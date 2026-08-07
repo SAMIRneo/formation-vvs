@@ -10,15 +10,15 @@ const { t } = Astro.props;
 ---
 <BaseLayout title={t.t} active="outils">
   <article class="detail wrap" data-reveal>
-    <a href={`${BASE_URL}/outils`} class="back">← Tous les outils</a>
+    <a href={`${BASE_URL}/outils/`} class="back">← Tous les outils</a>
     <h1>{t.t}</h1>
     <p class="lead">{t.d}</p>
     <div class="body">
       {t.body.split('\n').map((p) => <p>{p}</p>)}
     </div>
     <div class="cta-row">
-      <a href={`${BASE_URL}/tarifs`} class="btn">Rejoindre la formation</a>
-      <a href={`${BASE_URL}/formation`} class="btn btn--ghost">Voir les cours</a>
+      <a href={`${BASE_URL}/tarifs/`} class="btn">Rejoindre la formation</a>
+      <a href={`${BASE_URL}/formation/`} class="btn btn--ghost">Voir les cours</a>
     </div>
   </article>
 </BaseLayout>

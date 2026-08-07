@@ -12,7 +12,7 @@ import { BASE_URL } from '../consts';
     </div>
     <div class="tools">
       {tools.map((t) => (
-        <a class="tool" href={`${BASE_URL}/outils/${t.slug}`}>
+        <a class="tool" href={`${BASE_URL}/outils/${t.slug}/`}>
           <div class="tool__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={t.icon} /></svg></div>
           <h3>{t.t}</h3>
           <p>{t.d}</p>
