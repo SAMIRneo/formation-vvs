@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { tools } from '../data/content';
+import { BASE_URL } from '../consts';
 ---
 <BaseLayout title="Outils" active="outils">
   <section class="section wrap">
@@ -11,11 +12,12 @@ import { tools } from '../data/content';
     </div>
     <div class="tools">
       {tools.map((t) => (
-        <article class="tool">
+        <a class="tool" href={`${BASE_URL}/outils/${t.slug}`}>
           <div class="tool__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={t.icon} /></svg></div>
           <h3>{t.t}</h3>
           <p>{t.d}</p>
-        </article>
+          <span class="tool__go">Ouvrir →</span>
+        </a>
       ))}
     </div>
   </section>
@@ -26,7 +28,7 @@ import { tools } from '../data/content';
   .sec-head p { color: var(--texte-2); margin-top: 12px; max-width: 48ch; }
   .tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .tool {
-    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    display: block; background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
     border-radius: var(--radius); padding: 24px;
     transition: border-color .14s ease, transform .14s ease;
   }
@@ -35,5 +37,6 @@ import { tools } from '../data/content';
   .tool__ic svg { width: 24px; height: 24px; }
   .tool h3 { font-size: 1.2rem; margin-bottom: 8px; }
   .tool p { color: var(--texte-2); font-size: 0.9rem; }
+  .tool__go { display: inline-block; margin-top: 14px; font-weight: 700; font-size: 0.8rem; color: var(--bleu); }
   @media (max-width: 760px) { .tools { grid-template-columns: 1fr; } }
 </style>

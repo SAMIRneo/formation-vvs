@@ -69,7 +69,7 @@ import { BASE_URL } from '../consts';
       <p>Quatre modules, du premier chandelier à la gestion en live.</p>
     </div>
     <div class="mods">
-      {modules.map((m, i) => <ModuleCard {...m} />)}
+    {modules.map((m) => <ModuleCard {...m} href={`${BASE_URL}/formation/${m.slug}`} />)}
     </div>
   </section>
 

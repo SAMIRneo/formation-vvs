@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tools } from '../../data/content';
+import { BASE_URL } from '../../consts';
+
+export function getStaticPaths() {
+  return tools.map((t) => ({ params: { slug: t.slug }, props: { t } }));
+}
+const { t } = Astro.props;
+---
+<BaseLayout title={t.t} active="outils">
+  <article class="detail wrap" data-reveal>
+    <a href={`${BASE_URL}/outils`} class="back">← Tous les outils</a>
+    <h1>{t.t}</h1>
+    <p class="lead">{t.d}</p>
+    <div class="body">
+      {t.body.split('\n').map((p) => <p>{p}</p>)}
+    </div>
+    <div class="cta-row">
+      <a href={`${BASE_URL}/tarifs`} class="btn">Rejoindre la formation</a>
+      <a href={`${BASE_URL}/formation`} class="btn btn--ghost">Voir les cours</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail { max-width: 720px; padding: 48px 20px 64px; }
+  .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
+  .back:hover { color: var(--orange); }
+  .detail h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; }
+  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 28px; max-width: 52ch; }
+  .body p { font-size: 1.02rem; line-height: 1.7; margin-bottom: 18px; color: var(--texte); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  @media (max-width: 760px) { .detail { padding: 36px 16px 56px; } }
+</style>
