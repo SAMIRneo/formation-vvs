@@ -1,0 +1,100 @@
+---
+// Schéma SVG animé — blueprint brutaliste, style "app premium"
+// variant: 'price' | 'trend' | 'risk' | 'setup'
+interface Props { variant: 'price' | 'trend' | 'risk' | 'setup'; }
+const { variant } = Astro.props;
+---
+<div class="schem" data-schem={variant}>
+  {variant === 'price' && (
+    <svg viewBox="0 0 320 180" class="schem__svg" role="img" aria-label="Schéma lecture du prix">
+      <!-- grille -->
+      <g class="schem__grid">
+        {Array.from({length: 7}).map((_,i)=>(<line x1="0" y1={20+i*24} x2="320" y2={20+i*24} />))}
+        {Array.from({length: 9}).map((_,i)=>(<line x1={20+i*36} y1="0" x2={20+i*36} y2="180" />))}
+      </g>
+      <!-- chandeliers -->
+      <g class="schem__candles">
+        <g><line class="wick" x1="50" y1="40" x2="50" y2="100"/><rect class="up" x="44" y="55" width="12" height="34"/></g>
+        <g><line class="wick" x1="100" y1="30" x2="100" y2="110"/><rect class="up" x="94" y="48" width="12" height="46"/></g>
+        <g><line class="wick" x1="150" y1="50" x2="150" y2="120"/><rect class="down" x="144" y="70" width="12" height="40"/></g>
+        <g><line class="wick" x1="200" y1="35" x2="200" y2="105"/><rect class="up" x="194" y="52" width="12" height="38"/></g>
+        <g><line class="wick" x1="250" y1="28" x2="250" y2="98"/><rect class="up" x="244" y="44" width="12" height="42"/></g>
+        <g><line class="wick" x1="300" y1="38" x2="300" y2="108"/><rect class="down" x="294" y="60" width="12" height="40"/></g>
+      </g>
+      <!-- niveau clé -->
+      <line class="key" x1="0" y1="130" x2="320" y2="130"/>
+      <text class="key-t" x="8" y="124">RÉSISTANCE</text>
+    </svg>
+  )}
+  {variant === 'trend' && (
+    <svg viewBox="0 0 320 180" class="schem__svg" role="img" aria-label="Schéma tendance et volume">
+      <g class="schem__grid">
+        {Array.from({length: 7}).map((_,i)=>(<line x1="0" y1={20+i*24} x2="320" y2={20+i*24} />))}
+      </g>
+      <polyline class="trend-line" points="20,140 70,120 120,128 170,90 220,100 270,60 310,48"/>
+      <g class="vol">
+        {[30,60,90,120,150,180,210,240,270,300].map((x,i)=>(<rect class="vol-bar" x={x-6} y={150-(i%3)*14} width="12" height={(i%3)*14+6} />))}
+      </g>
+      <circle class="pulse-dot" cx="310" cy="48" r="5"/>
+    </svg>
+  )}
+  {variant === 'risk' && (
+    <svg viewBox="0 0 320 180" class="schem__svg" role="img" aria-label="Schéma gestion du risque">
+      <circle class="ring" cx="110" cy="90" r="60"/>
+      <path class="risk-arc" d="M110 30 A60 60 0 0 1 170 90" />
+      <text class="risk-t" x="110" y="96" text-anchor="middle">1%</text>
+      <g class="sl">
+        <line class="entry" x1="220" y1="40" x2="220" y2="140"/>
+        <line class="stop" x1="260" y1="55" x2="260" y2="140"/>
+        <line class="tp" x1="290" y1="30" x2="290" y2="140"/>
+        <text x="220" y="155" text-anchor="middle" class="lbl">ENTRÉE</text>
+        <text x="260" y="155" text-anchor="middle" class="lbl down">STOP</text>
+        <text x="290" y="155" text-anchor="middle" class="lbl up">TP</text>
+      </g>
+    </svg>
+  )}
+  {variant === 'setup' && (
+    <svg viewBox="0 0 320 180" class="schem__svg" role="img" aria-label="Schéma setup de trade">
+      <g class="schem__grid">
+        {Array.from({length: 7}).map((_,i)=>(<line x1="0" y1={20+i*24} x2="320" y2={20+i*24} />))}
+      </g>
+      <polyline class="trend-line" points="20,120 90,100 150,108 210,70"/>
+      <rect class="zone" x="200" y="40" width="90" height="80"/>
+      <text class="zone-t" x="245" y="86" text-anchor="middle">ZONE</text>
+      <path class="arrow" d="M150 108 L205 86" marker-end="url(#ah)"/>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <circle class="pulse-dot" cx="205" cy="86" r="5"/>
+    </svg>
+  )}
+</div>
+
+<style>
+  .schem { width: 100%; border: var(--border-w) solid var(--ligne); border-radius: var(--radius); background: var(--charbon-3); padding: 12px; overflow: hidden; }
+  .schem__svg { width: 100%; height: auto; display: block; }
+  .schem__grid line { stroke: rgba(255,255,255,0.06); stroke-width: 1; }
+  .wick { stroke: var(--texte-2); stroke-width: 1.5; }
+  .up { fill: var(--emeraude); }
+  .down { fill: var(--rouge); }
+  .key { stroke: var(--jaune); stroke-width: 2; stroke-dasharray: 6 4; }
+  .key-t { fill: var(--jaune); font: 700 9px/1 'Satoshi', sans-serif; letter-spacing: 0.1em; }
+  .trend-line { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 2.4s ease forwards; }
+  .vol-bar { fill: color-mix(in srgb, var(--bleu) 60%, transparent); }
+  .pulse-dot { fill: var(--orange); animation: dotpulse 1.8s ease-in-out infinite; }
+  .ring { fill: none; stroke: var(--ligne); stroke-width: 10; }
+  .risk-arc { fill: none; stroke: var(--rouge); stroke-width: 10; stroke-linecap: round; transform-origin: 110px 90px; transform: rotate(-90deg); stroke-dasharray: 377; stroke-dashoffset: 377; animation: draw 1.8s ease forwards; }
+  .risk-t { fill: var(--rouge); font: 700 22px/1 'Clash Display', sans-serif; }
+  .entry { stroke: var(--texte); stroke-width: 2; }
+  .stop { stroke: var(--rouge); stroke-width: 2; }
+  .tp { stroke: var(--emeraude); stroke-width: 2; }
+  .lbl { fill: var(--texte-2); font: 700 8px/1 'Satoshi', sans-serif; letter-spacing: 0.08em; }
+  .lbl.up { fill: var(--emeraude); } .lbl.down { fill: var(--rouge); }
+  .zone { fill: color-mix(in srgb, var(--orange) 12%, transparent); stroke: var(--orange); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .zone-t { fill: var(--orange); font: 700 11px/1 'Clash Display', sans-serif; }
+  .arrow { fill: none; stroke: var(--orange); stroke-width: 2.5; stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 2s ease .4s forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes dotpulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
+  @media (prefers-reduced-motion: reduce) {
+    .trend-line, .risk-arc, .arrow { animation: none; stroke-dashoffset: 0; }
+    .pulse-dot { animation: none; }
+  }
+</style>

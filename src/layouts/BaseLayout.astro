@@ -1,0 +1,133 @@
+---
+import '../styles/global.css';
+import { BASE_URL } from '../consts';
+interface Props {
+  title: string;
+  active: 'accueil' | 'formation' | 'outils' | 'tarifs' | 'contact';
+}
+const { title, active } = Astro.props;
+const tabs = [
+  { id: 'accueil',  label: 'Accueil', href: `${BASE_URL}/`,                 icon: 'M3 11.5 12 4l9 7.5M5 10v9h14v-9' },
+  { id: 'formation',label: 'Cours',   href: `${BASE_URL}/formation`,        icon: 'M4 5h16v14H4zM4 9h16M9 5v14' },
+  { id: 'outils',   label: 'Outils',  href: `${BASE_URL}/outils`,           icon: 'M3 12h4l3-8 4 16 3-8h4' },
+  { id: 'tarifs',   label: 'Tarifs',  href: `${BASE_URL}/tarifs`,           icon: 'M12 3v18M7 7h7a3 3 0 0 1 0 6H7m0 0h8a3 3 0 0 1 0 6H7' },
+  { id: 'contact',  label: 'Contact', href: `${BASE_URL}/contact`,          icon: 'M4 5h16v14H4zM4 7l8 6 8-6' },
+];
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0C0B09" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FormationVVS" />
+  <title>{title} — FormationVVS</title>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" />
+  <link rel="manifest" href={`${BASE_URL}/manifest.webmanifest`} />
+  <link rel="apple-touch-icon" href={`${BASE_URL}/icon-192.png`} />
+  <link rel="icon" type="image/svg+xml" href={`${BASE_URL}/favicon.svg`} />
+  <script is:inline define:vars={{ swPath: `${BASE_URL}/sw.js` }}>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register(swPath).catch(() => {}));
+    }
+  </script>
+  <script>
+    import '../scripts/motion.js';
+  </script>
+</head>
+<body>
+  <!-- Header app -->
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a href={`${BASE_URL}/`} class="brand">
+        <span class="brand__mark">FV</span>
+        <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
+      </a>
+      <a href={`${BASE_URL}/tarifs`} class="app-header__cta">Rejoindre</a>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <slot />
+  </main>
+
+  <!-- Bottom tab bar -->
+  <nav class="tabbar" aria-label="Navigation principale">
+    {tabs.map((t) => (
+      <a
+        href={t.href}
+        class={`tabbar__item ${active === t.id ? 'is-active' : ''}`}
+        aria-current={active === t.id ? 'page' : undefined}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d={t.icon} />
+        </svg>
+        <span>{t.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <style>
+    .app-header {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--charbon); /* opaque par défaut — jamais de flash/blanc sur Safari */
+      border-bottom: var(--border-w) solid var(--ligne);
+      padding-top: var(--safe-t);
+    }
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .app-header { background: color-mix(in srgb, var(--charbon) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    }
+    .app-header__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1080px; margin: 0 auto; padding: 12px 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand__mark {
+      font-family: var(--font-display); font-weight: 700;
+      background: var(--orange); color: var(--charbon);
+      width: 36px; height: 36px; display: grid; place-items: center;
+      border-radius: 7px; font-size: 0.95rem; letter-spacing: -0.05em;
+    }
+    .brand__name { font-family: var(--font-display); font-weight: 700; font-size: 0.92rem; letter-spacing: -0.02em; text-transform: uppercase; }
+    .brand__vvs { color: var(--orange); }
+    .app-header__cta {
+      font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+      font-size: 0.8rem; padding: 8px 14px; border: var(--border-w) solid var(--orange);
+      border-radius: 7px; color: var(--orange); transition: all .12s ease;
+    }
+    .app-header__cta:hover { background: var(--orange); color: var(--charbon); }
+
+    .app-main { min-height: 70vh; }
+
+    .tabbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      display: flex; justify-content: space-around; align-items: stretch;
+      background: var(--charbon-2); /* opaque par défaut — jamais de flash sur Safari */
+      border-top: var(--border-w) solid var(--ligne);
+      padding-bottom: var(--safe-b);
+    }
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .tabbar { background: color-mix(in srgb, var(--charbon-2) 95%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+    }
+    .tabbar__item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 9px 0 7px; color: var(--texte-2);
+      font-family: var(--font-body); font-weight: 700; font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      transition: color .12s ease, transform .12s ease;
+      position: relative;
+    }
+    .tabbar__item svg { width: 23px; height: 23px; }
+    .tabbar__item.is-active { color: var(--orange); }
+    .tabbar__item.is-active::before {
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 26px; height: 3px; background: var(--orange); border-radius: 0 0 3px 3px;
+    }
+    .tabbar__item:active { transform: scale(0.94); }
+  </style>
+</body>
+</html>

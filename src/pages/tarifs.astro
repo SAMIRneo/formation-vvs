@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { plans } from '../data/content';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Tarifs" active="tarifs">
+  <section class="section wrap">
+    <div class="sec-head reveal" data-reveal>
+      <span class="eyebrow">Tarifs</span>
+      <h2>Simple. Sans piège.</h2>
+      <p>Commence gratuit. Monte quand tu veux. Annule quand tu veux.</p>
+    </div>
+    <div class="plans">
+      {plans.map((p) => (
+        <article class={`plan ${p.hl ? 'plan--hl' : ''}`}>
+          {p.hl && <span class="plan__flag">Populaire</span>}
+          <h3 class="plan__nom">{p.nom}</h3>
+          <div class="plan__prix"><span class="plan__montant">{p.prix}</span><span class="plan__per">{p.periode}</span></div>
+          <ul class="plan__feat">
+            {p.feat.map((f) => <li>{f}</li>)}
+          </ul>
+          <a href={`${BASE_URL}/contact`} class={`btn ${p.hl ? '' : 'btn--ghost'}`}>{p.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sec-head { margin-bottom: 40px; text-align: center; }
+  .sec-head p { color: var(--texte-2); margin-top: 12px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+  .plan {
+    position: relative; background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .plan--hl { border-color: var(--orange); box-shadow: var(--ombre-dure-orange); }
+  .plan__flag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--orange); color: var(--charbon); font-family: var(--font-body); font-weight: 700; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 20px; border: var(--border-w) solid var(--charbon); }
+  .plan__nom { font-size: 1.3rem; }
+  .plan__prix { display: flex; align-items: baseline; gap: 4px; font-family: var(--font-display); }
+  .plan__montant { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.04em; color: var(--orange); }
+  .plan--hl .plan__montant { color: var(--orange); }
+  .plan__per { color: var(--texte-2); font-size: 0.9rem; font-weight: 700; }
+  .plan__feat { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; }
+  .plan__feat li { position: relative; padding-left: 22px; font-size: 0.9rem; color: var(--texte); }
+  .plan__feat li::before { content: '✓'; position: absolute; left: 0; color: var(--emeraude); font-weight: 700; }
+  .plan .btn { width: 100%; justify-content: center; }
+  @media (max-width: 860px) {
+    .plans { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+    .plan--hl { order: -1; }
+  }
+</style>

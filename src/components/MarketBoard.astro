@@ -1,0 +1,46 @@
+---
+import { marketTickers } from '../data/content';
+// Board statique — ZÉRO canvas → zéro bug mobile. Données dans src/data/content.ts
+// data-base = valeur numérique pour la simulation "live" (motion.js)
+---
+<div class="board">
+  {marketTickers.map((t) => (
+    <div class={`tile tile--${t.dir}`} data-base={t.price.replace(/\D/g, '')}>
+      <span class="tile__bar"></span>
+      <div class="tile__row">
+        <span class="tile__sym">{t.sym}</span>
+        <span class={`tile__badge badge ${t.dir === 'up' ? 'badge--up' : 'badge--down'}`}>{t.chg}</span>
+      </div>
+      <span class="tile__price" data-val={t.price.replace(/\D/g, '')}>{t.price}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .board {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  }
+  .tile {
+    position: relative; overflow: hidden;
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 14px 14px 14px 18px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tile__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+  .tile--up .tile__bar { background: var(--emeraude); }
+  .tile--down .tile__bar { background: var(--rouge); }
+  .tile__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .tile__sym { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; letter-spacing: -0.02em; }
+  .tile__badge { font-size: 0.62rem; padding: 2px 7px; }
+  .tile__price { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; letter-spacing: -0.03em; }
+  .tile--up .tile__price { color: var(--emeraude); }
+  .tile--down .tile__price { color: var(--rouge); }
+
+  @media (max-width: 760px) {
+    .board { grid-template-columns: 1fr; } /* liste verticale pleine largeur : jamais de prix coupé */
+    .tile { flex-direction: row; align-items: center; gap: 12px; padding: 13px 14px 13px 18px; }
+    .tile__sym { flex: 0 0 auto; min-width: 6.5ch; }
+    .tile__price { flex: 1 1 auto; text-align: right; white-space: nowrap; }
+    .tile__badge { flex: 0 0 auto; }
+  }
+</style>

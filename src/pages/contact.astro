@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Contact" active="contact">
+  <section class="section wrap">
+    <div class="sec-head reveal" data-reveal>
+      <span class="eyebrow">Contact</span>
+      <h2>On en parle.</h2>
+      <p>Une question sur la formation, un plan, un partenariat ? Écris-moi.</p>
+    </div>
+    <div class="contact">
+      <a class="chan" href="mailto:contact@formationvvs.fr">
+        <span class="chan__k">Email</span>
+        <span class="chan__v">contact@formationvvs.fr</span>
+      </a>
+      <a class="chan" href="https://discord.gg/" target="_blank" rel="noopener">
+        <span class="chan__k">Discord</span>
+        <span class="chan__v">Communauté FormationVVS</span>
+      </a>
+      <a class="chan" href="https://t.me/" target="_blank" rel="noopener">
+        <span class="chan__k">Telegram</span>
+        <span class="chan__v">@formationvvs</span>
+      </a>
+    </div>
+    <div class="panel-orange cta-final">
+      <h2>Prêt à commencer ?</h2>
+      <p>Rejoins la formation et construis ton cadre de trader.</p>
+      <a href={`${BASE_URL}/tarifs`} class="btn">Voir les tarifs</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sec-head { margin-bottom: 36px; text-align: center; }
+  .sec-head p { color: var(--texte-2); margin-top: 12px; }
+  .contact { display: flex; flex-direction: column; gap: 12px; max-width: 520px; margin: 0 auto 32px; }
+  .chan {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 18px 22px; transition: border-color .14s ease, transform .14s ease;
+  }
+  .chan:hover { border-color: var(--orange); transform: translateX(4px); }
+  .chan__k { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--orange); flex: 0 0 auto; }
+  .chan__v { color: var(--texte); font-size: 0.95rem; text-align: right; }
+  .cta-final { padding: 38px; text-align: center; }
+  .cta-final p { max-width: 40ch; margin: 14px auto 24px; color: #2A1500; font-weight: 500; }
+</style>

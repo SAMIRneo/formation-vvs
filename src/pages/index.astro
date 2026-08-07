@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MarketBoard from '../components/MarketBoard.astro';
+import ModuleCard from '../components/ModuleCard.astro';
+import Schematic from '../components/Schematic.astro';
+import { modules } from '../data/content';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Accueil" active="accueil">
+  <!-- HERO produit-first -->
+  <section class="hero wrap">
+    <div class="hero__copy" data-reveal>
+      <span class="eyebrow">Formation trading — pour de vrai</span>
+      <h1>Trader<br/>avec une<br/><span class="hl">méthode</span>.</h1>
+      <p class="hero__lead">Pas de promesse miraculeuse. Une formation brute, structurée, qui te donne un cadre pour lire les marchés et gérer ton risque.</p>
+      <div class="hero__cta">
+        <a href={`${BASE_URL}/formation`} class="btn">Voir les cours</a>
+        <a href={`${BASE_URL}/tarifs`} class="btn btn--ghost">Les tarifs</a>
+      </div>
+    </div>
+    <div class="hero__board" data-reveal data-reveal-delay="120">
+      <div class="board-head">
+        <span class="board-head__t">MARCHÉS EN DIRECT</span>
+        <span class="board-head__dot"></span>
+      </div>
+      <MarketBoard />
+    </div>
+  </section>
+
+  <!-- COMMENT ÇA MARCHE (schema) -->
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">La boucle</span>
+      <h2>Une méthode, pas un truc.</h2>
+      <p>Tu ne devines pas. Tu suis une boucle que tu maîtrises — du premier niveau jusqu'au trade en live.</p>
+    </div>
+    <div class="loop">
+      <div class="loop__step" data-reveal data-tilt>
+        <span class="loop__n">01</span>
+        <Schematic variant="price" />
+        <h3>Lis le prix</h3>
+        <p>Chandeliers, niveaux, structure. Tu sais où tu es.</p>
+      </div>
+      <div class="loop__step" data-reveal data-reveal-delay="100" data-tilt>
+        <span class="loop__n">02</span>
+        <Schematic variant="trend" />
+        <h3>Repère la tendance</h3>
+        <p>Volume + direction. Le bruit s'efface.</p>
+      </div>
+      <div class="loop__step" data-reveal data-reveal-delay="200" data-tilt>
+        <span class="loop__n">03</span>
+        <Schematic variant="risk" />
+        <h3>Borne ton risque</h3>
+        <p>1% par trade. Le stop avant l'entrée.</p>
+      </div>
+      <div class="loop__step" data-reveal data-reveal-delay="300" data-tilt>
+        <span class="loop__n">04</span>
+        <Schematic variant="setup" />
+        <h3>Exécute le setup</h3>
+        <p>Zone + déclencheur. Tu agis, tu ne réagis pas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <h2>Le cursus</h2>
+      <p>Quatre modules, du premier chandelier à la gestion en live.</p>
+    </div>
+    <div class="mods">
+      {modules.map((m, i) => <ModuleCard {...m} />)}
+    </div>
+  </section>
+
+  <!-- PANNEAU COULEUR PLEIN (Color Block Story) -->
+  <section class="section wrap">
+    <div class="panel-orange cta-panel" data-reveal>
+      <h2>Arrête de trader à l’aveugle.</h2>
+      <p>Rejoins la formation et reprends le contrôle de ta méthode. Accès immédiat, depuis ton iPhone.</p>
+      <a href={`${BASE_URL}/tarifs`} class="btn">Rejoindre FormationVVS</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: center;
+    padding: 56px 20px 40px;
+  }
+  .hero__copy { order: -1; }
+  .hl { color: var(--orange); }
+  .hero__lead { color: var(--texte-2); font-size: 1.05rem; margin: 20px 0 28px; max-width: 30ch; }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero__board {
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 18px; box-shadow: var(--ombre-dure);
+  }
+  .board-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .board-head__t { font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .board-head__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--emeraude); box-shadow: 0 0 0 4px color-mix(in srgb, var(--emeraude) 25%, transparent); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+
+  .loop { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .loop__step {
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 18px; transition: border-color .16s ease;
+    transform-style: preserve-3d;
+  }
+  .loop__step:hover { border-color: var(--orange); }
+  .loop__n { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--orange); letter-spacing: -0.04em; }
+  .loop__step h3 { font-size: 1.1rem; margin: 12px 0 6px; }
+  .loop__step p { font-size: 0.85rem; color: var(--texte-2); }
+
+  .sec-head { margin-bottom: 32px; }
+  .sec-head p { color: var(--texte-2); margin-top: 10px; max-width: 46ch; }
+  .mods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .cta-panel { padding: 40px; text-align: center; }
+  .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
+
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 40px; }
+    .hero__copy { order: 0; }
+    .hero__lead { max-width: none; }
+    .hero__board { order: -1; height: 340px; } /* hauteur explicite : jamais coupé/court sur mobile (Safari desktop-mode ~980px) */
+    .loop { grid-template-columns: repeat(2, 1fr); }
+    /* board FORCÉ en liste 1 colonne dès 1024px (Safari iOS mode desktop rend ~980px -> évite prix coupés) */
+    .board { grid-template-columns: 1fr !important; }
+    :global(.board .tile) { flex-direction: row !important; align-items: center; gap: 12px; }
+  }
+  @media (max-width: 760px) {
+    .mods { grid-template-columns: 1fr; }
+    .loop { grid-template-columns: 1fr; }
+    .cta-panel { padding: 30px 22px; }
+    .hero__board { height: auto; } /* sur petit écran laisse le flux naturel mais reste lisible */
+  }
+</style>

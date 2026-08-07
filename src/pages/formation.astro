@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { cours } from '../data/content';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Formation" active="formation">
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Le cursus</span>
+      <h2>Cuisine ton cadre.</h2>
+      <p>Des modules courts, denses, sans blabla. Tu progresses module par module, à ton rythme, depuis l’iPhone.</p>
+    </div>
+    <div class="cours">
+      {cours.map((c) => (
+        <article class="cours__item">
+          <span class="cours__n">{c.n}</span>
+          <div class="cours__body">
+            <div class="cours__meta"><span class="badge badge--orange">{c.lvl}</span><span class="cours__dur">{c.dur}</span></div>
+            <h3>{c.t}</h3>
+            <p>{c.d}</p>
+          </div>
+          <a href={`${BASE_URL}/tarifs`} class="cours__go" aria-label="Rejoindre">→</a>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sec-head { margin-bottom: 36px; }
+  .sec-head p { color: var(--texte-2); margin-top: 12px; max-width: 48ch; }
+  .cours { display: flex; flex-direction: column; gap: 14px; }
+  .cours__item {
+    display: flex; align-items: center; gap: 18px;
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 20px 22px;
+    transition: border-color .14s ease, transform .14s ease;
+  }
+  .cours__item:hover { border-color: var(--orange); transform: translateX(4px); }
+  .cours__n { font-family: var(--font-display); font-weight: 700; font-size: 2rem; color: var(--orange); letter-spacing: -0.04em; flex: 0 0 auto; }
+  .cours__body { flex: 1 1 auto; }
+  .cours__meta { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .cours__dur { font-size: 0.72rem; color: var(--texte-2); font-weight: 700; }
+  .cours__body h3 { font-size: 1.25rem; margin-bottom: 4px; }
+  .cours__body p { color: var(--texte-2); font-size: 0.9rem; }
+  .cours__go { font-size: 1.6rem; color: var(--orange); flex: 0 0 auto; font-weight: 700; }
+  @media (max-width: 760px) {
+    .cours__item { padding: 16px; gap: 12px; }
+    .cours__n { font-size: 1.5rem; }
+  }
+</style>
