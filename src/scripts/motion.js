@@ -73,4 +73,22 @@
       card.addEventListener('pointerleave', () => { card.style.transform = ''; });
     });
   }
+
+  // ---- 5) Parallax léger (héro) : translateY selon le scroll ----
+  const pxEls = Array.from(document.querySelectorAll('[data-parallax]'));
+  if (pxEls.length && !reduce) {
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      pxEls.forEach((el) => {
+        const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
+        el.style.transform = `translate3d(0, ${(y * speed).toFixed(1)}px, 0)`;
+      });
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  }
 })();
