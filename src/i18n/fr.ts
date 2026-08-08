@@ -4,6 +4,7 @@ export default {
   'nav.marche': 'Marché',
   'nav.modules': 'Modules',
   'nav.abonnement': 'Abonnement',
+  'nav.contact': 'Contact',
   'nav.rejoindre': 'Rejoindre',
 
   'home.eyebrow': 'Formation trading — pour de vrai',

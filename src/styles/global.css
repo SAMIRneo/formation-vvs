@@ -22,10 +22,10 @@
   --ligne: #DED9CC;      /* bordures */
   --ligne-2: #C9C2B2;
 
-  /* Accent signature — lime électrique (unique, verrouillé) */
-  --lime: #C6F432;
-  --lime-press: #B0DC20;
-  --lime-ink: #1C2A00;
+  /* Accent signature — teal-émeraude premium (unique, verrouillé) */
+  --lime: #1FD6A6;
+  --lime-press: #15B98C;
+  --lime-ink: #064C3A;
 
   /* Data semantics (trading) */
   --emeraude: #109E6A;  --emeraude-ink: #064C33;
@@ -37,7 +37,7 @@
   --radius-sm: 10px;
   --radius-pill: 999px;
   --ombre: 0 22px 50px -28px rgba(20,19,15,0.28);
-  --halo-lime: 0 18px 44px -20px rgba(198,244,50,0.55);
+  --halo-lime: 0 18px 44px -20px rgba(31,214,166,0.5);
 
   --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
   --font-body: 'Space Grotesk', system-ui, sans-serif;

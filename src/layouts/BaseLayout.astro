@@ -17,6 +17,7 @@ const tabs = [
   { id: 'marche',     key: 'nav.marche',      href: localizedPath('/marche/', lang),   icon: 'M3 17l5-5 4 4 8-9M3 21h18' },
   { id: 'modules',    key: 'nav.modules',     href: localizedPath('/modules/', lang),  icon: 'M4 5h16v14H4zM4 9h16M9 5v14' },
   { id: 'abonnement', key: 'nav.abonnement',  href: localizedPath('/abonnement/', lang), icon: 'M12 3v18M7 7h7a3 3 0 0 1 0 6H7m0 0h8a3 3 0 0 1 0 6H7' },
+  { id: 'contact',    key: 'nav.contact',     href: localizedPath('/contact/', lang),    icon: 'M4 4h16v16H4zM4 7l8 6 8-6' },
 ];
 ---
 <!doctype html>
@@ -24,7 +25,7 @@ const tabs = [
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0C0B09" />
+  <meta name="theme-color" content="#F4F1EA" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="FormationVVS" />
@@ -135,10 +136,10 @@ const tabs = [
     .brand__vvs { color: var(--encre); }
     .app-header__cta {
       font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
-      font-size: 0.8rem; padding: 8px 14px; border: 1.5px solid var(--encre);
-      border-radius: 7px; color: var(--encre); background: transparent; transition: all .12s ease;
+      font-size: 0.8rem; padding: 8px 14px; border: 1.5px solid var(--lime-press);
+      border-radius: 7px; color: var(--lime-ink); background: var(--lime); transition: all .14s ease;
     }
-    .app-header__cta:hover { background: var(--encre); color: var(--canvas); }
+    .app-header__cta:hover { background: var(--lime-press); transform: translateY(-1px); }
 
     .app-main { min-height: 70vh; }
 
