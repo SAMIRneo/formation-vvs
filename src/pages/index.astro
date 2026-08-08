@@ -44,14 +44,14 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     </div>
     <div class="modbento">
       {modules.map((m, i) => (
-        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}`}>
+        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} data-parallax={i % 2 ? "0.09" : "-0.09"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}`}>
           <div class="modbento__top">
             <span class="modbento__n">{m.n}</span>
             <span class="badge">{m.tag}</span>
           </div>
           <h3 class="modbento__t">{m.title}</h3>
           <p class="modbento__d">{m.desc}</p>
-          <div class="modbento__diagram" data-parallax="0.12">
+          <div class="modbento__diagram">
             <ChapterDiagram variant={diagramVariant[i]} lang={lang} />
           </div>
           <span class="modbento__go">{t(lang, 'home.ctaModules')} <span class="modbento__arrow">→</span></span>
@@ -112,20 +112,22 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 
   /* bento modules */
   .modbento {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    overflow: visible; padding: 28px 0;
   }
   .modbento__card {
     position: relative; overflow: hidden; display: flex; flex-direction: column;
     background: var(--carte); border: 1.5px solid var(--ligne); border-radius: var(--radius);
-    padding: 24px; box-shadow: var(--ombre);
+    padding: 24px; box-shadow: 0 14px 30px -16px rgba(20,19,15,0.25);
     transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    will-change: transform;
   }
   .modbento__card::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);
     opacity: 0; transition: opacity .25s ease;
   }
-  .modbento__card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 26px 50px -24px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .modbento__card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 30px 56px -22px color-mix(in srgb, var(--accent) 42%, rgba(20,19,15,0.3)); }
   .modbento__card:hover::before { opacity: 1; }
   .modbento__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
   .modbento__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; color: var(--accent); letter-spacing: -0.04em; line-height: 1; }
@@ -154,7 +156,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 56px; }
-    .modbento { grid-template-columns: 1fr; }
+    .modbento { grid-template-columns: 1fr; gap: 34px; padding: 24px 0; }
   }
   @media (max-width: 640px) {
     .hero__stats { gap: 22px; }

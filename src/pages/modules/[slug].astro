@@ -36,7 +36,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
       <!-- Chapitres en cartes bento -->
       <div class="chapters">
         {m.chapters.map((c, i) => (
-          <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}`} data-reveal>
+          <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
             <div class="chap__head">
               <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
               <div class="chap__headtext">
@@ -89,12 +89,14 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
   .toc a:hover { color: var(--encre); border-color: var(--encre); }
 
   /* Chapitres bento */
-  .chapters { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+  .chapters { display: flex; flex-direction: column; gap: 30px; min-width: 0; overflow: visible; padding: 26px 0; }
   .chap {
     position: relative; overflow: hidden; isolation: isolate;
     background: var(--carte); border: 1.5px solid var(--ligne);
-    border-radius: var(--radius); padding: 26px 26px 26px 30px; box-shadow: var(--ombre);
+    border-radius: var(--radius); padding: 26px 26px 26px 30px;
+    box-shadow: 0 14px 32px -16px rgba(20,19,15,0.22);
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    will-change: transform;
   }
   .chap::before {
     content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -105,7 +107,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
     background: var(--accent); opacity: .9;
   }
-  .chap:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 28px 56px -28px color-mix(in srgb, var(--accent) 38%, transparent); }
+  .chap:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 32px 60px -26px color-mix(in srgb, var(--accent) 40%, rgba(20,19,15,0.3)); }
   .chap:hover::before { opacity: 1; }
   .chap__head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
   .chap__n {
@@ -157,6 +159,6 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     .detail { padding: 36px 16px 56px; }
     .chap { padding: 18px 16px 18px 22px; }
     .chap__body { grid-template-columns: 1fr; gap: 16px; }
-    .chapters { gap: 16px; }
+    .chapters { gap: 26px; padding: 22px 0; }
   }
 </style>

@@ -23,7 +23,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     <h2 class="chaps-title">{t(lang, 'modules.chapitres')}</h2>
     <div class="chapters">
       {m.chapters.map((c, i) => (
-        <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}`} data-reveal>
+        <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
           <div class="chap__head">
             <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
             <div class="chap__headtext">
@@ -60,12 +60,14 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
   .lead { color: var(--encre-2); font-size: 1.1rem; margin-bottom: 20px; max-width: 52ch; }
   .intro { font-size: 1.02rem; line-height: 1.7; color: var(--encre); margin-bottom: 36px; }
   .chaps-title { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 24px; }
-  .chapters { display: flex; flex-direction: column; gap: 28px; }
+  .chapters { display: flex; flex-direction: column; gap: 30px; overflow: visible; padding: 26px 0; }
   .chap {
     position: relative; overflow: hidden; isolation: isolate;
     border: 1.5px solid var(--ligne); border-radius: var(--radius);
-    padding: 24px; background: var(--carte); box-shadow: var(--ombre);
+    padding: 24px; background: var(--carte);
+    box-shadow: 0 14px 32px -16px rgba(20,19,15,0.22);
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    will-change: transform;
   }
   .chap::before {
     content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -76,7 +78,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
     background: var(--accent); opacity: .9;
   }
-  .chap:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 24px 48px -26px color-mix(in srgb, var(--accent) 38%, transparent); }
+  .chap:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 32px 60px -26px color-mix(in srgb, var(--accent) 40%, rgba(20,19,15,0.3)); }
   .chap:hover::before { opacity: 1; }
   .chap__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
   .chap__n {

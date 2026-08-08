@@ -21,17 +21,18 @@ if (reduce || !gsap || !ScrollTrigger) {
   try {
     gsap.registerPlugin(ScrollTrigger);
 
-    // 1) Scroll-reveal : on anime le transform via GSAP, l'opacity via la classe .in (CSS).
+    // 1) Scroll-reveal : les éléments data-parallax gardent .in (opacity via CSS)
+    //    mais leur transform est géré par le parallax (pas de conflit de transform).
     const items = gsap.utils.toArray('[data-reveal]');
     items.forEach((el) => {
+      if (el.hasAttribute('data-parallax')) { el.classList.add('in'); return; } // transform -> parallax
       const delay = Number(el.getAttribute('data-reveal-delay') || 0) / 1000;
       const inView = el.getBoundingClientRect().top < window.innerHeight * 0.95;
       if (inView) {
-        // Déjà visible au chargement : on révèle direct + petite animation.
         el.classList.add('in');
         gsap.fromTo(el, { y: 28 }, { y: 0, duration: 0.7, delay, ease: 'power3.out' });
       } else {
-        el.classList.add('in'); // ouvre l'opacity via CSS
+        el.classList.add('in');
         gsap.fromTo(el, { y: 28 }, {
           y: 0, duration: 0.7, delay, ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 92%', once: true },
@@ -39,11 +40,14 @@ if (reduce || !gsap || !ScrollTrigger) {
       }
     });
 
-    // 2) Parallax générique sur tous [data-parallax] (vitesse = valeur de l'attribut)
+    // 2) Parallax générique sur tous [data-parallax] (vitesse = valeur de l'attribut).
+    //    Les cartes "flottent" : chaque widget se décale verticalement au scroll.
+    //    .in est ajouté ici aussi (au cas où le reveal ne l'a pas fait) pour l'opacity.
     gsap.utils.toArray('[data-parallax]').forEach((el) => {
+      el.classList.add('in');
       const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
       gsap.to(el, {
-        yPercent: speed * 100,
+        yPercent: speed * 160,
         ease: 'none',
         scrollTrigger: { trigger: el.closest('section') || el, start: 'top bottom', end: 'bottom top', scrub: true },
       });
