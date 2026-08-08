@@ -76,6 +76,35 @@ const tabs = [
     ))}
   </nav>
 
+  <!-- Footer global -->
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__col">
+        <a href={`${BASE_URL}/`} class="brand brand--footer">
+          <span class="brand__mark">FV</span>
+          <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
+        </a>
+        <p class="app-footer__tag">Former brutal, pas bruit. Méthode, risque, setups en live.</p>
+      </div>
+      <div class="app-footer__col">
+        <h4>Naviguer</h4>
+        <a href={`${BASE_URL}/marche/`}>Marché</a>
+        <a href={`${BASE_URL}/modules/`}>Modules</a>
+        <a href={`${BASE_URL}/abonnement/`}>Abonnement</a>
+      </div>
+      <div class="app-footer__col app-footer__contact">
+        <h4>Contact</h4>
+        <a href="mailto:contact@formationvvs.fr">contact@formationvvs.fr</a>
+        <a href="https://discord.gg/formationvvs">Discord</a>
+        <a href="https://t.me/formationvvs">Telegram</a>
+      </div>
+    </div>
+    <div class="app-footer__base">
+      <span>© {new Date().getFullYear()} FormationVVS</span>
+      <span>Tous droits réservés</span>
+    </div>
+  </footer>
+
   <style>
     .app-header {
       position: sticky; top: 0; z-index: 50;
@@ -133,6 +162,40 @@ const tabs = [
       width: 26px; height: 3px; background: var(--orange); border-radius: 0 0 3px 3px;
     }
     .tabbar__item:active { transform: scale(0.94); }
+
+    .app-footer {
+      border-top: var(--border-w) solid var(--ligne);
+      background: var(--charbon);
+      padding: 40px 20px calc(76px + var(--safe-b)); /* laisse place à la tabbar fixe */
+      margin-top: 40px;
+    }
+    .app-footer__inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 28px;
+    }
+    .brand--footer { margin-bottom: 14px; }
+    .app-footer__tag { color: var(--texte-2); font-size: 0.9rem; max-width: 34ch; line-height: 1.5; }
+    .app-footer__col h4 {
+      font-family: var(--font-body); font-weight: 700; font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.08em; color: var(--texte-2);
+      margin: 0 0 12px;
+    }
+    .app-footer__col a {
+      display: block; color: var(--texte); font-size: 0.9rem; font-weight: 500;
+      padding: 5px 0; transition: color .12s ease;
+    }
+    .app-footer__col a:hover { color: var(--orange); }
+    .app-footer__base {
+      max-width: 1080px; margin: 32px auto 0; padding-top: 20px;
+      border-top: 1px solid var(--ligne);
+      display: flex; justify-content: space-between; gap: 12px;
+      font-size: 0.78rem; color: var(--texte-2);
+    }
+    @media (max-width: 760px) {
+      .app-footer__inner { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+      .app-footer__col:first-child { grid-column: 1 / -1; }
+      .app-footer__base { flex-direction: column; gap: 4px; text-align: left; }
+    }
   </style>
 </body>
 </html>
