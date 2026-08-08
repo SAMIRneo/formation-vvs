@@ -34,7 +34,7 @@ const { tools } = getContent(lang);
         </a>
       ))}
     </div>
-    <div class="panel-lime cta-panel" data-reveal>
+    <div class="cta-panel" data-reveal>
       <h2>{t(lang, 'marche.ctaTitle')}</h2>
       <p>{t(lang, 'marche.ctaLead')}</p>
       <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'marche.ctaBtn')}</a>
@@ -60,6 +60,6 @@ const { tools } = getContent(lang);
   .tool__go { transition: gap .18s ease; }
   .tool:hover .tool__go { gap: 11px; }
   .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }
-  .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
+  .cta-panel p { max-width: 44ch; margin: 14px auto 26px;  font-weight: 500; }
   @media (max-width: 760px) { .tools { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
 </style>

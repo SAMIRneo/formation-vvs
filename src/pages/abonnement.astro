@@ -25,7 +25,7 @@ const { plans } = getContent(lang);
         </article>
       ))}
     </div>
-    <div class="panel-lime cta-panel" data-reveal>
+    <div class="cta-panel" data-reveal>
       <h2>{t(lang, 'abo.ctaPanelTitle')}</h2>
       <p>{t(lang, 'abo.ctaPanelLead')}</p>
       <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'abo.ctaBtn')}</a>
@@ -58,6 +58,6 @@ const { plans } = getContent(lang);
   .plan__feat li::before { content: '✓'; position: absolute; left: 0; color: var(--emeraude); font-weight: 700; }
   .plan .btn { width: 100%; text-align: center; }
   .cta-panel { margin-top: 40px; padding: 40px; text-align: center; }
-  .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
+  .cta-panel p { max-width: 44ch; margin: 14px auto 26px;  font-weight: 500; }
   @media (max-width: 760px) { .plans { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
 </style>

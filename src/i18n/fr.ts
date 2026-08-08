@@ -11,6 +11,8 @@ export default {
   'home.heroLead': "Pas de promesse miraculeuse. Une formation brute, structurée, qui te donne un cadre pour lire les marchés et gérer ton risque — du premier chandelier au trade en live.",
   'home.ctaModules': 'Voir les modules',
   'home.ctaAbo': 'Les abonnements',
+  'home.manifesteEyebrow': 'Le constat',
+  'home.manifeste': 'Former brutal, pas bruit. Tu ne deviens pas trader en consommant du contenu — en exécutant une méthode.',
 
   'home.methodeEyebrow': 'La méthode',
   'home.methodeTitle': 'Une boucle, pas un truc.',
@@ -70,6 +72,7 @@ export default {
   'modules.chapitres': 'Chapitres',
   'modules.chapitre': 'Chapitre',
   'modules.schema': 'Schéma',
+  'modules.cursusTitle': 'Le cursus',
 
   'abo.title': 'Abonnement',
   'abo.lead': 'Choisis ton niveau. Accès immédiat, depuis ton iPhone.',
