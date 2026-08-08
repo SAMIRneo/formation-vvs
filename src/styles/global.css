@@ -70,6 +70,7 @@ h1, h2, h3, .display {
   letter-spacing: -0.04em;
   text-transform: uppercase;
   line-height: 0.95;
+  text-wrap: balance;
 }
 h1 { font-size: clamp(2.6rem, 9vw, 5.5rem); }
 h2 { font-size: clamp(1.9rem, 6vw, 3.2rem); line-height: 1; }

@@ -9,32 +9,52 @@ export function getStaticPaths() {
 }
 const { m } = Astro.props;
 const lang = getLang(Astro.url);
+const accentVar = { orange: 'var(--orange)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[m.accent || 'orange'];
 ---
 <BaseLayout title={m.title} active="modules">
-  <article class="detail wrap" data-reveal>
+  <article class="detail wrap">
     <a href={localizedPath('/modules/', lang)} class="back">{t(lang, 'modules.back')}</a>
-    <span class="badge badge--orange">{m.tag}</span>
-    <h1>{m.title}</h1>
-    <p class="lead">{m.desc}</p>
-    <p class="intro">{m.body}</p>
+    <header class="detail__head" data-reveal>
+      <span class="badge badge--orange">{m.tag}</span>
+      <h1>{m.title}</h1>
+      <p class="lead">{m.desc}</p>
+      <p class="intro">{m.body}</p>
+    </header>
 
-    <h2 class="chaps-title">{t(lang, 'modules.chapitres')}</h2>
-    <div class="chapters">
-      {m.chapters.map((c, i) => (
-        <section class="chap" data-reveal>
-          <div class="chap__head">
-            <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="chap__t">{c.title}</h3>
-          </div>
-          <ChapterDiagram variant={c.diagram} />
-          <p class="chap__body">{c.body}</p>
-          {c.points && (
-            <ul class="chap__pts">
-              {c.points.map((p) => <li>{p}</li>)}
-            </ul>
-          )}
-        </section>
-      ))}
+    <div class="detail__layout">
+      <!-- Sommaire sticky -->
+      <aside class="toc" aria-label="Sommaire du module">
+        <span class="toc__k">{t(lang, 'modules.chapitres')}</span>
+        <ol>
+          {m.chapters.map((c, i) => (
+            <li><a href={`#chap-${i+1}`}>{String(i+1).padStart(2,'0')} · {c.title}</a></li>
+          ))}
+        </ol>
+      </aside>
+
+      <!-- Chapitres en cartes bento -->
+      <div class="chapters">
+        {m.chapters.map((c, i) => (
+          <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}`} data-reveal>
+            <span class="chap__bar"></span>
+            <div class="chap__head">
+              <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
+              <h2 class="chap__t">{c.title}</h2>
+            </div>
+            <div class="chap__body">
+              <div class="chap__diagram"><ChapterDiagram variant={c.diagram} /></div>
+              <div class="chap__text">
+                <p class="chap__lead">{c.body}</p>
+                {c.points && (
+                  <ul class="chap__pts">
+                    {c.points.map((p) => <li>{p}</li>)}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
 
     <div class="cta-row">
@@ -45,26 +65,49 @@ const lang = getLang(Astro.url);
 </BaseLayout>
 
 <style>
-  .detail { max-width: 760px; padding: 48px 20px 64px; }
-  .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
+  .detail { max-width: 1080px; padding: 48px 20px 64px; }
+  .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
   .back:hover { color: var(--orange); }
-  .detail h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; }
-  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 20px; max-width: 52ch; }
-  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--texte); margin-bottom: 36px; }
-  .chaps-title { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 24px; }
-  .chapters { display: flex; flex-direction: column; gap: 40px; }
-  .chap { border: var(--border-w) solid var(--ligne); border-radius: var(--radius); padding: 22px; background: var(--charbon-2); }
+  .detail__head { max-width: 760px; margin-bottom: 40px; }
+  .detail__head h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; text-wrap: balance; }
+  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 18px; max-width: 52ch; }
+  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--texte); }
+
+  .detail__layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+
+  /* TOC sticky */
+  .toc { position: sticky; top: 84px; align-self: start; }
+  .toc__k { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.66rem; color: var(--orange); }
+  .toc ol { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+  .toc a { display: block; color: var(--texte-2); font-size: 0.85rem; font-weight: 500; padding: 7px 10px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease; }
+  .toc a:hover { color: var(--texte); border-color: var(--orange); }
+
+  /* Chapitres bento */
+  .chapters { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .chap { position: relative; overflow: hidden; background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px 22px 22px 26px; box-shadow: var(--ombre-douce); }
+  .chap__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); opacity: .9; }
   .chap__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-  .chap__n { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--orange); letter-spacing: -0.04em; flex: 0 0 auto; }
-  .chap__t { font-size: clamp(1.3rem, 5vw, 1.8rem); margin: 0; }
-  .chap__body { font-size: 1rem; line-height: 1.65; color: var(--texte); margin: 18px 0 16px; }
+  .chap__n { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--accent); letter-spacing: -0.04em; flex: 0 0 auto; }
+  .chap__t { font-size: clamp(1.25rem, 4vw, 1.7rem); margin: 0; text-wrap: balance; }
+  .chap__body { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 22px; align-items: start; }
+  .chap__diagram { min-width: 0; }
+  .chap__lead { font-size: 0.98rem; line-height: 1.65; color: var(--texte); margin: 0 0 16px; }
   .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .chap__pts li { font-size: 0.95rem; color: var(--texte-2); padding-left: 24px; position: relative; }
-  .chap__pts li::before { content: '►'; position: absolute; left: 0; color: var(--orange); font-size: 0.8rem; }
+  .chap__pts li { font-size: 0.92rem; color: var(--texte-2); padding-left: 24px; position: relative; line-height: 1.45; }
+  .chap__pts li::before { content: '►'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
+
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+
+  @media (max-width: 1024px) {
+    .detail__layout { grid-template-columns: 1fr; gap: 20px; }
+    .toc { position: static; }
+    .toc ol { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .toc a { border-left: none; border: 1px solid var(--ligne); border-radius: 6px; }
+  }
   @media (max-width: 760px) {
     .detail { padding: 36px 16px 56px; }
-    .chap { padding: 18px 16px; }
-    .chapters { gap: 28px; }
+    .chap { padding: 18px 16px 18px 22px; }
+    .chap__body { grid-template-columns: 1fr; gap: 16px; }
+    .chapters { gap: 16px; }
   }
 </style>

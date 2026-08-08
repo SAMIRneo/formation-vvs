@@ -29,9 +29,9 @@ import { marketTickers } from '../data/content';
   .tile__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
   .tile--up .tile__bar { background: var(--emeraude); }
   .tile--down .tile__bar { background: var(--rouge); }
-  .tile__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .tile__sym { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; letter-spacing: -0.02em; }
-  .tile__badge { font-size: 0.62rem; padding: 2px 7px; }
+  .tile__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+  .tile__sym { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile__badge { font-size: 0.62rem; padding: 2px 7px; white-space: nowrap; flex: 0 0 auto; }
   .tile__price { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; letter-spacing: -0.03em; }
   .tile--up .tile__price { color: var(--emeraude); }
   .tile--down .tile__price { color: var(--rouge); }
