@@ -10,7 +10,7 @@ const { modules } = getContent(lang);
 const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 ---
 <BaseLayout title={t(lang, 'home.heroTitle').split('\n')[0]} active="accueil">
-  <!-- HERO ÉDITORIAL (split) -->
+  <!-- HERO ÉDITORIAL -->
   <section class="hero wrap">
     <div class="hero__main" data-reveal>
       <span class="eyebrow">{t(lang, 'home.eyebrow')}</span>
@@ -26,18 +26,6 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
         <div><span class="num">100%</span><span class="lab">sur iPhone</span></div>
       </div>
     </div>
-    <aside class="hero__board" data-reveal data-reveal-delay="120">
-      <div class="board-card">
-        <div class="board-card__head">
-          <span class="board-card__dot"></span>
-          <span class="board-card__title">{t(lang, 'home.marcheTitle')}</span>
-          <span class="board-card__live">LIVE</span>
-        </div>
-        <MarketBoard />
-      </div>
-      <p class="board-card__note">{t(lang, 'home.marcheLead')}</p>
-      <a href={localizedPath('/marche/', lang)} class="board-card__link">{t(lang, 'home.marcheLink')} →</a>
-    </aside>
   </section>
 
   <!-- MANIFESTE -->
@@ -98,31 +86,16 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 
 <style>
   .hero {
-    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center;
-    padding: 84px 22px 64px; min-height: 70vh;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 96px 22px 72px; min-height: 62vh; justify-content: center;
   }
-  .hero__main { display: flex; flex-direction: column; gap: 22px; }
-  .hero__lead { color: var(--encre); font-size: 1.12rem; max-width: 48ch; line-height: 1.6; margin-top: 4px; }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
-  .hero__stats { display: flex; gap: 34px; margin-top: 14px; padding-top: 22px; border-top: 1px solid var(--ligne); }
+  .hero__main { display: flex; flex-direction: column; align-items: center; gap: 22px; max-width: 880px; }
+  .hero__lead { color: var(--encre); font-size: 1.18rem; max-width: 52ch; line-height: 1.6; margin-top: 4px; }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .hero__stats { display: flex; gap: 40px; margin-top: 16px; padding-top: 24px; border-top: 1px solid var(--ligne); }
   .hero__stats > div { display: flex; flex-direction: column; }
-  .hero__stats .num { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; line-height: 1; }
+  .hero__stats .num { font-family: var(--font-display); font-weight: 600; font-size: 1.8rem; line-height: 1; }
   .hero__stats .lab { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--encre-2); margin-top: 6px; }
-
-  /* carte marché hero */
-  .hero__board { display: flex; flex-direction: column; gap: 14px; }
-  .board-card {
-    background: var(--carte); border: 1.5px solid var(--ligne); border-radius: var(--radius);
-    padding: 20px; box-shadow: var(--ombre);
-  }
-  .board-card__head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .board-card__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emeraude); box-shadow: 0 0 0 4px color-mix(in srgb, var(--emeraude) 22%, transparent); animation: blink 2s ease-in-out infinite; }
-  .board-card__title { font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.74rem; }
-  .board-card__live { margin-left: auto; font-family: var(--font-mono); font-weight: 700; font-size: 0.6rem; letter-spacing: 0.12em; color: var(--encre); background: var(--lime); padding: 3px 8px; border-radius: var(--radius-pill); }
-  .board-card__note { color: var(--encre-2); font-size: 0.86rem; line-height: 1.5; }
-  .board-card__link { font-family: var(--font-mono); font-weight: 700; font-size: 0.82rem; color: var(--encre); }
-  .board-card__link:hover { color: var(--lime-ink); }
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
 
   /* manifeste */
   .manifesto .eyebrow { margin-bottom: 22px; }

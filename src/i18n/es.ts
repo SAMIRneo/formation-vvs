@@ -68,6 +68,8 @@ export default {
   'modules.ctaBtn': 'Unirse a FormationVVS',
   'modules.back': '← Todos los módulos',
   'modules.chapitres': 'Capítulos',
+  'modules.chapitre': 'Capítulo',
+  'modules.schema': 'Esquema',
 
   'abo.title': 'Suscripción',
   'abo.lead': 'Elige tu nivel. Acceso inmediato, desde tu iPhone.',

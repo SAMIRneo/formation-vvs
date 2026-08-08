@@ -28,10 +28,10 @@
   --lime-ink: #1C2A00;
 
   /* Data semantics (trading) */
-  --emeraude: #109E6A;
-  --rouge: #E0354B;
-  --jaune: #C99A12;
-  --bleu: #2F6FE0;
+  --emeraude: #109E6A;  --emeraude-ink: #064C33;
+  --rouge: #E0354B;     --rouge-ink: #7A0E1E;
+  --jaune: #C99A12;     --jaune-ink: #6B4E00;
+  --bleu: #2F6FE0;      --bleu-ink: #0A2A8C;
 
   --radius: 16px;
   --radius-sm: 10px;
