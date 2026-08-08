@@ -7,27 +7,20 @@ import { modules } from '../data/content';
 import { BASE_URL } from '../consts';
 ---
 <BaseLayout title="Accueil" active="accueil">
-  <!-- HERO produit-first -->
+  <!-- HERO — texte en premier (pas de marché) -->
   <section class="hero wrap">
     <div class="hero__copy" data-reveal>
       <span class="eyebrow">Formation trading — pour de vrai</span>
       <h1>Trader<br/>avec une<br/><span class="hl">méthode</span>.</h1>
-      <p class="hero__lead">Pas de promesse miraculeuse. Une formation brute, structurée, qui te donne un cadre pour lire les marchés et gérer ton risque.</p>
+      <p class="hero__lead">Pas de promesse miraculeuse. Une formation brute, structurée, qui te donne un cadre pour lire les marchés et gérer ton risque — du premier chandelier au trade en live.</p>
       <div class="hero__cta">
         <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
         <a href={`${BASE_URL}/abonnement/`} class="btn btn--ghost">Les abonnements</a>
       </div>
     </div>
-    <div class="hero__board" data-reveal data-reveal-delay="120">
-      <div class="board-head">
-        <span class="board-head__t">MARCHÉS EN DIRECT</span>
-        <span class="board-head__dot"></span>
-      </div>
-      <MarketBoard />
-    </div>
   </section>
 
-  <!-- COMMENT ÇA MARCHE (schema) -->
+  <!-- LA BOUClE MÉTHODE -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
       <span class="eyebrow">La boucle</span>
@@ -62,6 +55,23 @@ import { BASE_URL } from '../consts';
     </div>
   </section>
 
+  <!-- MARCHÉ — section dédiée (PAS en premier) -->
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Marchés en direct</span>
+      <h2>Le pulse du marché.</h2>
+      <p>Les niveaux qui comptent, mis à jour chaque session. Up en vert, down en rouge — sans bruit.</p>
+    </div>
+    <div class="market-block" data-reveal>
+      <div class="board-head">
+        <span class="board-head__t">MARCHÉS EN DIRECT</span>
+        <span class="board-head__dot"></span>
+      </div>
+      <MarketBoard />
+      <a href={`${BASE_URL}/marche/`} class="market-link">Voir le marché complet →</a>
+    </div>
+  </section>
+
   <!-- MODULES -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
@@ -73,7 +83,7 @@ import { BASE_URL } from '../consts';
     </div>
   </section>
 
-  <!-- PANNEAU COULEUR PLEIN (Color Block Story) -->
+  <!-- PANNEAU COULEUR PLEIN -->
   <section class="section wrap">
     <div class="panel-orange cta-panel" data-reveal>
       <h2>Arrête de trader à l'aveugle.</h2>
@@ -85,21 +95,23 @@ import { BASE_URL } from '../consts';
 
 <style>
   .hero {
-    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: center;
-    padding: 56px 20px 40px;
+    display: flex; flex-direction: column; gap: 24px;
+    padding: 64px 20px 48px; max-width: 760px; margin: 0 auto;
   }
-  .hero__copy { order: -1; }
   .hl { color: var(--orange); }
-  .hero__lead { color: var(--texte-2); font-size: 1.05rem; margin: 20px 0 28px; max-width: 30ch; }
+  .hero__lead { color: var(--texte-2); font-size: 1.1rem; margin: 22px 0 30px; max-width: 52ch; line-height: 1.6; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
-  .hero__board {
-    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
-    border-radius: var(--radius); padding: 18px; box-shadow: var(--ombre-dure);
-  }
+
   .board-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .board-head__t { font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
   .board-head__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--emeraude); box-shadow: 0 0 0 4px color-mix(in srgb, var(--emeraude) 25%, transparent); animation: pulse 2s infinite; }
   @keyframes pulse { 50% { opacity: 0.4; } }
+
+  .market-block {
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 20px; box-shadow: var(--ombre-dure);
+  }
+  .market-link { display: inline-block; margin-top: 16px; color: var(--orange); font-weight: 700; font-size: 0.85rem; }
 
   .loop { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
   .loop__step {
@@ -113,25 +125,33 @@ import { BASE_URL } from '../consts';
   .loop__step p { font-size: 0.85rem; color: var(--texte-2); }
 
   .sec-head { margin-bottom: 32px; }
-  .sec-head p { color: var(--texte-2); margin-top: 10px; max-width: 46ch; }
+  .sec-head p { color: var(--texte-2); margin-top: 10px; max-width: 52ch; }
   .mods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
   .cta-panel { padding: 40px; text-align: center; }
   .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
 
+  /* TABLETTE */
   @media (max-width: 1024px) {
-    .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 40px; }
-    .hero__copy { order: 0; }
-    .hero__lead { max-width: none; }
-    .hero__board { order: -1; height: 340px; }
+    .hero { padding-top: 48px; }
     .loop { grid-template-columns: repeat(2, 1fr); }
     .board { grid-template-columns: 1fr !important; }
     :global(.board .tile) { flex-direction: row !important; align-items: center; gap: 12px; }
   }
+  /* MOBILE — hero lisible, market board liste 1-col, modules 1-col */
   @media (max-width: 760px) {
-    .mods { grid-template-columns: 1fr; }
+    .hero { padding: 40px 16px 32px; }
+    .hero__lead { font-size: 1.05rem; }
+    .hero__cta { flex-direction: column; align-items: stretch; }
+    .hero__cta .btn { width: 100%; justify-content: center; }
     .loop { grid-template-columns: 1fr; }
+    .mods { grid-template-columns: 1fr; }
     .cta-panel { padding: 30px 22px; }
-    .hero__board { height: auto; }
+    .market-block { padding: 16px; }
+  }
+  /* PETIT MOBILE */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: clamp(2.3rem, 11vw, 3.4rem); }
+    .sec-head { margin-bottom: 24px; }
   }
 </style>
