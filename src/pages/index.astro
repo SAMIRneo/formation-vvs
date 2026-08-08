@@ -20,21 +20,6 @@ const lang = getLang(Astro.url);
     </div>
   </section>
 
-  <!-- MÉTHODE -->
-  <section class="section wrap">
-    <div class="sec-head" data-reveal>
-      <span class="eyebrow">{t(lang, 'home.methodeEyebrow')}</span>
-      <h2>{t(lang, 'home.methodeTitle')}</h2>
-      <p>{t(lang, 'home.methodeLead')}</p>
-    </div>
-    <ol class="method">
-      <li data-reveal><span class="method__n">01</span><div><h3>{t(lang, 'home.m1t')}</h3><p>{t(lang, 'home.m1d')}</p></div></li>
-      <li data-reveal data-reveal-delay="80"><span class="method__n">02</span><div><h3>{t(lang, 'home.m2t')}</h3><p>{t(lang, 'home.m2d')}</p></div></li>
-      <li data-reveal data-reveal-delay="160"><span class="method__n">03</span><div><h3>{t(lang, 'home.m3t')}</h3><p>{t(lang, 'home.m3d')}</p></div></li>
-      <li data-reveal data-reveal-delay="240"><span class="method__n">04</span><div><h3>{t(lang, 'home.m4t')}</h3><p>{t(lang, 'home.m4d')}</p></div></li>
-    </ol>
-  </section>
-
   <!-- MARCHÉ -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
@@ -92,16 +77,6 @@ const lang = getLang(Astro.url);
     border-radius: var(--radius); padding: 20px; box-shadow: var(--ombre-dure);
   }
   .market-link { display: inline-block; margin-top: 16px; color: var(--orange); font-weight: 700; font-size: 0.85rem; }
-
-  .method { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .method li {
-    display: flex; gap: 14px; align-items: flex-start;
-    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
-    border-radius: var(--radius); padding: 16px 18px;
-  }
-  .method__n { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--orange); letter-spacing: -0.04em; flex: 0 0 auto; }
-  .method h3 { font-size: 1.05rem; margin: 0 0 4px; }
-  .method p { font-size: 0.85rem; color: var(--texte-2); margin: 0; }
 
   .sec-head { margin-bottom: 32px; }
   .sec-head p { color: var(--texte-2); margin-top: 10px; max-width: 52ch; }

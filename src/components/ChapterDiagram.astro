@@ -1,213 +1,288 @@
 ---
-// Schémas animés par chapitre — blueprint brutaliste
+// Schémas animés par chapitre — blueprint brutaliste enrichi
 // variant: candles | levels | range | context | trend | reversal | volume |
 //          pullback | positionsize | stop | rr | drawdown | plan | zone | annotated | review
 interface Props { variant: string; }
 const { variant } = Astro.props;
+const uid = variant; // pour ids de marker uniques par variante
 ---
 <div class="cd" data-reveal>
+  {/* ============ 1. CHANDELIER ============ */}
   {variant === 'candles' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Anatomie d'un chandelier japonais">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Anatomie d'un chandelier japonais">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <g class="cd__fill up"><line class="cd__wick" x1="60" y1="40" x2="60" y2="150"/><rect x="50" y="70" width="20" height="50"/></g>
-      <g class="cd__fill down"><line class="cd__wick" x1="120" y1="30" x2="120" y2="160"/><rect x="110" y="80" width="20" height="55"/></g>
-      <g class="cd__fill up"><line class="cd__wick" x1="180" y1="50" x2="180" y2="140"/><rect x="170" y="65" width="20" height="45"/></g>
-      <g class="cd__fill down"><line class="cd__wick" x1="240" y1="35" x2="240" y2="170"/><rect x="230" y="95" width="20" height="50"/></g>
-      <text class="cd__lbl" x="60" y="188" text-anchor="middle">corps</text>
-      <text class="cd__lbl" x="120" y="188" text-anchor="middle">mèche</text>
+      {/* axe Y prix */}
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      {[20,76,132,188].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['64k','62k','60k','58k'][i]}</text>))}
+      {/* bougies */}
+      <g class="cd__fill up"><line class="cd__wick" x1="80" y1="44" x2="80" y2="150"/><rect x="68" y="74" width="24" height="52" rx="2"/></g>
+      <g class="cd__fill down"><line class="cd__wick" x1="140" y1="32" x2="140" y2="162"/><rect x="128" y="82" width="24" height="58" rx="2"/></g>
+      <g class="cd__fill up"><line class="cd__wick" x1="200" y1="54" x2="200" y2="142"/><rect x="188" y="68" width="24" height="46" rx="2"/></g>
+      <g class="cd__fill down"><line class="cd__wick" x1="262" y1="40" x2="262" y2="176"/><rect x="250" y="100" width="24" height="54" rx="2"/></g>
+      <text class="cd__lbl" x="80" y="200" text-anchor="middle">corps</text>
+      <text class="cd__lbl" x="140" y="200" text-anchor="middle">mèche</text>
+      <line class="cd__line dim" x1="80" y1="100" x2="80" y2="100"/>
     </svg>
   )}
+
+  {/* ============ 2. SUPPORT / RÉSISTANCE ============ */}
   {variant === 'levels' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Support et résistance en zones">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Support et résistance en zones">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <rect class="cd__zone" x="0" y="40" width="320" height="120"/>
-      <line class="cd__line res" x1="0" y1="48" x2="320" y2="48"/>
-      <line class="cd__line sup" x1="0" y1="152" x2="320" y2="152"/>
-      <text class="cd__lbl up" x="8" y="42">RÉSISTANCE</text>
-      <text class="cd__lbl down" x="8" y="172">SUPPORT</text>
-      <circle class="cd__pulse" cx="160" cy="100" r="6"/>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      {[20,76,132,188].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['1.10','1.08','1.06','1.04'][i]}</text>))}
+      <rect class="cd__zone" x="44" y="40" width="296" height="40"/>
+      <rect class="cd__zone" x="44" y="140" width="296" height="44"/>
+      <line class="cd__line res" x1="44" y1="48" x2="340" y2="48"/>
+      <line class="cd__line sup" x1="44" y1="148" x2="340" y2="148"/>
+      <text class="cd__lbl up" x="50" y="44">RÉSISTANCE</text>
+      <text class="cd__lbl down" x="50" y="178">SUPPORT</text>
+      <circle class="cd__pulse" cx="190" cy="94" r="6"/>
+      <text class="cd__lbl" x="200" y="98">prix</text>
     </svg>
   )}
+
+  {/* ============ 3. RANGE & CASSURE ============ */}
   {variant === 'range' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Range et cassure">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Range et cassure">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <line class="cd__line res" x1="0" y1="60" x2="320" y2="60"/>
-      <line class="cd__line sup" x1="0" y1="150" x2="320" y2="150"/>
-      <polyline class="cd__line price" points="40,135 80,70 120,130 160,80 200,120 240,90 270,90"/>
-      <path class="cd__line break" d="M270 90 L300 50" marker-end="url(#ah)"/>
-      <text class="cd__lbl" x="8" y="54">RANGE</text>
-      <text class="cd__lbl up" x="250" y="44">CASSURE</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <line class="cd__line res" x1="44" y1="70" x2="340" y2="70"/>
+      <line class="cd__line sup" x1="44" y1="168" x2="340" y2="168"/>
+      {/* prix qui rebondit dans le range puis casse */}
+      <polyline class="cd__line price" points="60,150 100,80 140,150 180,90 220,148 260,95"/>
+      <path class="cd__line break" d="M260 95 L320 52" marker-end="url(#ah)"/>
+      <text class="cd__lbl" x="50" y="64">PLAFOND</text>
+      <text class="cd__lbl" x="50" y="190">PLANCHER</text>
+      <text class="cd__lbl up" x="262" y="48">CASSURE ▲</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 4. CONTEXTE ============ */}
   {variant === 'context' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Lire la bougie dans son contexte">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Lire la bougie dans son contexte">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line trend" points="20,160 90,120 150,130 220,80 300,60"/>
-      <g class="cd__fill up"><rect x="250" y="55" width="18" height="40"/></g>
-      <line class="cd__line zone" x1="0" y1="150" x2="320" y2="150"/>
-      <text class="cd__lbl" x="8" y="144">TENDANCE ↑</text>
-      <text class="cd__lbl up" x="250" y="188">dans le sens</text>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <polyline class="cd__line trend" points="50,170 110,128 170,138 240,86 320,64"/>
+      <g class="cd__fill up"><rect x="288" y="58" width="20" height="44" rx="2"/></g>
+      <rect class="cd__zone" x="44" y="150" width="296" height="40"/>
+      <text class="cd__lbl" x="50" y="146">TENDANCE ▲</text>
+      <text class="cd__lbl up" x="240" y="200">bougie dans le sens</text>
+      <text class="cd__lbl down" x="50" y="200">zone de value</text>
     </svg>
   )}
+
+  {/* ============ 5. TENDANCE HH/HL ============ */}
   {variant === 'trend' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Tendance haussière HH HL">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Tendance haussière HH HL">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line trend" points="30,160 110,120 180,100 260,50"/>
-      <circle class="cd__pulse" cx="30" cy="160" r="5"/>
-      <circle class="cd__pulse" cx="110" cy="120" r="5"/>
-      <circle class="cd__pulse" cx="180" cy="100" r="5"/>
-      <circle class="cd__pulse" cx="260" cy="50" r="5"/>
-      <text class="cd__lbl up" x="120" y="92">HH</text>
-      <text class="cd__lbl up" x="50" y="150">HL</text>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <polyline class="cd__line trend" points="56,176 130,128 200,104 280,52"/>
+      <circle class="cd__pulse" cx="56" cy="176" r="5"/>
+      <circle class="cd__pulse" cx="130" cy="128" r="5"/>
+      <circle class="cd__pulse" cx="200" cy="104" r="5"/>
+      <circle class="cd__pulse" cx="280" cy="52" r="5"/>
+      <text class="cd__lbl up" x="140" y="120">HH</text>
+      <text class="cd__lbl up" x="64" y="168">HL</text>
+      <path class="cd__line dim" d="M130 128 L200 104" marker-end="url(#ah)"/>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 6. RETOURNEMENT (W) ============ */}
   {variant === 'reversal' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Double bottom retournement">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Double bottom retournement">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line price" points="30,80 90,160 150,80 210,160 270,80"/>
-      <line class="cd__line neck" x1="30" y1="80" x2="270" y2="80"/>
-      <text class="cd__lbl down" x="60" y="178">W</text>
-      <text class="cd__lbl up" x="150" y="72">COU</text>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <polyline class="cd__line price" points="60,72 120,168 180,72 240,168 300,72"/>
+      <line class="cd__line neck" x1="60" y1="72" x2="300" y2="72"/>
+      {/* flèche de retournement */}
+      <path class="cd__line break" d="M300 72 L320 44" marker-end="url(#ah)"/>
+      <text class="cd__lbl down" x="110" y="200">W · double bottom</text>
+      <text class="cd__lbl up" x="180" y="64">COU (neckline)</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 7. VOLUME ============ */}
   {variant === 'volume' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Prix et volume de confirmation">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Prix et volume de confirmation">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line price" points="20,150 90,90 160,110 230,60 300,40"/>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <polyline class="cd__line price" points="50,160 110,96 170,116 240,64 310,42"/>
+      {/* histogramme volume */}
       <g>
-        {[30,65,100,135,170,205,240,275].map((x,i)=>(<rect class="cd__bar" x={x-7} y={170-(i%2?40:70)} width="14" height={(i%2?40:70)}/>))}
+        {[70,105,140,175,210,245,280,315].map((x,i)=>{
+          const h = i===3 ? 96 : (i%2?44:72);
+          return <rect class="cd__bar" x={x-9} y={196-h} width="18" height={h}/>;
+        })}
       </g>
-      <text class="cd__lbl" x="8" y="192">VOLUME</text>
+      <text class="cd__lbl" x="50" y="212">VOLUME (confirmation)</text>
+      <text class="cd__lbl up" x="220" y="58">▲ cassure sur volume</text>
     </svg>
   )}
+
+  {/* ============ 8. PULLBACK / RETEST ============ */}
   {variant === 'pullback' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Pullback et retest">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Pullback et retest">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line trend" points="20,150 100,90 160,110 220,60 300,55"/>
-      <line class="cd__line sup" x1="0" y1="110" x2="320" y2="110"/>
-      <path class="cd__line entry" d="M160 110 L160 80" marker-end="url(#ah)"/>
-      <text class="cd__lbl up" x="120" y="104">RETEST</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <polyline class="cd__line trend" points="50,170 120,104 180,124 240,68 320,60"/>
+      <line class="cd__line sup" x1="44" y1="124" x2="340" y2="124"/>
+      {/* retest rebond */}
+      <path class="cd__line entry" d="M180 124 L180 88" marker-end="url(#ah)"/>
+      <circle class="cd__pulse" cx="180" cy="124" r="5"/>
+      <text class="cd__lbl up" x="140" y="118">RETEST ✓</text>
+      <text class="cd__lbl" x="190" y="84">entrée</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 9. TAILLE DE POSITION ============ */}
   {variant === 'positionsize' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Calcul de la taille de position">
-      <g class="cd__box b1"><rect x="10" y="60" width="80" height="60" rx="8"/><text class="cd__bx" x="50" y="88" text-anchor="middle">CAPITAL</text><text class="cd__bxv" x="50" y="108" text-anchor="middle">10k€</text></g>
-      <text class="cd__op" x="100" y="95">×</text>
-      <g class="cd__box b2"><rect x="120" y="60" width="70" height="60" rx="8"/><text class="cd__bx" x="155" y="88" text-anchor="middle">RISQUE</text><text class="cd__bxv" x="155" y="108" text-anchor="middle">1%</text></g>
-      <text class="cd__op" x="198" y="95">÷</text>
-      <g class="cd__box b3"><rect x="210" y="60" width="90" height="60" rx="8"/><text class="cd__bx" x="255" y="85" text-anchor="middle">ÉCART</text><text class="cd__bxv" x="255" y="105" text-anchor="middle">entrée−stop</text></g>
-      <text class="cd__op" x="155" y="150">=</text>
-      <g class="cd__box res"><rect x="100" y="155" width="120" height="36" rx="8"/><text class="cd__bxv" x="160" y="178" text-anchor="middle">TAILLE DU LOT</text></g>
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Calcul de la taille de position">
+      <g class="cd__box b1"><rect x="20" y="50" width="86" height="64" rx="8"/><text class="cd__bx" x="63" y="82" text-anchor="middle">CAPITAL</text><text class="cd__bxv" x="63" y="104" text-anchor="middle">10 000 €</text></g>
+      <text class="cd__op" x="112" y="92">×</text>
+      <g class="cd__box b2"><rect x="128" y="50" width="70" height="64" rx="8"/><text class="cd__bx" x="163" y="82" text-anchor="middle">RISQUE</text><text class="cd__bxv" x="163" y="104" text-anchor="middle">1%</text></g>
+      <text class="cd__op" x="202" y="92">÷</text>
+      <g class="cd__box b3"><rect x="216" y="50" width="104" height="64" rx="8"/><text class="cd__bx" x="268" y="78" text-anchor="middle">ÉCART</text><text class="cd__bxv" x="268" y="100" text-anchor="middle">entrée − stop</text></g>
+      <text class="cd__op" x="160" y="150">=</text>
+      <g class="cd__box res"><rect x="96" y="156" width="148" height="40" rx="8"/><text class="cd__bxv" x="170" y="182" text-anchor="middle">TAILLE DU LOT</text></g>
     </svg>
   )}
+
+  {/* ============ 10. ENTRÉE / STOP / TARGET ============ */}
   {variant === 'stop' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Entrée stop et target">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Entrée stop et target">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <line class="cd__line entry" x1="60" y1="40" x2="60" y2="170"/>
-      <line class="cd__line stop" x1="40" y1="160" x2="40" y2="180"/>
-      <line class="cd__line tp" x1="250" y1="30" x2="250" y2="170"/>
-      <text class="cd__lbl" x="64" y="52">ENTRÉE</text>
-      <text class="cd__lbl down" x="8" y="178">STOP</text>
-      <text class="cd__lbl up" x="220" y="42">TARGET</text>
-      <path class="cd__line" d="M60 100 L40 100" marker-end="url(#ah)"/>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      {[40,100,160].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['62.0','61.0','60.0'][i]}</text>))}
+      <line class="cd__line entry" x1="120" y1="40" x2="120" y2="180"/>
+      <line class="cd__line stop" x1="96" y1="168" x2="96" y2="188"/>
+      <line class="cd__line tp" x1="280" y1="30" x2="280" y2="180"/>
+      <text class="cd__lbl" x="126" y="52">ENTRÉE 61.0</text>
+      <text class="cd__lbl down" x="60" y="190">STOP 60.0</text>
+      <text class="cd__lbl up" x="244" y="42">TARGET 62.0</text>
+      <path class="cd__line dim" d="M120 110 L96 110" marker-end="url(#ah)"/>
+      <text class="cd__lbl" x="92" y="104">1R</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 11. R-MULTIPLE ============ */}
   {variant === 'rr' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Risk reward R-multiple">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Risk reward R-multiple">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <rect class="cd__bar risk" x="40" y="40" width="40" height="120"/>
-      <rect class="cd__bar reward" x="120" y="40" width="40" height="120"/>
-      <rect class="cd__bar reward" x="170" y="40" width="40" height="120"/>
-      <rect class="cd__bar reward" x="220" y="40" width="40" height="120"/>
-      <text class="cd__lbl down" x="60" y="178" text-anchor="middle">1R risque</text>
-      <text class="cd__lbl up" x="190" y="178" text-anchor="middle">3R gain</text>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <rect class="cd__bar risk" x="64" y="40" width="48" height="140"/>
+      <rect class="cd__bar reward" x="140" y="40" width="48" height="140"/>
+      <rect class="cd__bar reward" x="196" y="40" width="48" height="140"/>
+      <rect class="cd__bar reward" x="252" y="40" width="48" height="140"/>
+      <text class="cd__lbl down" x="88" y="196" text-anchor="middle">1R risque</text>
+      <text class="cd__lbl up" x="248" y="196" text-anchor="middle">3R gain</text>
+      <text class="cd__lbl" x="50" y="32">RATIO 1:3</text>
     </svg>
   )}
+
+  {/* ============ 12. DRAWDOWN ============ */}
   {variant === 'drawdown' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Courbe de drawdown">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Courbe de drawdown">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line equity" points="20,60 90,70 150,130 200,120 270,50 300,45"/>
-      <path class="cd__zone dd" d="M90 70 L150 130 L200 120 L200 70 L150 70 L90 70 Z"/>
-      <text class="cd__lbl down" x="130" y="155">DRAWDOWN</text>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      {[40,100,160].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['+10%','0%','-20%'][i]}</text>))}
+      <polyline class="cd__line equity" points="56,60 120,68 180,140 230,128 300,52 320,46"/>
+      <path class="cd__zone dd" d="M120 68 L180 140 L230 128 L230 68 L180 68 L120 68 Z"/>
+      <text class="cd__lbl down" x="150" y="160">DRAWDOWN −18%</text>
+      <text class="cd__lbl up" x="262" y="44">nouveau sommet</text>
     </svg>
   )}
+
+  {/* ============ 13. PLAN DE TRADE ============ */}
   {variant === 'plan' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Plan de trade">
-      <g class="cd__check"><rect x="20" y="30" width="20" height="20" rx="5"/><path d="M24 40 L28 45 L36 33" /></g>
-      <text class="cd__lbl" x="52" y="46">Contexte</text>
-      <g class="cd__check"><rect x="20" y="70" width="20" height="20" rx="5"/><path d="M24 80 L28 85 L36 73" /></g>
-      <text class="cd__lbl" x="52" y="86">Setup</text>
-      <g class="cd__check"><rect x="20" y="110" width="20" height="20" rx="5"/><path d="M24 120 L28 125 L36 113" /></g>
-      <text class="cd__lbl" x="52" y="126">Entrée / Stop / Target</text>
-      <g class="cd__check"><rect x="20" y="150" width="20" height="20" rx="5"/><path d="M24 160 L28 165 L36 153" /></g>
-      <text class="cd__lbl" x="52" y="166">La raison</text>
-      <path class="cd__line" d="M260 40 L260 160" marker-end="url(#ah)"/>
-      <text class="cd__lbl up" x="250" y="186">EXÉCUTION</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Plan de trade">
+      <g class="cd__check"><rect x="30" y="28" width="22" height="22" rx="5"/><path d="M35 39 L40 45 L49 31" /></g>
+      <text class="cd__lbl" x="64" y="45">Contexte</text>
+      <g class="cd__check"><rect x="30" y="68" width="22" height="22" rx="5"/><path d="M35 79 L40 85 L49 71" /></g>
+      <text class="cd__lbl" x="64" y="85">Setup</text>
+      <g class="cd__check"><rect x="30" y="108" width="22" height="22" rx="5"/><path d="M35 119 L40 125 L49 111" /></g>
+      <text class="cd__lbl" x="64" y="125">Entrée / Stop / Target</text>
+      <g class="cd__check"><rect x="30" y="148" width="22" height="22" rx="5"/><path d="M35 159 L40 165 L49 151" /></g>
+      <text class="cd__lbl" x="64" y="165">La raison</text>
+      <path class="cd__line break" d="M280 40 L300 170" marker-end="url(#ah)"/>
+      <text class="cd__lbl up" x="258" y="200">EXÉCUTION</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 14. ZONE D'ENTRÉE ============ */}
   {variant === 'zone' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Zone d'entrée">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Zone d'entrée">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <rect class="cd__zone zn" x="60" y="70" width="120" height="70"/>
-      <polyline class="cd__line price" points="20,160 80,120 140,140 200,90 280,60"/>
-      <path class="cd__line entry" d="M140 140 L140 90" marker-end="url(#ah)"/>
-      <text class="cd__lbl" x="80" y="64">ZONE</text>
-      <text class="cd__lbl up" x="100" y="186">ENTRY rebond</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <rect class="cd__zone zn" x="80" y="70" width="130" height="80"/>
+      <polyline class="cd__line price" points="50,170 110,128 170,148 230,96 300,64"/>
+      <path class="cd__line entry" d="M170 148 L170 96" marker-end="url(#ah)"/>
+      <text class="cd__lbl" x="96" y="64">ZONE DE DEMANDE</text>
+      <text class="cd__lbl up" x="110" y="196">ENTRY au rebond</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 15. SETUP ANNOTÉ ============ */}
   {variant === 'annotated' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Setup annoté">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Setup annoté">
       <g class="cd__grid">
-        {Array.from({length:6}).map((_,i)=>(<line class="cd__gridline" x1="0" y1={20+i*32} x2="320" y2={20+i*32}/>))}
+        {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      <polyline class="cd__line price" points="20,150 90,100 150,120 220,60 290,50"/>
-      <path class="cd__line entry" d="M150 120 L150 95" marker-end="url(#ah)"/>
-      <line class="cd__line stop" x1="140" y1="140" x2="140" y2="155"/>
-      <line class="cd__line tp" x1="240" y1="50" x2="240" y2="65"/>
-      <text class="cd__lbl up" x="156" y="92">E</text>
-      <text class="cd__lbl down" x="118" y="152">S</text>
-      <text class="cd__lbl up" x="200" y="44">T</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
+      <polyline class="cd__line price" points="50,160 110,104 170,124 240,64 310,54"/>
+      <path class="cd__line entry" d="M170 124 L170 96" marker-end="url(#ah)"/>
+      <line class="cd__line stop" x1="158" y1="146" x2="158" y2="162"/>
+      <line class="cd__line tp" x1="256" y1="54" x2="256" y2="70"/>
+      <text class="cd__lbl up" x="176" y="92">E 1.1040</text>
+      <text class="cd__lbl down" x="120" y="160">S 1.1010</text>
+      <text class="cd__lbl up" x="214" y="48">T 1.1120</text>
+      <text class="cd__lbl" x="50" y="200">pourquoi : retest + volume</text>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
+
+  {/* ============ 16. JOURNAL ============ */}
   {variant === 'review' && (
-    <svg viewBox="0 0 320 200" class="cd__svg" role="img" aria-label="Journal de trade">
-      <rect class="cd__page" x="70" y="20" width="180" height="160" rx="10"/>
-      <line class="cd__line jl" x1="90" y1="50" x2="230" y2="50"/>
-      <line class="cd__line jl" x1="90" y1="75" x2="230" y2="75"/>
-      <line class="cd__line jl" x1="90" y1="100" x2="200" y2="100"/>
-      <text class="cd__star" x="90" y="135">★★★★</text>
-      <text class="cd__lbl" x="170" y="135">3/5</text>
-      <text class="cd__lbl" x="90" y="168">JOURNAL</text>
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Journal de trade">
+      <rect class="cd__page" x="80" y="18" width="200" height="184" rx="10"/>
+      <line class="cd__line jl" x1="100" y1="52" x2="260" y2="52"/>
+      <line class="cd__line jl" x1="100" y1="80" x2="260" y2="80"/>
+      <line class="cd__line jl" x1="100" y1="108" x2="226" y2="108"/>
+      <line class="cd__line jl" x1="100" y1="136" x2="260" y2="136"/>
+      <text class="cd__star" x="100" y="170">★★★★</text>
+      <text class="cd__lbl" x="210" y="170">3/5</text>
+      <text class="cd__lbl" x="100" y="200">JOURNAL DE TRADE</text>
     </svg>
   )}
 </div>
@@ -216,9 +291,11 @@ const { variant } = Astro.props;
   .cd { width: 100%; border: var(--border-w) solid var(--ligne); border-radius: var(--radius); background: var(--charbon-3); padding: 16px; overflow: hidden; }
   .cd__svg { width: 100%; height: auto; display: block; }
   .cd__gridline { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
-  /* lignes qui se dessinent au reveal */
+  .cd__axis { stroke: var(--texte-2); stroke-width: 1.5; opacity: .5; }
+  .cd__ytick { fill: var(--texte-2); font: 600 9px/1 'Satoshi', sans-serif; opacity: .7; }
   .cd__line { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 800; stroke-dashoffset: 0; }
   .cd.in .cd__line { animation: cddraw 1.3s ease forwards; }
+  .cd__line.dim { stroke: var(--texte-2); stroke-width: 2; stroke-dasharray: 4 4; }
   .cd__wick { stroke: var(--texte-2); stroke-width: 2; }
   .cd__fill { opacity: 0; transform: scale(.92); transform-origin: center; }
   .cd.in .cd__fill { animation: cdfill .6s ease forwards; }
@@ -243,7 +320,7 @@ const { variant } = Astro.props;
   .cd__box rect { fill: var(--charbon-2); stroke: var(--ligne); stroke-width: 2; }
   .cd__box.res rect { fill: color-mix(in srgb, var(--orange) 16%, transparent); stroke: var(--orange); }
   .cd__bx { fill: var(--texte-2); font: 700 9px/1 'Satoshi', sans-serif; letter-spacing: 0.04em; }
-  .cd__bxv { fill: var(--texte); font: 700 10px/1 'Clash Display', sans-serif; }
+  .cd__bxv { fill: var(--texte); font: 700 11px/1 'Clash Display', sans-serif; }
   .cd__op { fill: var(--orange); font: 700 22px/1 'Clash Display', sans-serif; }
   .cd__check rect { fill: none; stroke: var(--emeraude); stroke-width: 2.5; }
   .cd__check path { fill: none; stroke: var(--emeraude); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
