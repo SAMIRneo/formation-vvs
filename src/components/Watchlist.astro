@@ -1,0 +1,127 @@
+---
+// Veille marché — liste de niveaux clés ÉDITABLE (localStorage), 100% client
+interface Props { lang?: 'fr' | 'es'; }
+const { lang = 'fr' } = Astro.props;
+const L = {
+  fr: {
+    title: 'Veille marché', sub: 'Tes niveaux à surveiller. Cliques pour éditer, Entrée pour valider.',
+    add: 'Ajouter un niveau', ph: 'ex. BTC/EUR 58k support', empty: 'Aucun niveau. Ajoute tes zones de value.',
+    clear: 'Tout effacer', exp: 'export',
+  },
+  es: {
+    title: 'Veille mercado', sub: 'Tus niveles a vigilar. Clic para editar, Enter para validar.',
+    add: 'Añadir nivel', ph: 'ej. BTC/EUR 58k soporte', empty: 'Ningún nivel. Añade tus zonas de valor.',
+    clear: 'Borrar todo', exp: 'export',
+  },
+}[lang];
+---
+<div class="watch" data-reveal data-lang={lang}>
+  <div class="watch__head">
+    <div>
+      <h2 class="watch__t">{L.title}</h2>
+      <p class="watch__sub">{L.sub}</p>
+    </div>
+    <div class="watch__tools">
+      <button class="journal__btn" data-export type="button">{L.exp}</button>
+      <button class="journal__btn journal__btn--ghost" data-clear type="button">{L.clear}</button>
+    </div>
+  </div>
+
+  <form class="watch__add" data-form>
+    <input name="lvl" placeholder={L.ph} autocomplete="off" />
+    <button class="btn" type="submit">{L.add}</button>
+  </form>
+
+  <ul class="watch__list" data-list>
+    <li class="watch__empty" data-empty>{L.empty}</li>
+  </ul>
+</div>
+
+<style>
+  .watch { background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre-douce); }
+  .watch__head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .watch__t { font-size: clamp(1.3rem, 5vw, 1.9rem); margin: 0; }
+  .watch__sub { color: var(--texte-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 44ch; }
+  .watch__tools { display: flex; gap: 8px; flex: 0 0 auto; align-items: center; }
+  .journal__btn { font-family: var(--font-body); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 7px 11px; border: var(--border-w) solid var(--ligne); border-radius: 7px; background: transparent; color: var(--texte-2); cursor: pointer; transition: all .12s ease; }
+  .journal__btn:hover { border-color: var(--lime); color: var(--lime); }
+  .journal__btn--ghost:hover { border-color: var(--rouge); color: var(--rouge); }
+
+  .watch__add { display: flex; gap: 10px; margin-bottom: 18px; }
+  .watch__add input { flex: 1; font-family: var(--font-body); font-size: 0.95rem; color: var(--texte);
+    background: var(--charbon); border: var(--border-w) solid var(--ligne); border-radius: 8px; padding: 11px 12px; }
+  .watch__add input:focus { outline: 2px solid var(--lime); outline-offset: 1px; border-color: var(--lime); }
+
+  .watch__list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .watch__empty { color: var(--texte-2); font-size: 0.9rem; text-align: center; padding: 18px; border: 1px dashed var(--ligne); border-radius: 10px; }
+  .wrow { display: flex; align-items: center; gap: 10px; background: var(--charbon-3); border: var(--border-w) solid var(--ligne); border-radius: 10px; padding: 10px 14px; }
+  .wrow__txt { flex: 1; font-size: 0.92rem; color: var(--texte); cursor: text; }
+  .wrow__del { background: none; border: none; color: var(--texte-2); cursor: pointer; font-size: 1.05rem; padding: 2px 6px; border-radius: 6px; }
+  .wrow__del:hover { color: var(--rouge); background: color-mix(in srgb, var(--rouge) 12%, transparent); }
+</style>
+
+<script is:inline>
+  (function () {
+    const init = () => {
+    const KEY = 'fv_watch_v1';
+    const root = document.querySelector('.watch[data-reveal]');
+    if (!root) return;
+    const form = root.querySelector('[data-form]');
+    const list = root.querySelector('[data-list]');
+    const empty = root.querySelector('[data-empty]');
+    const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } };
+    const save = (a) => localStorage.setItem(KEY, JSON.stringify(a));
+    const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    function render() {
+      const arr = load();
+      list.innerHTML = '';
+      if (!arr.length) { list.appendChild(empty); empty.style.display = ''; return; }
+      empty.style.display = 'none';
+      arr.slice().reverse().forEach((t) => {
+        const li = document.createElement('li');
+        li.className = 'wrow';
+        li.innerHTML = `<span class="wrow__txt" data-edit="${esc(t.id)}">${esc(t.txt)}</span><button class="wrow__del" data-del="${esc(t.id)}" aria-label="Supprimer">✕</button>`;
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const inp = form.querySelector('input');
+      const v = inp.value.trim();
+      if (!v) return;
+      const arr = load();
+      arr.push({ id: Date.now().toString(36), txt: v });
+      save(arr); render(); inp.value = '';
+    });
+
+    list.addEventListener('click', (e) => {
+      const del = e.target.closest('[data-del]');
+      if (del) { save(load().filter((t) => t.id !== del.dataset.del)); render(); return; }
+      const ed = e.target.closest('[data-edit]');
+      if (ed) {
+        const nv = prompt('Modifier le niveau :', ed.textContent);
+        if (nv !== null && nv.trim()) {
+          const arr = load(); const it = arr.find((t) => t.id === ed.dataset.edit);
+          if (it) { it.txt = nv.trim(); save(arr); render(); }
+        }
+      }
+    });
+
+    root.querySelector('[data-clear]').addEventListener('click', () => {
+      if (load().length && confirm('Effacer toute la veille ?')) { save([]); render(); }
+    });
+    root.querySelector('[data-export]').addEventListener('click', () => {
+      const arr = load(); if (!arr.length) return;
+      const blob = new Blob([JSON.stringify(arr, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'formationvvs-veille.json'; a.click();
+    });
+
+    render();
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>

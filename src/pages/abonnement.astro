@@ -25,7 +25,7 @@ const { plans } = getContent(lang);
         </article>
       ))}
     </div>
-    <div class="panel-orange cta-panel" data-reveal>
+    <div class="panel-lime cta-panel" data-reveal>
       <h2>{t(lang, 'abo.ctaPanelTitle')}</h2>
       <p>{t(lang, 'abo.ctaPanelLead')}</p>
       <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'abo.ctaBtn')}</a>
@@ -42,16 +42,16 @@ const { plans } = getContent(lang);
     border-radius: var(--radius); padding: 26px 22px; display: flex; flex-direction: column;
     transition: border-color .14s ease, transform .14s ease;
   }
-  .plan:hover { transform: translateY(-4px); border-color: var(--orange); }
-  .plan--hl { border-color: var(--orange); box-shadow: var(--ombre-dure); }
+  .plan:hover { transform: translateY(-4px); border-color: var(--lime); }
+  .plan--hl { border-color: var(--lime); box-shadow: var(--ombre-dure); }
   .plan__flag {
-    position: absolute; top: -12px; left: 22px; background: var(--orange); color: var(--charbon);
+    position: absolute; top: -12px; left: 22px; background: var(--lime); color: var(--charbon);
     font-family: var(--font-display); font-weight: 700; font-size: 0.62rem; text-transform: uppercase;
     letter-spacing: 0.08em; padding: 4px 10px; border-radius: 5px;
   }
   .plan__nom { font-size: 1.3rem; margin-bottom: 12px; }
   .plan__prix { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
-  .plan__montant { font-family: var(--font-display); font-weight: 700; font-size: 2.4rem; letter-spacing: -0.04em; color: var(--orange); }
+  .plan__montant { font-family: var(--font-display); font-weight: 700; font-size: 2.4rem; letter-spacing: -0.04em; color: var(--lime); }
   .plan__per { color: var(--texte-2); font-weight: 700; font-size: 0.85rem; }
   .plan__feat { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex: 1 1 auto; }
   .plan__feat li { color: var(--texte); font-size: 0.92rem; padding-left: 22px; position: relative; }

@@ -1,0 +1,195 @@
+---
+// Journal de trades — persistance localStorage, 100% client, zéro backend
+// Documente: contexte, setup, entrée, stop, target, résultat, ressenti
+interface Props { lang?: 'fr' | 'es'; }
+const { lang = 'fr' } = Astro.props;
+const L = {
+  fr: {
+    title: 'Journal de trades', sub: 'Ton miroir. Note AVANT et APRÈS chaque trade.',
+    ctx: 'Contexte', setup: 'Setup', entry: 'Entrée', stop: 'Stop', target: 'Target',
+    result: 'Résultat', win: 'Gain', loss: 'Perte', bE: 'Break-even',
+    feel: 'Ressenti', feelPh: 'Ce que tu as ressenti (peur, FOMO, calme…)',
+    sym: 'Symbole / paire', symPh: 'ex. BTC/EUR', note: 'Note post-trade', notePh: 'Ce qui est arrivé vs le plan',
+    add: 'Ajouter au journal', empty: 'Aucun trade enregistré. Commence par en documenter un.',
+    clear: 'Tout effacer', exp: 'export', count: 'trade',
+  },
+  es: {
+    title: 'Diario de trades', sub: 'Tu espejo. Anota ANTES y DESPUÉS de cada trade.',
+    ctx: 'Contexto', setup: 'Setup', entry: 'Entrada', stop: 'Stop', target: 'Objetivo',
+    result: 'Resultado', win: 'Ganancia', loss: 'Pérdida', bE: 'Break-even',
+    feel: 'Sentimiento', feelPh: 'Lo que sentiste (miedo, FOMO, calma…)',
+    sym: 'Símbolo / par', symPh: 'ej. BTC/EUR', note: 'Nota post-trade', notePh: 'Lo que pasó vs el plan',
+    add: 'Añadir al diario', empty: 'Ningún trade registrado. Empieza documentando uno.',
+    clear: 'Borrar todo', exp: 'export', count: 'trade',
+  },
+}[lang];
+---
+<div class="journal" data-reveal>
+  <div class="journal__head">
+    <div>
+      <h2 class="journal__t">{L.title}</h2>
+      <p class="journal__sub">{L.sub}</p>
+    </div>
+    <div class="journal__tools">
+      <span class="journal__count" data-count>0 {L.count}</span>
+      <button class="journal__btn" data-export type="button">{L.exp}</button>
+      <button class="journal__btn journal__btn--ghost" data-clear type="button">{L.clear}</button>
+    </div>
+  </div>
+
+  <form class="journal__form" data-form>
+    <div class="journal__grid">
+      <label class="jf">{L.sym}<input name="sym" placeholder={L.symPh} required /></label>
+      <label class="jf">{L.ctx}<input name="ctx" placeholder={L.ctx} /></label>
+      <label class="jf">{L.setup}<input name="setup" placeholder={L.setup} /></label>
+      <label class="jf">{L.entry}<input name="entry" inputmode="decimal" placeholder="100.0" /></label>
+      <label class="jf">{L.stop}<input name="stop" inputmode="decimal" placeholder="95.0" /></label>
+      <label class="jf">{L.target}<input name="target" inputmode="decimal" placeholder="110.0" /></label>
+      <label class="jf jf--res">{L.result}
+        <select name="result">
+          <option value="win">{L.win}</option>
+          <option value="loss">{L.loss}</option>
+          <option value="be">{L.bE}</option>
+        </select>
+      </label>
+      <label class="jf jf--feel">{L.feel}<input name="feel" placeholder={L.feelPh} /></label>
+    </div>
+    <label class="jf jf--note">{L.note}
+      <textarea name="note" rows="2" placeholder={L.notePh}></textarea>
+    </label>
+    <button class="btn" type="submit">{L.add}</button>
+  </form>
+
+  <ul class="journal__list" data-list>
+    <li class="journal__empty" data-empty>{L.empty}</li>
+  </ul>
+</div>
+
+<style>
+  .journal { background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre-douce); }
+  .journal__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+  .journal__t { font-size: clamp(1.3rem, 5vw, 1.9rem); margin: 0; }
+  .journal__sub { color: var(--texte-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 46ch; }
+  .journal__tools { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+  .journal__count { font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; color: var(--lime); }
+  .journal__btn { font-family: var(--font-body); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 7px 11px; border: var(--border-w) solid var(--ligne); border-radius: 7px; background: transparent; color: var(--texte-2); cursor: pointer; transition: all .12s ease; }
+  .journal__btn:hover { border-color: var(--lime); color: var(--lime); }
+  .journal__btn--ghost:hover { border-color: var(--rouge); color: var(--rouge); }
+
+  .journal__form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+  .journal__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .jf { display: flex; flex-direction: column; gap: 5px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texte-2); }
+  .jf input, .jf select, .jf textarea {
+    font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: var(--texte);
+    background: var(--charbon); border: var(--border-w) solid var(--ligne); border-radius: 8px; padding: 10px 12px; resize: vertical;
+  }
+  .jf input:focus, .jf select:focus, .jf textarea:focus { outline: 2px solid var(--lime); outline-offset: 1px; border-color: var(--lime); }
+  .jf--note { grid-column: 1 / -1; }
+  @media (max-width: 640px) { .journal__grid { grid-template-columns: 1fr; } }
+
+  .journal__list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .journal__empty { color: var(--texte-2); font-size: 0.9rem; text-align: center; padding: 20px; border: 1px dashed var(--ligne); border-radius: 10px; }
+  .jrow { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; background: var(--charbon-3); border: var(--border-w) solid var(--ligne); border-radius: 10px; padding: 12px 14px; }
+  .jrow__sym { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--lime); }
+  .jrow__meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: var(--texte-2); }
+  .jrow__meta b { color: var(--texte); font-weight: 600; }
+  .jrow__note { font-size: 0.78rem; color: var(--texte-2); margin-top: 4px; line-height: 1.4; }
+  .jrow__res { font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; padding: 4px 9px; border-radius: 6px; letter-spacing: 0.04em; }
+  .jrow__res--win { background: color-mix(in srgb, var(--emeraude) 22%, transparent); color: var(--emeraude); }
+  .jrow__res--loss { background: color-mix(in srgb, var(--rouge) 22%, transparent); color: var(--rouge); }
+  .jrow__res--be { background: color-mix(in srgb, var(--jaune) 22%, transparent); color: var(--jaune); }
+  .jrow__del { background: none; border: none; color: var(--texte-2); cursor: pointer; font-size: 1.1rem; padding: 2px 6px; border-radius: 6px; }
+  .jrow__del:hover { color: var(--rouge); background: color-mix(in srgb, var(--rouge) 12%, transparent); }
+</style>
+
+<script is:inline>
+  (function () {
+    const init = () => {
+    const KEY = 'fv_journal_v1';
+    const root = document.querySelector('.journal[data-reveal]');
+    if (!root) return;
+    const form = root.querySelector('[data-form]');
+    const list = root.querySelector('[data-list]');
+    const empty = root.querySelector('[data-empty]');
+    const countEl = root.querySelector('[data-count]');
+    const L = {
+      fr: { count: 'trade', empty: 'Aucun trade enregistré. Commence par en documenter un.', win: 'Gain', loss: 'Perte', be: 'BE', del: 'Supprimer', exp: 'export', note: 'Note', feel: 'Ressenti', ctx: 'Ctx', setup: 'Setup', e: 'E', s: 'S', t: 'T' },
+      es: { count: 'trade', empty: 'Ningún trade registrado. Empieza documentando uno.', win: 'Ganancia', loss: 'Pérdida', be: 'BE', del: 'Borrar', exp: 'export', note: 'Nota', feel: 'Sentimiento', ctx: 'Ctx', setup: 'Setup', e: 'E', s: 'S', t: 'T' },
+    }[root.dataset.lang || 'fr'];
+
+    const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } };
+    const save = (a) => localStorage.setItem(KEY, JSON.stringify(a));
+    const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    function render() {
+      const arr = load();
+      countEl.textContent = arr.length + ' ' + L.count;
+      list.innerHTML = '';
+      if (!arr.length) { list.appendChild(empty); empty.style.display = ''; return; }
+      empty.style.display = 'none';
+      arr.slice().reverse().forEach((t) => {
+        const li = document.createElement('li');
+        li.className = 'jrow';
+        const resCls = t.result === 'win' ? 'win' : t.result === 'loss' ? 'loss' : 'be';
+        const resLbl = t.result === 'win' ? L.win : t.result === 'loss' ? L.loss : L.be;
+        const meta = [];
+        if (t.ctx) meta.push(`${L.ctx}: <b>${esc(t.ctx)}</b>`);
+        if (t.setup) meta.push(`${L.setup}: <b>${esc(t.setup)}</b>`);
+        if (t.entry) meta.push(`${L.e}: <b>${esc(t.entry)}</b>`);
+        if (t.stop) meta.push(`${L.s}: <b>${esc(t.stop)}</b>`);
+        if (t.target) meta.push(`${L.t}: <b>${esc(t.target)}</b>`);
+        if (t.feel) meta.push(`${L.feel}: <b>${esc(t.feel)}</b>`);
+        li.innerHTML = `
+          <span class="jrow__sym">${esc(t.sym || '—')}</span>
+          <div>
+            <div class="jrow__meta">${meta.join(' &middot; ')}</div>
+            ${t.note ? `<div class="jrow__note">${esc(t.note)}</div>` : ''}
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="jrow__res jrow__res--${resCls}">${resLbl}</span>
+            <button class="jrow__del" data-del="${esc(t.id)}" title="${L.del}" aria-label="${L.del}">✕</button>
+          </div>`;
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const arr = load();
+      arr.push({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        sym: f.get('sym'), ctx: f.get('ctx'), setup: f.get('setup'),
+        entry: f.get('entry'), stop: f.get('stop'), target: f.get('target'),
+        result: f.get('result'), feel: f.get('feel'), note: f.get('note'),
+        at: new Date().toISOString(),
+      });
+      save(arr); render(); form.reset();
+    });
+
+    list.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-del]');
+      if (!btn) return;
+      const arr = load().filter((t) => t.id !== btn.dataset.del);
+      save(arr); render();
+    });
+
+    root.querySelector('[data-clear]').addEventListener('click', () => {
+      if (!load().length) return;
+      if (confirm('Effacer tout le journal ?')) { save([]); render(); }
+    });
+    root.querySelector('[data-export]').addEventListener('click', () => {
+      const arr = load();
+      if (!arr.length) return;
+      const blob = new Blob([JSON.stringify(arr, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'formationvvs-journal.json'; a.click();
+    });
+
+    render();
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>

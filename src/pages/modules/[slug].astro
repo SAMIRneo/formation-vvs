@@ -9,7 +9,7 @@ export function getStaticPaths() {
 }
 const { m } = Astro.props;
 const lang = getLang(Astro.url);
-const accentVar = { orange: 'var(--orange)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[m.accent || 'orange'];
+const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[m.accent || 'orange'];
 ---
 <BaseLayout title={m.title} active="modules">
   <article class="detail wrap">
@@ -67,7 +67,7 @@ const accentVar = { orange: 'var(--orange)', bleu: 'var(--bleu)', jaune: 'var(--
 <style>
   .detail { max-width: 1080px; padding: 48px 20px 64px; }
   .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
-  .back:hover { color: var(--orange); }
+  .back:hover { color: var(--lime); }
   .detail__head { max-width: 760px; margin-bottom: 40px; }
   .detail__head h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; text-wrap: balance; }
   .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 18px; max-width: 52ch; }
@@ -77,10 +77,10 @@ const accentVar = { orange: 'var(--orange)', bleu: 'var(--bleu)', jaune: 'var(--
 
   /* TOC sticky */
   .toc { position: sticky; top: 84px; align-self: start; }
-  .toc__k { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.66rem; color: var(--orange); }
+  .toc__k { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.66rem; color: var(--lime); }
   .toc ol { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 4px; }
   .toc a { display: block; color: var(--texte-2); font-size: 0.85rem; font-weight: 500; padding: 7px 10px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease; }
-  .toc a:hover { color: var(--texte); border-color: var(--orange); }
+  .toc a:hover { color: var(--texte); border-color: var(--lime); }
 
   /* Chapitres bento */
   .chapters { display: flex; flex-direction: column; gap: 20px; min-width: 0; }

@@ -37,7 +37,7 @@ const { modules } = getContent(lang);
       </div>
 
       <!-- CTA panneau couleur (half) -->
-      <div class="bento__card b-half panel-orange" data-reveal data-reveal-delay="80">
+      <div class="bento__card b-half panel-lime" data-reveal data-reveal-delay="80">
         <div class="cta-mini">
           <h3>{t(lang, 'home.ctaPanelTitle')}</h3>
           <p>{t(lang, 'home.ctaPanelLead')}</p>
@@ -72,16 +72,16 @@ const { modules } = getContent(lang);
 <style>
   .hero-parallax { padding: 72px 20px 56px; min-height: 64vh; display: flex; align-items: center; }
   .hero { width: 100%; max-width: 820px; display: flex; flex-direction: column; gap: 24px; }
-  .hl { color: var(--orange); }
+  .hl { color: var(--lime); }
   .hero__lead { color: var(--texte-2); font-size: 1.12rem; margin: 22px 0 30px; max-width: 52ch; line-height: 1.6; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
 
-  .market-link { display: inline-block; margin-top: 16px; color: var(--orange); font-weight: 700; font-size: 0.85rem; }
+  .market-link { display: inline-block; margin-top: 16px; color: var(--lime); font-weight: 700; font-size: 0.85rem; }
 
   .cta-mini { display: flex; flex-direction: column; height: 100%; }
   .cta-mini h3 { font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 10px; color: #1A0D00; text-transform: uppercase; letter-spacing: -0.03em; font-family: var(--font-display); font-weight: 700; line-height: 1; }
   .cta-mini p { color: #2A1500; font-weight: 500; font-size: 0.92rem; margin-bottom: 16px; flex: 1 1 auto; }
-  .cta-mini .btn { background: var(--charbon); color: var(--orange); border-color: #1A0D00; align-self: flex-start; }
+  .cta-mini .btn { background: var(--charbon); color: var(--lime); border-color: #1A0D00; align-self: flex-start; }
 
   .sec-head { margin: 0; }
   .mods-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -90,8 +90,8 @@ const { modules } = getContent(lang);
     background: var(--charbon-3); border: var(--border-w) solid var(--ligne);
     border-radius: 12px; padding: 16px 18px; transition: border-color .15s ease, transform .15s ease;
   }
-  .mod-bento:hover { border-color: var(--orange); transform: translateY(-2px); }
-  .mod-bento__n { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--orange); letter-spacing: -0.04em; }
+  .mod-bento:hover { border-color: var(--lime); transform: translateY(-2px); }
+  .mod-bento__n { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--lime); letter-spacing: -0.04em; }
   .mod-bento__t { font-size: 1.05rem; margin: 0 0 2px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; }
   .mod-bento__d { font-size: 0.8rem; color: var(--texte-2); margin: 0; }
   .mod-bento__tag { font-family: var(--font-body); font-weight: 700; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border: var(--border-w) solid var(--ligne); border-radius: 6px; color: var(--texte-2); }

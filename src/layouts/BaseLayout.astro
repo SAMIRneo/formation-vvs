@@ -45,6 +45,7 @@ const tabs = [
   </script>
   <script>
     import '../scripts/motion.js';
+    import '../scripts/gsap-motion.js';
   </script>
 </head>
 <body>
@@ -126,18 +127,18 @@ const tabs = [
     .brand { display: flex; align-items: center; gap: 10px; }
     .brand__mark {
       font-family: var(--font-display); font-weight: 700;
-      background: var(--orange); color: var(--charbon);
+      background: var(--lime); color: var(--charbon);
       width: 36px; height: 36px; display: grid; place-items: center;
       border-radius: 7px; font-size: 0.95rem; letter-spacing: -0.05em;
     }
     .brand__name { font-family: var(--font-display); font-weight: 700; font-size: 0.92rem; letter-spacing: -0.02em; text-transform: uppercase; }
-    .brand__vvs { color: var(--orange); }
+    .brand__vvs { color: var(--lime); }
     .app-header__cta {
       font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
-      font-size: 0.8rem; padding: 8px 14px; border: var(--border-w) solid var(--orange);
-      border-radius: 7px; color: var(--orange); transition: all .12s ease;
+      font-size: 0.8rem; padding: 8px 14px; border: var(--border-w) solid var(--lime);
+      border-radius: 7px; color: var(--lime); transition: all .12s ease;
     }
-    .app-header__cta:hover { background: var(--orange); color: var(--charbon); }
+    .app-header__cta:hover { background: var(--lime); color: var(--charbon); }
 
     .app-main { min-height: 70vh; }
 
@@ -160,10 +161,10 @@ const tabs = [
       position: relative;
     }
     .tabbar__item svg { width: 23px; height: 23px; }
-    .tabbar__item.is-active { color: var(--orange); }
+    .tabbar__item.is-active { color: var(--lime); }
     .tabbar__item.is-active::before {
       content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 26px; height: 3px; background: var(--orange); border-radius: 0 0 3px 3px;
+      width: 26px; height: 3px; background: var(--lime); border-radius: 0 0 3px 3px;
     }
     .tabbar__item:active { transform: scale(0.94); }
 
@@ -188,7 +189,7 @@ const tabs = [
       display: block; color: var(--texte); font-size: 0.9rem; font-weight: 500;
       padding: 5px 0; transition: color .12s ease;
     }
-    .app-footer__col a:hover { color: var(--orange); }
+    .app-footer__col a:hover { color: var(--lime); }
     .app-footer__base {
       max-width: 1080px; margin: 32px auto 0; padding-top: 20px;
       border-top: 1px solid var(--ligne);

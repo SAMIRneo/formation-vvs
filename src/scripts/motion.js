@@ -1,26 +1,13 @@
 // FormationVVS — moteur de mouvement léger (zéro dépendance)
-// Reveals staggered, ripple tactile, market board "live", respect reduced-motion.
+// Reveals + parallax héro + draw-on SVG désormais pilotés par gsap-motion.js.
+// Ici: ripple tactile, market board LIVE, tilt léger. Respect reduced-motion.
 (function () {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- 1) Reveals au scroll (stagger via data-reveal-delay) ----
-  const reveals = Array.from(document.querySelectorAll('[data-reveal]'));
-  if (reveals.length && !reduce) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          const d = e.target.getAttribute('data-reveal-delay') || 0;
-          setTimeout(() => e.target.classList.add('in'), Number(d));
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach((el) => io.observe(el));
-  } else {
-    reveals.forEach((el) => el.classList.add('in'));
-  }
+  // Reveals + parallax héro + draw-on SVG pilotés par gsap-motion.js
+  // (qui gère aussi le fallback si GSAP indisponible). Rien ici.
 
-  // ---- 2) Ripple tactile sur .btn et .tabbar__item ----
+  // ---- Ripple tactile sur .btn et .tabbar__item ----
   function attachRipple(els) {
     els.forEach((el) => {
       el.addEventListener('pointerdown', (ev) => {
@@ -40,7 +27,7 @@
   attachRipple(document.querySelectorAll('.btn'));
   attachRipple(document.querySelectorAll('.tabbar__item'));
 
-  // ---- 3) Market board LIVE (CoinGecko crypto + open.er-api FX, sans clé, CORS *) ----
+  // ---- Market board LIVE (CoinGecko crypto + open.er-api FX, sans clé, CORS *) ----
   const board = document.getElementById('market-board');
   if (board) {
     const tiles = Array.from(board.querySelectorAll('.tile'));
@@ -98,7 +85,7 @@
     setInterval(refresh, 30000);
   }
 
-  // ---- 4) Tilt léger sur cartes (desktop, pointer fine) ----
+  // ---- Tilt léger sur cartes (desktop, pointer fine) ----
   if (!reduce && window.matchMedia('(pointer:fine)').matches) {
     document.querySelectorAll('[data-tilt]').forEach((card) => {
       card.addEventListener('pointermove', (e) => {
@@ -109,23 +96,5 @@
       });
       card.addEventListener('pointerleave', () => { card.style.transform = ''; });
     });
-  }
-
-  // ---- 5) Parallax léger (héro) : translateY selon le scroll ----
-  const pxEls = Array.from(document.querySelectorAll('[data-parallax]'));
-  if (pxEls.length && !reduce) {
-    let ticking = false;
-    const update = () => {
-      const y = window.scrollY;
-      pxEls.forEach((el) => {
-        const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
-        el.style.transform = `translate3d(0, ${(y * speed).toFixed(1)}px, 0)`;
-      });
-      ticking = false;
-    };
-    window.addEventListener('scroll', () => {
-      if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
-    }, { passive: true });
-    update();
   }
 })();

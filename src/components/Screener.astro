@@ -1,0 +1,114 @@
+---
+// Screener de setups — filtre visuel par structure de marché (données statiques pédagogiques)
+// Pas de flux live (aucune API no-key fiable côté client pour ça) : c'est un ENTRAÎNEMENT
+// à lire la structure, pas un terminal de trading.
+interface Props { lang?: 'fr' | 'es'; }
+const { lang = 'fr' } = Astro.props;
+const L = {
+  fr: {
+    title: 'Screener de setups', sub: 'Filtre l’univers par structure. Entraîne-toi à lire, pas à suivre.',
+    all: 'Tous', range: 'Range', break: 'Cassure', rev: 'Retournement', up: 'Haussier', down: 'Baissier',
+    bias: 'Biais', struct: 'Structure', pair: 'Paire', why: 'Pourquoi',
+    hint: 'Données pédagogiques statiques — entraîne la lecture, pas le suivez-aveugle.',
+  },
+  es: {
+    title: 'Screener de setups', sub: 'Filtra el universo por estructura. Entrena tu lectura, no sigas a ciegas.',
+    all: 'Todos', range: 'Rango', break: 'Ruptura', rev: 'Giro', up: 'Alcista', down: 'Bajista',
+    bias: 'Sesgo', struct: 'Estructura', pair: 'Par', why: 'Por qué',
+    hint: 'Datos pedagógicos estáticos — entrena la lectura, no sigas a ciegas.',
+  },
+}[lang];
+
+// Univers simulé (exemples de structures typiques) — éducatif, pas conseil
+const UNIVERSE = [
+  { pair: 'BTC/EUR', bias: 'up', struct: 'break', why: 'Cassure daily R1 sur volume, retest en cours' },
+  { pair: 'ETH/EUR', bias: 'up', struct: 'range', why: 'Range 1 600–1 720, rebond sur support' },
+  { pair: 'SOL/EUR', bias: 'up', struct: 'rev', why: 'Double bottom 4H, cou rompue' },
+  { pair: 'EUR/USD', bias: 'down', struct: 'range', why: 'Range 1.08–1.10, rejet résistance' },
+  { pair: 'XAU/EUR', bias: 'up', struct: 'break', why: 'Sortie drapeau, momentum haussier' },
+  { pair: 'ADA/EUR', bias: 'down', struct: 'rev', why: 'Tête-épaules sur 1D, cou enfoncée' },
+  { pair: 'DOGE/EUR', bias: 'down', struct: 'range', why: 'Compression, attente de direction' },
+  { pair: 'XRP/EUR', bias: 'up', struct: 'break', why: 'Cassure range 3 jours, volume confirmé' },
+];
+---
+<div class="screen" data-reveal data-lang={lang}>
+  <div class="screen__head">
+    <div>
+      <h2 class="screen__t">{L.title}</h2>
+      <p class="screen__sub">{L.sub}</p>
+    </div>
+  </div>
+
+  <div class="screen__filters" data-filters>
+    <button class="sf is-active" data-f="all">{L.all}</button>
+    <button class="sf" data-f="range">{L.range}</button>
+    <button class="sf" data-f="break">{L.break}</button>
+    <button class="sf" data-f="rev">{L.rev}</button>
+  </div>
+
+  <div class="screen__grid" data-grid>
+    {UNIVERSE.map((u) => (
+      <article class="scard" data-struct={u.struct} data-bias={u.bias}>
+        <div class="scard__top">
+          <span class="scard__pair">{u.pair}</span>
+          <span class={`scard__bias scard__bias--${u.bias}`}>{u.bias === 'up' ? L.up : L.down}</span>
+        </div>
+        <div class="scard__struct">
+          <span class="scard__tag">{u.struct === 'range' ? L.range : u.struct === 'break' ? L.break : L.rev}</span>
+        </div>
+        <p class="scard__why"><b>{L.why} :</b> {u.why}</p>
+      </article>
+    ))}
+  </div>
+  <p class="screen__hint">{L.hint}</p>
+</div>
+
+<style>
+  .screen { background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre-douce); }
+  .screen__head { margin-bottom: 16px; }
+  .screen__t { font-size: clamp(1.3rem, 5vw, 1.9rem); margin: 0; }
+  .screen__sub { color: var(--texte-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 48ch; }
+
+  .screen__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .sf { font-family: var(--font-body); font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 8px 14px; border: var(--border-w) solid var(--ligne); border-radius: 8px; background: transparent; color: var(--texte-2); cursor: pointer; transition: all .12s ease; }
+  .sf:hover { border-color: var(--lime); color: var(--lime); }
+  .sf.is-active { background: var(--lime); color: var(--charbon); border-color: var(--lime); }
+
+  .screen__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 640px) { .screen__grid { grid-template-columns: 1fr; } }
+
+  .scard { background: var(--charbon-3); border: var(--border-w) solid var(--ligne); border-radius: 11px; padding: 14px 16px; transition: border-color .15s ease, transform .15s ease; }
+  .scard:hover { border-color: color-mix(in srgb, var(--lime) 50%, var(--ligne)); transform: translateY(-2px); }
+  .scard__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .scard__pair { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; }
+  .scard__bias { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.06em; }
+  .scard__bias--up { background: color-mix(in srgb, var(--emeraude) 20%, transparent); color: var(--emeraude); }
+  .scard__bias--down { background: color-mix(in srgb, var(--rouge) 20%, transparent); color: var(--rouge); }
+  .scard__tag { display: inline-block; font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border: var(--border-w) solid var(--jaune); color: var(--jaune); border-radius: 6px; }
+  .scard__why { color: var(--texte-2); font-size: 0.82rem; line-height: 1.45; margin: 10px 0 0; }
+  .scard__why b { color: var(--texte); }
+  .screen__hint { color: var(--texte-2); font-size: 0.72rem; opacity: 0.65; margin: 16px 0 0; text-align: center; }
+</style>
+
+<script is:inline>
+  (function () {
+    const init = () => {
+    const root = document.querySelector('.screen[data-reveal]');
+    if (!root) return;
+    const filters = root.querySelectorAll('[data-f]');
+    const cards = Array.from(root.querySelectorAll('.scard'));
+    filters.forEach((b) => b.addEventListener('click', () => {
+      filters.forEach((x) => x.classList.remove('is-active'));
+      b.classList.add('is-active');
+      const f = b.dataset.f;
+      cards.forEach((c) => {
+        const show = f === 'all' || c.dataset.struct === f;
+        c.style.display = show ? '' : 'none';
+      });
+    });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>

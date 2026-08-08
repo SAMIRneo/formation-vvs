@@ -16,7 +16,7 @@ const { modules } = getContent(lang);
     <div class="mods">
       {modules.map((m) => <ModuleCard {...m} href={localizedPath(`/modules/${m.slug}/`, lang)} />)}
     </div>
-    <div class="panel-orange cta-panel" data-reveal>
+    <div class="panel-lime cta-panel" data-reveal>
       <h2>{t(lang, 'modules.ctaTitle')}</h2>
       <p>{t(lang, 'modules.ctaLead')}</p>
       <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'modules.ctaBtn')}</a>

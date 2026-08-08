@@ -24,7 +24,7 @@ const lang = getLang(Astro.url);
         <span class="chan__v">@formationvvs</span>
       </a>
     </div>
-    <div class="panel-orange cta-final" data-reveal>
+    <div class="panel-lime cta-final" data-reveal>
       <h2>{t(lang, 'contact.finalTitle')}</h2>
       <p>{t(lang, 'contact.finalLead')}</p>
       <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'contact.finalBtn')}</a>
@@ -41,8 +41,8 @@ const lang = getLang(Astro.url);
     background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
     border-radius: var(--radius); padding: 18px 22px; transition: border-color .14s ease, transform .14s ease;
   }
-  .chan:hover { border-color: var(--orange); transform: translateX(4px); }
-  .chan__k { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--orange); flex: 0 0 auto; }
+  .chan:hover { border-color: var(--lime); transform: translateX(4px); }
+  .chan__k { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--lime); flex: 0 0 auto; }
   .chan__v { color: var(--texte); font-size: 0.95rem; text-align: right; }
   .cta-final { padding: 38px; text-align: center; }
   .cta-final p { max-width: 40ch; margin: 14px auto 24px; color: #2A1500; font-weight: 500; }

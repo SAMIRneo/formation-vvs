@@ -62,7 +62,7 @@ const { variant } = Astro.props;
       <rect class="zone" x="200" y="40" width="90" height="80"/>
       <text class="zone-t" x="245" y="86" text-anchor="middle">ZONE</text>
       <path class="arrow" d="M150 108 L205 86" marker-end="url(#ah)"/>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#FF6A00"/></marker></defs>
+      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#C6F432"/></marker></defs>
       <circle class="pulse-dot" cx="205" cy="86" r="5"/>
     </svg>
   )}
@@ -77,9 +77,9 @@ const { variant } = Astro.props;
   .down { fill: var(--rouge); }
   .key { stroke: var(--jaune); stroke-width: 2; stroke-dasharray: 6 4; }
   .key-t { fill: var(--jaune); font: 700 9px/1 'Satoshi', sans-serif; letter-spacing: 0.1em; }
-  .trend-line { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 2.4s ease forwards; }
+  .trend-line { fill: none; stroke: var(--lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 2.4s ease forwards; }
   .vol-bar { fill: color-mix(in srgb, var(--bleu) 60%, transparent); }
-  .pulse-dot { fill: var(--orange); animation: dotpulse 1.8s ease-in-out infinite; }
+  .pulse-dot { fill: var(--lime); animation: dotpulse 1.8s ease-in-out infinite; }
   .ring { fill: none; stroke: var(--ligne); stroke-width: 10; }
   .risk-arc { fill: none; stroke: var(--rouge); stroke-width: 10; stroke-linecap: round; transform-origin: 110px 90px; transform: rotate(-90deg); stroke-dasharray: 377; stroke-dashoffset: 377; animation: draw 1.8s ease forwards; }
   .risk-t { fill: var(--rouge); font: 700 22px/1 'Clash Display', sans-serif; }
@@ -88,9 +88,9 @@ const { variant } = Astro.props;
   .tp { stroke: var(--emeraude); stroke-width: 2; }
   .lbl { fill: var(--texte-2); font: 700 8px/1 'Satoshi', sans-serif; letter-spacing: 0.08em; }
   .lbl.up { fill: var(--emeraude); } .lbl.down { fill: var(--rouge); }
-  .zone { fill: color-mix(in srgb, var(--orange) 12%, transparent); stroke: var(--orange); stroke-width: 1.5; stroke-dasharray: 5 4; }
-  .zone-t { fill: var(--orange); font: 700 11px/1 'Clash Display', sans-serif; }
-  .arrow { fill: none; stroke: var(--orange); stroke-width: 2.5; stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 2s ease .4s forwards; }
+  .zone { fill: color-mix(in srgb, var(--lime) 12%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .zone-t { fill: var(--lime); font: 700 11px/1 'Clash Display', sans-serif; }
+  .arrow { fill: none; stroke: var(--lime); stroke-width: 2.5; stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 2s ease .4s forwards; }
   @keyframes draw { to { stroke-dashoffset: 0; } }
   @keyframes dotpulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
   @media (prefers-reduced-motion: reduce) {

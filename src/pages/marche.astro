@@ -34,7 +34,7 @@ const { tools } = getContent(lang);
         </a>
       ))}
     </div>
-    <div class="panel-orange cta-panel" data-reveal>
+    <div class="panel-lime cta-panel" data-reveal>
       <h2>{t(lang, 'marche.ctaTitle')}</h2>
       <p>{t(lang, 'marche.ctaLead')}</p>
       <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'marche.ctaBtn')}</a>
@@ -50,13 +50,13 @@ const { tools } = getContent(lang);
     background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
     border-radius: var(--radius); padding: 22px; transition: border-color .14s ease, transform .14s ease;
   }
-  .tool:hover { border-color: var(--orange); transform: translateY(-4px); }
+  .tool:hover { border-color: var(--lime); transform: translateY(-4px); }
   .tool__ic { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 9px;
-    background: color-mix(in srgb, var(--orange) 14%, transparent); color: var(--orange); margin-bottom: 14px; }
+    background: color-mix(in srgb, var(--lime) 14%, transparent); color: var(--lime); margin-bottom: 14px; }
   .tool__ic svg { width: 22px; height: 22px; }
   .tool__t { font-size: 1.2rem; margin-bottom: 8px; }
   .tool__d { color: var(--texte-2); font-size: 0.9rem; }
-  .tool__go { margin-top: 12px; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; color: var(--orange); display: inline-flex; align-items: center; gap: 6px; }
+  .tool__go { margin-top: 12px; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; color: var(--lime); display: inline-flex; align-items: center; gap: 6px; }
   .tool__go { transition: gap .18s ease; }
   .tool:hover .tool__go { gap: 11px; }
   .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }

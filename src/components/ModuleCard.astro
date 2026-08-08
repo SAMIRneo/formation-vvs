@@ -8,7 +8,7 @@ interface Props {
   accent?: 'orange' | 'bleu' | 'jaune' | 'emeraude';
 }
 const { n, title, desc, tag, href, accent = 'orange' } = Astro.props;
-const accentVar = { orange: 'var(--orange)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[accent];
+const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[accent];
 ---
 <a class="mod" href={href} style={`--accent:${accentVar}`} data-reveal>
   <span class="mod__bar"></span>
