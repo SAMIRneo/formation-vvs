@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { tools } from '../../../data/content';
+import { getLang, t, localizedPath } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return tools.map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
+}
+const { tool } = Astro.props;
+const lang = getLang(Astro.url);
+const isCalc = tool.slug === 'calculateur';
+---
+<BaseLayout title={tool.t} active="marche">
+  <article class="outil wrap" data-reveal>
+    <a href={localizedPath('/marche/', lang)} class="back">{t(lang, 'marche.toolsTitle')} ←</a>
+    <header class="outil__head">
+      <span class="outil__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={tool.icon} /></svg>
+      </span>
+      <h1>{tool.t}</h1>
+      <p class="lead">{tool.d}</p>
+    </header>
+
+    <p class="outil__body">{tool.body}</p>
+
+    {isCalc && (
+      <div class="calc" data-reveal>
+        <h2 class="calc__t">{t(lang, 'outil.calcTitle')}</h2>
+        <div class="calc__grid">
+          <label class="calc__f">{t(lang, 'outil.capital')}
+            <input id="cap" type="number" inputmode="decimal" value="10000" min="1" />
+          </label>
+          <label class="calc__f">{t(lang, 'outil.risk')} %
+            <input id="risk" type="number" inputmode="decimal" value="1" min="0.1" step="0.1" />
+          </label>
+          <label class="calc__f">{t(lang, 'outil.entry')}
+            <input id="entry" type="number" inputmode="decimal" value="100" min="0.01" step="0.01" />
+          </label>
+          <label class="calc__f">{t(lang, 'outil.stop')}
+            <input id="stop" type="number" inputmode="decimal" value="95" min="0.01" step="0.01" />
+          </label>
+        </div>
+        <div class="calc__out">
+          <span class="calc__lbl">{t(lang, 'outil.size')}</span>
+          <span class="calc__val" id="size">—</span>
+          <span class="calc__sub" id="sub"></span>
+        </div>
+      </div>
+    )}
+
+    <div class="cta-row">
+      <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'nav.modules')}</a>
+      <a href={localizedPath('/abonnement/', lang)} class="btn btn--ghost">{t(lang, 'nav.abonnement')}</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .outil { max-width: 720px; padding: 48px 20px 64px; }
+  .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
+  .back:hover { color: var(--orange); }
+  .outil__head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+  .outil__ic { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 11px;
+    background: color-mix(in srgb, var(--orange) 14%, transparent); color: var(--orange); }
+  .outil__ic svg { width: 26px; height: 26px; }
+  .outil h1 { font-size: clamp(2rem, 7vw, 3.2rem); text-wrap: balance; }
+  .lead { color: var(--texte-2); font-size: 1.1rem; margin: 0; }
+  .outil__body { font-size: 1.02rem; line-height: 1.7; color: var(--texte); margin-bottom: 36px; }
+
+  .calc { background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 24px; margin-bottom: 36px; box-shadow: var(--ombre-douce); }
+  .calc__t { font-size: clamp(1.3rem, 5vw, 1.8rem); margin-bottom: 18px; }
+  .calc__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .calc__f { display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; font-weight: 700; color: var(--texte-2); text-transform: uppercase; letter-spacing: 0.04em; }
+  .calc__f input { font-family: var(--font-body); font-size: 1.05rem; font-weight: 600; color: var(--texte);
+    background: var(--charbon); border: var(--border-w) solid var(--ligne); border-radius: 8px; padding: 11px 12px; }
+  .calc__f input:focus { outline: 2px solid var(--orange); outline-offset: 1px; border-color: var(--orange); }
+  .calc__out { margin-top: 20px; display: flex; flex-direction: column; gap: 4px; padding-top: 18px; border-top: 1px solid var(--ligne); }
+  .calc__lbl { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--texte-2); }
+  .calc__val { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 8vw, 3rem); color: var(--emeraude); letter-spacing: -0.03em; }
+  .calc__sub { font-size: 0.85rem; color: var(--texte-2); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  @media (max-width: 760px) { .outil { padding: 36px 16px 56px; } .calc__grid { grid-template-columns: 1fr; } }
+</style>
+
+{isCalc && (
+  <script is:inline>
+    (function () {
+      const cap = document.getElementById('cap');
+      const risk = document.getElementById('risk');
+      const entry = document.getElementById('entry');
+      const stop = document.getElementById('stop');
+      const sizeEl = document.getElementById('size');
+      const subEl = document.getElementById('sub');
+      function calc() {
+        const c = parseFloat(cap.value), r = parseFloat(risk.value), e = parseFloat(entry.value), s = parseFloat(stop.value);
+        if (!c || !r || !e || !s || e === s) { sizeEl.textContent = '—'; subEl.textContent = ''; return; }
+        const riskEur = c * (r / 100);
+        const ecart = Math.abs(e - s);
+        const size = riskEur / ecart;
+        const unit = size >= 1 ? size.toFixed(2) : size.toFixed(4);
+        sizeEl.textContent = unit + (size >= 1 ? ' unités' : ' lot');
+        subEl.textContent = 'Risque ' + riskEur.toFixed(0) + ' € pour ' + ecart + ' pts d’écart';
+      }
+      [cap, risk, entry, stop].forEach((el) => el.addEventListener('input', calc));
+      calc();
+    })();
+  </script>
+)}

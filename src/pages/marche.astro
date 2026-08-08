@@ -23,13 +23,14 @@ const lang = getLang(Astro.url);
     </div>
     <div class="tools">
       {tools.map((tool) => (
-        <article class="tool" data-reveal>
+        <a class="tool" href={localizedPath(`/outils/${tool.slug}/`, lang)} data-reveal>
           <span class="tool__ic" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={tool.icon} /></svg>
           </span>
           <h3 class="tool__t">{t(lang, `marche.${tool.slug}Name`)}</h3>
           <p class="tool__d">{t(lang, `marche.${tool.slug}Desc`)}</p>
-        </article>
+          <span class="tool__go">Ouvrir →</span>
+        </a>
       ))}
     </div>
     <div class="panel-orange cta-panel" data-reveal>
@@ -54,6 +55,9 @@ const lang = getLang(Astro.url);
   .tool__ic svg { width: 22px; height: 22px; }
   .tool__t { font-size: 1.2rem; margin-bottom: 8px; }
   .tool__d { color: var(--texte-2); font-size: 0.9rem; }
+  .tool__go { margin-top: 12px; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; color: var(--orange); display: inline-flex; align-items: center; gap: 6px; }
+  .tool__go { transition: gap .18s ease; }
+  .tool:hover .tool__go { gap: 11px; }
   .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }
   .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
   @media (max-width: 760px) { .tools { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
