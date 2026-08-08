@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChapterDiagram from '../../components/ChapterDiagram.astro';
 import { modules } from '../../data/content';
 import { BASE_URL } from '../../consts';
 
@@ -14,9 +15,26 @@ const { m } = Astro.props;
     <span class="badge badge--orange">{m.tag}</span>
     <h1>{m.title}</h1>
     <p class="lead">{m.desc}</p>
-    <div class="body">
-      {m.body.split('\n').map((p) => <p>{p}</p>)}
+    <p class="intro">{m.body}</p>
+
+    <div class="chapters">
+      {m.chapters.map((c, i) => (
+        <section class="chap" data-reveal>
+          <div class="chap__head">
+            <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
+            <h2 class="chap__t">{c.title}</h2>
+          </div>
+          <ChapterDiagram variant={c.diagram} />
+          <p class="chap__body">{c.body}</p>
+          {c.points && (
+            <ul class="chap__pts">
+              {c.points.map((p) => <li>{p}</li>)}
+            </ul>
+          )}
+        </section>
+      ))}
     </div>
+
     <div class="cta-row">
       <a href={`${BASE_URL}/abonnement/`} class="btn">Rejoindre la formation</a>
       <a href={`${BASE_URL}/marche/`} class="btn btn--ghost">Voir le marché</a>
@@ -25,12 +43,25 @@ const { m } = Astro.props;
 </BaseLayout>
 
 <style>
-  .detail { max-width: 720px; padding: 48px 20px 64px; }
+  .detail { max-width: 760px; padding: 48px 20px 64px; }
   .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
   .back:hover { color: var(--orange); }
   .detail h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; }
-  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 28px; max-width: 52ch; }
-  .body p { font-size: 1.02rem; line-height: 1.7; margin-bottom: 18px; color: var(--texte); }
-  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
-  @media (max-width: 760px) { .detail { padding: 36px 16px 56px; } }
+  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 20px; max-width: 52ch; }
+  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--texte); margin-bottom: 36px; }
+  .chapters { display: flex; flex-direction: column; gap: 40px; }
+  .chap { border: var(--border-w) solid var(--ligne); border-radius: var(--radius); padding: 22px; background: var(--charbon-2); }
+  .chap__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .chap__n { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--orange); letter-spacing: -0.04em; flex: 0 0 auto; }
+  .chap__t { font-size: clamp(1.3rem, 5vw, 1.8rem); margin: 0; }
+  .chap__body { font-size: 1rem; line-height: 1.65; color: var(--texte); margin: 18px 0 16px; }
+  .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .chap__pts li { font-size: 0.95rem; color: var(--texte-2); padding-left: 24px; position: relative; }
+  .chap__pts li::before { content: '►'; position: absolute; left: 0; color: var(--orange); font-size: 0.8rem; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+  @media (max-width: 760px) {
+    .detail { padding: 36px 16px 56px; }
+    .chap { padding: 18px 16px; }
+    .chapters { gap: 28px; }
+  }
 </style>
