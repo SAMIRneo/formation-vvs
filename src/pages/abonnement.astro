@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { plans } from '../data/content';
+import { getContent } from '../data/content';
 import { getLang, t, localizedPath } from '../i18n/ui';
 const lang = getLang(Astro.url);
+const { plans } = getContent(lang);
 ---
 <BaseLayout title={t(lang, 'abo.title')} active="abonnement">
   <section class="section wrap">

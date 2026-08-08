@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MarketBoard from '../components/MarketBoard.astro';
-import { tools } from '../data/content';
+import { getContent } from '../data/content';
 import { getLang, t, localizedPath } from '../i18n/ui';
 const lang = getLang(Astro.url);
+const { tools } = getContent(lang);
 ---
 <BaseLayout title={t(lang, 'marche.title')} active="marche">
   <section class="section wrap">

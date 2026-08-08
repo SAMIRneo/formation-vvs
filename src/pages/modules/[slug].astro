@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterDiagram from '../../components/ChapterDiagram.astro';
-import { modules } from '../../data/content';
+import { getContent } from '../../data/content';
 import { getLang, t, localizedPath } from '../../i18n/ui';
 
 export function getStaticPaths() {
-  return modules.map((m) => ({ params: { slug: m.slug }, props: { m } }));
+  return getContent('fr').modules.map((m) => ({ params: { slug: m.slug }, props: { m } }));
 }
 const { m } = Astro.props;
 const lang = getLang(Astro.url);
@@ -42,7 +42,7 @@ const accentVar = { orange: 'var(--orange)', bleu: 'var(--bleu)', jaune: 'var(--
               <h2 class="chap__t">{c.title}</h2>
             </div>
             <div class="chap__body">
-              <div class="chap__diagram"><ChapterDiagram variant={c.diagram} /></div>
+              <div class="chap__diagram"><ChapterDiagram variant={c.diagram} lang={lang} /></div>
               <div class="chap__text">
                 <p class="chap__lead">{c.body}</p>
                 {c.points && (

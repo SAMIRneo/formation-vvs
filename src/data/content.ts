@@ -150,3 +150,9 @@ export const plans = [
   { nom: 'Trader', prix: '29€', periode: '/ mois', feat: ['Les 4 modules', 'Calculateur de risque', 'Journal de trades', 'Veille marché'], cta: 'Rejoindre', hl: true },
   { nom: 'Pro', prix: '79€', periode: '/ mois', feat: ['Tout Trader', 'Setups en live', 'Coaching mensuel', 'Support prioritaire'], cta: 'Passer Pro', hl: false },
 ];
+
+import { modulesEs, toolsEs, plansEs } from './content.es';
+export function getContent(lang: 'fr' | 'es' = 'fr') {
+  if (lang === 'es') return { modules: modulesEs, tools: toolsEs, plans: plansEs, marketTickers };
+  return { modules, tools, plans, marketTickers };
+}

@@ -1,35 +1,71 @@
 ---
-// Schémas animés par chapitre — blueprint brutaliste enrichi
+// Schémas animés par chapitre — blueprint brutaliste enrichi (FR/ES)
 // variant: candles | levels | range | context | trend | reversal | volume |
 //          pullback | positionsize | stop | rr | drawdown | plan | zone | annotated | review
-interface Props { variant: string; }
-const { variant } = Astro.props;
-const uid = variant; // pour ids de marker uniques par variante
+interface Props { variant: string; lang?: 'fr' | 'es'; }
+const { variant, lang = 'fr' } = Astro.props;
+
+// Labels localisés (FR + ES) pour tous les textes SVG/aria
+const L = {
+  fr: {
+    candles: { aria: "Anatomie d'un chandelier japonais", corps: 'corps', meche: 'mèche' },
+    levels: { aria: 'Support et résistance en zones', res: 'RÉSISTANCE', sup: 'SUPPORT', prix: 'prix' },
+    range: { aria: 'Range et cassure', range: 'RANGE', cassure: 'CASSURE ▲' },
+    context: { aria: 'Lire la bougie dans son contexte', tend: 'TENDANCE ▲', sens: 'bougie dans le sens', value: 'zone de value' },
+    trend: { aria: 'Tendance haussière HH HL', hh: 'HH', hl: 'HL' },
+    reversal: { aria: 'Double bottom retournement', w: 'W · double bottom', cou: 'COU (neckline)' },
+    volume: { aria: 'Prix et volume de confirmation', vol: 'VOLUME (confirmation)', cass: '▲ cassure sur volume' },
+    pullback: { aria: 'Pullback et retest', retest: 'RETEST ✓', entree: 'entrée' },
+    positionsize: { aria: 'Calcul de la taille de position', capital: 'CAPITAL', risque: 'RISQUE', ecart: 'ÉCART', entreeStop: 'entrée−stop', taille: 'TAILLE DU LOT' },
+    stop: { aria: 'Entrée stop et target', entree: 'ENTRÉE', stop: 'STOP', target: 'TARGET', r1: '1R' },
+    rr: { aria: 'Risk reward R-multiple', r1: '1R risque', r3: '3R gain', ratio: 'RATIO 1:3' },
+    drawdown: { aria: 'Courbe de drawdown', dd: 'DRAWDOWN −18%', sommet: 'nouveau sommet' },
+    plan: { aria: 'Plan de trade', contexte: 'Contexte', setup: 'Setup', est: 'Entrée / Stop / Target', raison: 'La raison', exec: 'EXÉCUTION' },
+    zone: { aria: "Zone d'entrée", zone: 'ZONE DE DEMANDE', entry: 'ENTRY au rebond' },
+    annotated: { aria: 'Setup annoté', pourquoi: 'pourquoi : retest + volume' },
+    review: { aria: 'Journal de trade', journal: 'JOURNAL', journalFull: 'JOURNAL DE TRADE' },
+  },
+  es: {
+    candles: { aria: "Anatomía de una vela japonesa", corps: 'cuerpo', meche: 'mecha' },
+    levels: { aria: 'Soporte y resistencia en zonas', res: 'RESISTENCIA', sup: 'SOPORTE', prix: 'precio' },
+    range: { aria: 'Rango y ruptura', range: 'RANGO', cassure: 'RUPTURA ▲' },
+    context: { aria: 'Leer la vela en su contexto', tend: 'TENDENCIA ▲', sens: 'vela a favor', value: 'zona de valor' },
+    trend: { aria: 'Tendencia alcista HH HL', hh: 'HH', hl: 'HL' },
+    reversal: { aria: 'Doble suelo giro', w: 'W · doble suelo', cou: 'CUELLO (neckline)' },
+    volume: { aria: 'Precio y volumen de confirmación', vol: 'VOLUMEN (confirmación)', cass: '▲ ruptura con volumen' },
+    pullback: { aria: 'Pullback y retest', retest: 'RETEST ✓', entree: 'entrada' },
+    positionsize: { aria: 'Cálculo del tamaño de posición', capital: 'CAPITAL', risque: 'RIESGO', ecart: 'ECARTE', entreeStop: 'entrada−stop', taille: 'TAMAÑO DEL LOTE' },
+    stop: { aria: 'Entrada stop y objetivo', entree: 'ENTRADA', stop: 'STOP', target: 'OBJETIVO', r1: '1R' },
+    rr: { aria: 'Risk reward R-múltiple', r1: '1R riesgo', r3: '3R ganancia', ratio: 'RATIO 1:3' },
+    drawdown: { aria: 'Curva de drawdown', dd: 'DRAWDOWN −18%', sommet: 'nuevo máximo' },
+    plan: { aria: 'Plan de trade', contexte: 'Contexto', setup: 'Setup', est: 'Entrada / Stop / Objetivo', raison: 'La razón', exec: 'EJECUCIÓN' },
+    zone: { aria: "Zona de entrada", zone: 'ZONA DE DEMANDA', entry: 'ENTRY en el rebote' },
+    annotated: { aria: 'Setup anotado', pourquoi: 'por qué : retest + volumen' },
+    review: { aria: 'Diario de trade', journal: 'DIARIO', journalFull: 'DIARIO DE TRADE' },
+  },
+}[lang];
 ---
 <div class="cd" data-reveal>
   {/* ============ 1. CHANDELIER ============ */}
   {variant === 'candles' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Anatomie d'un chandelier japonais">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.candles.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
-      {/* axe Y prix */}
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       {[20,76,132,188].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['64k','62k','60k','58k'][i]}</text>))}
-      {/* bougies */}
       <g class="cd__fill up"><line class="cd__wick" x1="80" y1="44" x2="80" y2="150"/><rect x="68" y="74" width="24" height="52" rx="2"/></g>
       <g class="cd__fill down"><line class="cd__wick" x1="140" y1="32" x2="140" y2="162"/><rect x="128" y="82" width="24" height="58" rx="2"/></g>
       <g class="cd__fill up"><line class="cd__wick" x1="200" y1="54" x2="200" y2="142"/><rect x="188" y="68" width="24" height="46" rx="2"/></g>
       <g class="cd__fill down"><line class="cd__wick" x1="262" y1="40" x2="262" y2="176"/><rect x="250" y="100" width="24" height="54" rx="2"/></g>
-      <text class="cd__lbl" x="80" y="200" text-anchor="middle">corps</text>
-      <text class="cd__lbl" x="140" y="200" text-anchor="middle">mèche</text>
-      <line class="cd__line dim" x1="80" y1="100" x2="80" y2="100"/>
+      <text class="cd__lbl" x="80" y="200" text-anchor="middle">{L.candles.corps}</text>
+      <text class="cd__lbl" x="140" y="200" text-anchor="middle">{L.candles.meche}</text>
     </svg>
   )}
 
   {/* ============ 2. SUPPORT / RÉSISTANCE ============ */}
   {variant === 'levels' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Support et résistance en zones">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.levels.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -39,35 +75,34 @@ const uid = variant; // pour ids de marker uniques par variante
       <rect class="cd__zone" x="44" y="140" width="296" height="44"/>
       <line class="cd__line res" x1="44" y1="48" x2="340" y2="48"/>
       <line class="cd__line sup" x1="44" y1="148" x2="340" y2="148"/>
-      <text class="cd__lbl up" x="50" y="44">RÉSISTANCE</text>
-      <text class="cd__lbl down" x="50" y="178">SUPPORT</text>
+      <text class="cd__lbl up" x="50" y="44">{L.levels.res}</text>
+      <text class="cd__lbl down" x="50" y="178">{L.levels.sup}</text>
       <circle class="cd__pulse" cx="190" cy="94" r="6"/>
-      <text class="cd__lbl" x="200" y="98">prix</text>
+      <text class="cd__lbl" x="200" y="98">{L.levels.prix}</text>
     </svg>
   )}
 
   {/* ============ 3. RANGE & CASSURE ============ */}
   {variant === 'range' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Range et cassure">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.range.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <line class="cd__line res" x1="44" y1="70" x2="340" y2="70"/>
       <line class="cd__line sup" x1="44" y1="168" x2="340" y2="168"/>
-      {/* prix qui rebondit dans le range puis casse */}
       <polyline class="cd__line price" points="60,150 100,80 140,150 180,90 220,148 260,95"/>
       <path class="cd__line break" d="M260 95 L320 52" marker-end="url(#ah)"/>
-      <text class="cd__lbl" x="50" y="64">PLAFOND</text>
-      <text class="cd__lbl" x="50" y="190">PLANCHER</text>
-      <text class="cd__lbl up" x="262" y="48">CASSURE ▲</text>
+      <text class="cd__lbl" x="50" y="64">{L.range.range}</text>
+      <text class="cd__lbl" x="50" y="190">{L.range.range}</text>
+      <text class="cd__lbl up" x="262" y="48">{L.range.cassure}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 4. CONTEXTE ============ */}
   {variant === 'context' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Lire la bougie dans son contexte">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.context.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -75,15 +110,15 @@ const uid = variant; // pour ids de marker uniques par variante
       <polyline class="cd__line trend" points="50,170 110,128 170,138 240,86 320,64"/>
       <g class="cd__fill up"><rect x="288" y="58" width="20" height="44" rx="2"/></g>
       <rect class="cd__zone" x="44" y="150" width="296" height="40"/>
-      <text class="cd__lbl" x="50" y="146">TENDANCE ▲</text>
-      <text class="cd__lbl up" x="240" y="200">bougie dans le sens</text>
-      <text class="cd__lbl down" x="50" y="200">zone de value</text>
+      <text class="cd__lbl" x="50" y="146">{L.context.tend}</text>
+      <text class="cd__lbl up" x="240" y="200">{L.context.sens}</text>
+      <text class="cd__lbl down" x="50" y="200">{L.context.value}</text>
     </svg>
   )}
 
   {/* ============ 5. TENDANCE HH/HL ============ */}
   {variant === 'trend' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Tendance haussière HH HL">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.trend.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -93,8 +128,8 @@ const uid = variant; // pour ids de marker uniques par variante
       <circle class="cd__pulse" cx="130" cy="128" r="5"/>
       <circle class="cd__pulse" cx="200" cy="104" r="5"/>
       <circle class="cd__pulse" cx="280" cy="52" r="5"/>
-      <text class="cd__lbl up" x="140" y="120">HH</text>
-      <text class="cd__lbl up" x="64" y="168">HL</text>
+      <text class="cd__lbl up" x="140" y="120">{L.trend.hh}</text>
+      <text class="cd__lbl up" x="64" y="168">{L.trend.hl}</text>
       <path class="cd__line dim" d="M130 128 L200 104" marker-end="url(#ah)"/>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
@@ -102,75 +137,72 @@ const uid = variant; // pour ids de marker uniques par variante
 
   {/* ============ 6. RETOURNEMENT (W) ============ */}
   {variant === 'reversal' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Double bottom retournement">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.reversal.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <polyline class="cd__line price" points="60,72 120,168 180,72 240,168 300,72"/>
       <line class="cd__line neck" x1="60" y1="72" x2="300" y2="72"/>
-      {/* flèche de retournement */}
       <path class="cd__line break" d="M300 72 L320 44" marker-end="url(#ah)"/>
-      <text class="cd__lbl down" x="110" y="200">W · double bottom</text>
-      <text class="cd__lbl up" x="180" y="64">COU (neckline)</text>
+      <text class="cd__lbl down" x="110" y="200">{L.reversal.w}</text>
+      <text class="cd__lbl up" x="180" y="64">{L.reversal.cou}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 7. VOLUME ============ */}
   {variant === 'volume' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Prix et volume de confirmation">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.volume.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <polyline class="cd__line price" points="50,160 110,96 170,116 240,64 310,42"/>
-      {/* histogramme volume */}
       <g>
         {[70,105,140,175,210,245,280,315].map((x,i)=>{
           const h = i===3 ? 96 : (i%2?44:72);
           return <rect class="cd__bar" x={x-9} y={196-h} width="18" height={h}/>;
         })}
       </g>
-      <text class="cd__lbl" x="50" y="212">VOLUME (confirmation)</text>
-      <text class="cd__lbl up" x="220" y="58">▲ cassure sur volume</text>
+      <text class="cd__lbl" x="50" y="212">{L.volume.vol}</text>
+      <text class="cd__lbl up" x="220" y="58">{L.volume.cass}</text>
     </svg>
   )}
 
   {/* ============ 8. PULLBACK / RETEST ============ */}
   {variant === 'pullback' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Pullback et retest">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.pullback.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <polyline class="cd__line trend" points="50,170 120,104 180,124 240,68 320,60"/>
       <line class="cd__line sup" x1="44" y1="124" x2="340" y2="124"/>
-      {/* retest rebond */}
       <path class="cd__line entry" d="M180 124 L180 88" marker-end="url(#ah)"/>
       <circle class="cd__pulse" cx="180" cy="124" r="5"/>
-      <text class="cd__lbl up" x="140" y="118">RETEST ✓</text>
-      <text class="cd__lbl" x="190" y="84">entrée</text>
+      <text class="cd__lbl up" x="140" y="118">{L.pullback.retest}</text>
+      <text class="cd__lbl" x="190" y="84">{L.pullback.entree}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 9. TAILLE DE POSITION ============ */}
   {variant === 'positionsize' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Calcul de la taille de position">
-      <g class="cd__box b1"><rect x="20" y="50" width="86" height="64" rx="8"/><text class="cd__bx" x="63" y="82" text-anchor="middle">CAPITAL</text><text class="cd__bxv" x="63" y="104" text-anchor="middle">10 000 €</text></g>
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.positionsize.aria}>
+      <g class="cd__box b1"><rect x="20" y="50" width="86" height="64" rx="8"/><text class="cd__bx" x="63" y="82" text-anchor="middle">{L.positionsize.capital}</text><text class="cd__bxv" x="63" y="104" text-anchor="middle">10 000 €</text></g>
       <text class="cd__op" x="112" y="92">×</text>
-      <g class="cd__box b2"><rect x="128" y="50" width="70" height="64" rx="8"/><text class="cd__bx" x="163" y="82" text-anchor="middle">RISQUE</text><text class="cd__bxv" x="163" y="104" text-anchor="middle">1%</text></g>
+      <g class="cd__box b2"><rect x="128" y="50" width="70" height="64" rx="8"/><text class="cd__bx" x="163" y="82" text-anchor="middle">{L.positionsize.risque}</text><text class="cd__bxv" x="163" y="104" text-anchor="middle">1%</text></g>
       <text class="cd__op" x="202" y="92">÷</text>
-      <g class="cd__box b3"><rect x="216" y="50" width="104" height="64" rx="8"/><text class="cd__bx" x="268" y="78" text-anchor="middle">ÉCART</text><text class="cd__bxv" x="268" y="100" text-anchor="middle">entrée − stop</text></g>
+      <g class="cd__box b3"><rect x="216" y="50" width="104" height="64" rx="8"/><text class="cd__bx" x="268" y="78" text-anchor="middle">{L.positionsize.ecart}</text><text class="cd__bxv" x="268" y="100" text-anchor="middle">{L.positionsize.entreeStop}</text></g>
       <text class="cd__op" x="160" y="150">=</text>
-      <g class="cd__box res"><rect x="96" y="156" width="148" height="40" rx="8"/><text class="cd__bxv" x="170" y="182" text-anchor="middle">TAILLE DU LOT</text></g>
+      <g class="cd__box res"><rect x="96" y="156" width="148" height="40" rx="8"/><text class="cd__bxv" x="170" y="182" text-anchor="middle">{L.positionsize.taille}</text></g>
     </svg>
   )}
 
   {/* ============ 10. ENTRÉE / STOP / TARGET ============ */}
   {variant === 'stop' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Entrée stop et target">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.stop.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -179,18 +211,18 @@ const uid = variant; // pour ids de marker uniques par variante
       <line class="cd__line entry" x1="120" y1="40" x2="120" y2="180"/>
       <line class="cd__line stop" x1="96" y1="168" x2="96" y2="188"/>
       <line class="cd__line tp" x1="280" y1="30" x2="280" y2="180"/>
-      <text class="cd__lbl" x="126" y="52">ENTRÉE 61.0</text>
-      <text class="cd__lbl down" x="60" y="190">STOP 60.0</text>
-      <text class="cd__lbl up" x="244" y="42">TARGET 62.0</text>
+      <text class="cd__lbl" x="126" y="52">{L.stop.entree} 61.0</text>
+      <text class="cd__lbl down" x="60" y="190">{L.stop.stop} 60.0</text>
+      <text class="cd__lbl up" x="244" y="42">{L.stop.target} 62.0</text>
       <path class="cd__line dim" d="M120 110 L96 110" marker-end="url(#ah)"/>
-      <text class="cd__lbl" x="92" y="104">1R</text>
+      <text class="cd__lbl" x="92" y="104">{L.stop.r1}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 11. R-MULTIPLE ============ */}
   {variant === 'rr' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Risk reward R-multiple">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.rr.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -199,15 +231,15 @@ const uid = variant; // pour ids de marker uniques par variante
       <rect class="cd__bar reward" x="140" y="40" width="48" height="140"/>
       <rect class="cd__bar reward" x="196" y="40" width="48" height="140"/>
       <rect class="cd__bar reward" x="252" y="40" width="48" height="140"/>
-      <text class="cd__lbl down" x="88" y="196" text-anchor="middle">1R risque</text>
-      <text class="cd__lbl up" x="248" y="196" text-anchor="middle">3R gain</text>
-      <text class="cd__lbl" x="50" y="32">RATIO 1:3</text>
+      <text class="cd__lbl down" x="88" y="196" text-anchor="middle">{L.rr.r1}</text>
+      <text class="cd__lbl up" x="248" y="196" text-anchor="middle">{L.rr.r3}</text>
+      <text class="cd__lbl" x="50" y="32">{L.rr.ratio}</text>
     </svg>
   )}
 
   {/* ============ 12. DRAWDOWN ============ */}
   {variant === 'drawdown' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Courbe de drawdown">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.drawdown.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -215,31 +247,31 @@ const uid = variant; // pour ids de marker uniques par variante
       {[40,100,160].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['+10%','0%','-20%'][i]}</text>))}
       <polyline class="cd__line equity" points="56,60 120,68 180,140 230,128 300,52 320,46"/>
       <path class="cd__zone dd" d="M120 68 L180 140 L230 128 L230 68 L180 68 L120 68 Z"/>
-      <text class="cd__lbl down" x="150" y="160">DRAWDOWN −18%</text>
-      <text class="cd__lbl up" x="262" y="44">nouveau sommet</text>
+      <text class="cd__lbl down" x="150" y="160">{L.drawdown.dd}</text>
+      <text class="cd__lbl up" x="262" y="44">{L.drawdown.sommet}</text>
     </svg>
   )}
 
   {/* ============ 13. PLAN DE TRADE ============ */}
   {variant === 'plan' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Plan de trade">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.plan.aria}>
       <g class="cd__check"><rect x="30" y="28" width="22" height="22" rx="5"/><path d="M35 39 L40 45 L49 31" /></g>
-      <text class="cd__lbl" x="64" y="45">Contexte</text>
+      <text class="cd__lbl" x="64" y="45">{L.plan.contexte}</text>
       <g class="cd__check"><rect x="30" y="68" width="22" height="22" rx="5"/><path d="M35 79 L40 85 L49 71" /></g>
-      <text class="cd__lbl" x="64" y="85">Setup</text>
+      <text class="cd__lbl" x="64" y="85">{L.plan.setup}</text>
       <g class="cd__check"><rect x="30" y="108" width="22" height="22" rx="5"/><path d="M35 119 L40 125 L49 111" /></g>
-      <text class="cd__lbl" x="64" y="125">Entrée / Stop / Target</text>
+      <text class="cd__lbl" x="64" y="125">{L.plan.est}</text>
       <g class="cd__check"><rect x="30" y="148" width="22" height="22" rx="5"/><path d="M35 159 L40 165 L49 151" /></g>
-      <text class="cd__lbl" x="64" y="165">La raison</text>
+      <text class="cd__lbl" x="64" y="165">{L.plan.raison}</text>
       <path class="cd__line break" d="M280 40 L300 170" marker-end="url(#ah)"/>
-      <text class="cd__lbl up" x="258" y="200">EXÉCUTION</text>
+      <text class="cd__lbl up" x="258" y="200">{L.plan.exec}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 14. ZONE D'ENTRÉE ============ */}
   {variant === 'zone' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Zone d'entrée">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.zone.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -247,15 +279,15 @@ const uid = variant; // pour ids de marker uniques par variante
       <rect class="cd__zone zn" x="80" y="70" width="130" height="80"/>
       <polyline class="cd__line price" points="50,170 110,128 170,148 230,96 300,64"/>
       <path class="cd__line entry" d="M170 148 L170 96" marker-end="url(#ah)"/>
-      <text class="cd__lbl" x="96" y="64">ZONE DE DEMANDE</text>
-      <text class="cd__lbl up" x="110" y="196">ENTRY au rebond</text>
+      <text class="cd__lbl" x="96" y="64">{L.zone.zone}</text>
+      <text class="cd__lbl up" x="110" y="196">{L.zone.entry}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 15. SETUP ANNOTÉ ============ */}
   {variant === 'annotated' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Setup annoté">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.annotated.aria}>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -267,14 +299,14 @@ const uid = variant; // pour ids de marker uniques par variante
       <text class="cd__lbl up" x="176" y="92">E 1.1040</text>
       <text class="cd__lbl down" x="120" y="160">S 1.1010</text>
       <text class="cd__lbl up" x="214" y="48">T 1.1120</text>
-      <text class="cd__lbl" x="50" y="200">pourquoi : retest + volume</text>
+      <text class="cd__lbl" x="50" y="200">{L.annotated.pourquoi}</text>
       <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--orange)"/></marker></defs>
     </svg>
   )}
 
   {/* ============ 16. JOURNAL ============ */}
   {variant === 'review' && (
-    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label="Journal de trade">
+    <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.review.aria}>
       <rect class="cd__page" x="80" y="18" width="200" height="184" rx="10"/>
       <line class="cd__line jl" x1="100" y1="52" x2="260" y2="52"/>
       <line class="cd__line jl" x1="100" y1="80" x2="260" y2="80"/>
@@ -282,7 +314,7 @@ const uid = variant; // pour ids de marker uniques par variante
       <line class="cd__line jl" x1="100" y1="136" x2="260" y2="136"/>
       <text class="cd__star" x="100" y="170">★★★★</text>
       <text class="cd__lbl" x="210" y="170">3/5</text>
-      <text class="cd__lbl" x="100" y="200">JOURNAL DE TRADE</text>
+      <text class="cd__lbl" x="100" y="200">{L.review.journalFull}</text>
     </svg>
   )}
 </div>
