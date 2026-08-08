@@ -21,6 +21,39 @@ if (reduce || !gsap || !ScrollTrigger) {
   try {
     gsap.registerPlugin(ScrollTrigger);
 
+    // 0) Titres : split-reveal (mots) + line-reveal (hero) + pulse CTA au scroll
+    function revealTitles() {
+      document.querySelectorAll('.anim-title, .anim-hero').forEach((el) => {
+        el.querySelectorAll('.word, .line-inner').forEach((w) => { w.style.opacity = '1'; w.style.transform = 'none'; });
+      });
+    }
+    function splitWords(el) {
+      const text = el.textContent;
+      el.innerHTML = text.split(/(\s+)/).map((w) => w.trim() === '' ? w : `<span class="word" style="display:inline-block; will-change:transform">${w}</span>`).join('');
+      return [...el.querySelectorAll('.word')];
+    }
+    function splitLines(el) {
+      const parts = el.innerHTML.split(/<br\s*\/?>/i);
+      el.innerHTML = parts.map((p) => `<span class="line" style="display:block; overflow:hidden"><span class="line-inner" style="display:block; will-change:transform">${p}</span></span>`).join('');
+      return [...el.querySelectorAll('.line-inner')];
+    }
+    document.querySelectorAll('.anim-title').forEach((el) => {
+      const words = splitWords(el);
+      gsap.set(words, { yPercent: 120, opacity: 0 });
+      ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => gsap.to(words, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.05, ease: 'power3.out' }) });
+    });
+    document.querySelectorAll('.anim-hero').forEach((el) => {
+      const lines = splitLines(el);
+      gsap.set(lines, { yPercent: 110 });
+      ScrollTrigger.create({ trigger: el, start: 'top 95%', once: true, onEnter: () => gsap.to(lines, { yPercent: 0, duration: 0.9, stagger: 0.12, ease: 'power4.out' }) });
+    });
+    document.querySelectorAll('.anim-cta').forEach((btn) => {
+      ScrollTrigger.create({ trigger: btn, start: 'top 92%', once: true, onEnter: () => {
+        gsap.fromTo(btn, { scale: 0.92 }, { scale: 1, duration: 0.6, ease: 'back.out(2.2)' });
+        btn.classList.add('cta-pulse'); setTimeout(() => btn.classList.remove('cta-pulse'), 1100);
+      } });
+    });
+
     // 1) Scroll-reveal : les éléments data-parallax gardent .in (opacity via CSS)
     //    mais leur transform est géré par le parallax (pas de conflit de transform).
     const items = gsap.utils.toArray('[data-reveal]');
@@ -77,10 +110,12 @@ if (reduce || !gsap || !ScrollTrigger) {
     }
 
     // 5) Safety net : après 1.2s, on force .in sur tout ce qui traînerait caché
-    //    (garantit qu'aucun CTA/pied de page ne reste invisible si un trigger foire).
+    //    + revealTitles() (au cas où un ScrollTrigger de titre/CTAm ne se déclenche pas).
     ScrollTrigger.refresh();
     setTimeout(revealAll, 1200);
+    setTimeout(revealTitles, 2000);
   } catch (e) {
     revealAll();
+    revealTitles();
   }
 }

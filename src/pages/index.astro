@@ -14,11 +14,11 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   <section class="hero wrap">
     <div class="hero__main" data-reveal>
       <span class="eyebrow">{t(lang, 'home.eyebrow')}</span>
-      <h1 set:html={t(lang, 'home.heroTitle').replace(/\n/g, '<br/>')} />
+      <h1 class="hero__title anim-hero" set:html={t(lang, 'home.heroTitle').replace(/\n/g, '<br/>')} />
       <p class="hero__lead">{t(lang, 'home.heroLead')}</p>
       <div class="hero__cta">
-        <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'home.ctaModules')}</a>
-        <a href={localizedPath('/abonnement/', lang)} class="btn btn--ghost">{t(lang, 'home.ctaAbo')}</a>
+        <a href={localizedPath('/modules/', lang)} class="btn anim-cta">{t(lang, 'home.ctaModules')}</a>
+        <a href={localizedPath('/abonnement/', lang)} class="btn btn--ghost anim-cta">{t(lang, 'home.ctaAbo')}</a>
       </div>
       <div class="hero__stats">
         <div><span class="num">4</span><span class="lab">modules</span></div>
@@ -39,7 +39,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   <!-- MODULES (bento éditorial) -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <h2>{t(lang, 'home.cursusTitle')}</h2>
+      <h2 class="anim-title">{t(lang, 'home.cursusTitle')}</h2>
       <p class="muted">{t(lang, 'home.cursusLead')}</p>
     </div>
     <div class="modbento">
@@ -64,7 +64,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   <section class="section section--alt">
     <div class="wrap">
       <div class="sec-head" data-reveal>
-        <h2>{t(lang, 'home.marcheTitle')}</h2>
+        <h2 class="anim-title">{t(lang, 'home.marcheTitle')}</h2>
         <p class="muted">{t(lang, 'home.marcheLead')}</p>
       </div>
       <div class="marche-grid" data-reveal>
@@ -77,9 +77,9 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   <!-- CTA FINAL -->
   <section class="section">
     <div class="wrap cta-final" data-reveal>
-      <h2 class="cta-final__title">{t(lang, 'home.ctaPanelTitle')}</h2>
+      <h2 class="cta-final__title anim-title">{t(lang, 'home.ctaPanelTitle')}</h2>
       <p class="cta-final__lead muted">{t(lang, 'home.ctaPanelLead')}</p>
-      <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'home.ctaPanelBtn')}</a>
+      <a href={localizedPath('/abonnement/', lang)} class="btn anim-cta">{t(lang, 'home.ctaPanelBtn')}</a>
     </div>
   </section>
 </BaseLayout>

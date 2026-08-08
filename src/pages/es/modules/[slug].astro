@@ -16,7 +16,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
   <article class="detail wrap" data-reveal>
     <a href={localizedPath('/modules/', lang)} class="back">{t(lang, 'modules.back')}</a>
     <span class="badge badge--orange">{m.tag}</span>
-    <h1>{m.title}</h1>
+    <h1 class="anim-title">{m.title}</h1>
     <p class="lead">{m.desc}</p>
     <p class="intro">{m.body}</p>
 
@@ -28,7 +28,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
             <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
             <div class="chap__headtext">
               <span class="chap__kicker">{t(lang, 'modules.chapitre')} {String(i + 1).padStart(2, '0')}</span>
-              <h3 class="chap__t">{c.title}</h3>
+              <h3 class="chap__t anim-title">{c.title}</h3>
             </div>
           </div>
           <figure class="chap__figure" data-parallax="0.1">
@@ -46,7 +46,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     </div>
 
     <div class="cta-row">
-      <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'nav.abonnement')}</a>
+      <a href={localizedPath('/abonnement/', lang)} class="btn anim-cta">{t(lang, 'nav.abonnement')}</a>
       <a href={localizedPath('/marche/', lang)} class="btn btn--ghost">{t(lang, 'nav.marche')}</a>
     </div>
   </article>

@@ -114,6 +114,12 @@ h3 { font-size: clamp(1.3rem, 3.5vw, 1.7rem); }
 .badge--up { background: var(--emeraude); color: var(--encre); }
 .badge--down { background: var(--rouge); color: var(--encre); }
 .badge--lime { background: var(--lime); color: var(--lime-ink); }
+.cta-pulse { animation: ctaPulse 1.1s ease; }
+@keyframes ctaPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lime) 55%, transparent); }
+  60% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--lime) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lime) 0%, transparent); }
+}
 
 /* CTA panel éditorial (remplace l'ancien panel-lime) */
 .cta-panel {
