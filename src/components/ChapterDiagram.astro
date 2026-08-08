@@ -54,12 +54,14 @@ const L = {
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       {[20,76,132,188].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['64k','62k','60k','58k'][i]}</text>))}
+      <line class="cd__ref" x1="44" y1="110" x2="340" y2="110"/>
       <g class="cd__fill up"><line class="cd__wick" x1="80" y1="44" x2="80" y2="150"/><rect x="68" y="74" width="24" height="52" rx="2"/></g>
       <g class="cd__fill down"><line class="cd__wick" x1="140" y1="32" x2="140" y2="162"/><rect x="128" y="82" width="24" height="58" rx="2"/></g>
       <g class="cd__fill up"><line class="cd__wick" x1="200" y1="54" x2="200" y2="142"/><rect x="188" y="68" width="24" height="46" rx="2"/></g>
       <g class="cd__fill down"><line class="cd__wick" x1="262" y1="40" x2="262" y2="176"/><rect x="250" y="100" width="24" height="54" rx="2"/></g>
       <text class="cd__lbl" x="80" y="200" text-anchor="middle">{L.candles.corps}</text>
       <text class="cd__lbl" x="140" y="200" text-anchor="middle">{L.candles.meche}</text>
+      <text class="cd__lbl dim" x="50" y="106">{L.candles.prix}</text>
     </svg>
   )}
 
@@ -96,7 +98,6 @@ const L = {
       <text class="cd__lbl" x="50" y="64">{L.range.range}</text>
       <text class="cd__lbl" x="50" y="190">{L.range.range}</text>
       <text class="cd__lbl up" x="262" y="48">{L.range.cassure}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -131,7 +132,6 @@ const L = {
       <text class="cd__lbl up" x="140" y="120">{L.trend.hh}</text>
       <text class="cd__lbl up" x="64" y="168">{L.trend.hl}</text>
       <path class="cd__line dim" d="M130 128 L200 104" marker-end="url(#ah)"/>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -147,7 +147,6 @@ const L = {
       <path class="cd__line break" d="M300 72 L320 44" marker-end="url(#ah)"/>
       <text class="cd__lbl down" x="110" y="200">{L.reversal.w}</text>
       <text class="cd__lbl up" x="180" y="64">{L.reversal.cou}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -183,7 +182,6 @@ const L = {
       <circle class="cd__pulse" cx="180" cy="124" r="5"/>
       <text class="cd__lbl up" x="140" y="118">{L.pullback.retest}</text>
       <text class="cd__lbl" x="190" y="84">{L.pullback.entree}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -208,6 +206,7 @@ const L = {
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       {[40,100,160].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['62.0','61.0','60.0'][i]}</text>))}
+      <line class="cd__ref" x1="44" y1="110" x2="340" y2="110"/>
       <line class="cd__line entry" x1="120" y1="40" x2="120" y2="180"/>
       <line class="cd__line stop" x1="96" y1="168" x2="96" y2="188"/>
       <line class="cd__line tp" x1="280" y1="30" x2="280" y2="180"/>
@@ -216,7 +215,7 @@ const L = {
       <text class="cd__lbl up" x="244" y="42">{L.stop.target} 62.0</text>
       <path class="cd__line dim" d="M120 110 L96 110" marker-end="url(#ah)"/>
       <text class="cd__lbl" x="92" y="104">{L.stop.r1}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
+      <text class="cd__val" x="150" y="116">1R = 1.0</text>
     </svg>
   )}
 
@@ -227,13 +226,16 @@ const L = {
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
-      <rect class="cd__bar risk" x="64" y="40" width="48" height="140"/>
-      <rect class="cd__bar reward" x="140" y="40" width="48" height="140"/>
-      <rect class="cd__bar reward" x="196" y="40" width="48" height="140"/>
-      <rect class="cd__bar reward" x="252" y="40" width="48" height="140"/>
-      <text class="cd__lbl down" x="88" y="196" text-anchor="middle">{L.rr.r1}</text>
-      <text class="cd__lbl up" x="248" y="196" text-anchor="middle">{L.rr.r3}</text>
+      <line class="cd__ref" x1="44" y1="110" x2="340" y2="110"/>
+      <rect class="cd__bar risk" x="64" y="110" width="48" height="78"/>
+      <rect class="cd__bar reward" x="140" y="40" width="48" height="70"/>
+      <rect class="cd__bar reward" x="196" y="40" width="48" height="70"/>
+      <rect class="cd__bar reward" x="252" y="40" width="48" height="70"/>
+      <text class="cd__lbl down" x="88" y="200" text-anchor="middle">{L.rr.r1}</text>
+      <text class="cd__lbl up" x="248" y="200" text-anchor="middle">{L.rr.r3}</text>
       <text class="cd__lbl" x="50" y="32">{L.rr.ratio}</text>
+      <text class="cd__val down" x="88" y="196" text-anchor="middle">−1%</text>
+      <text class="cd__val up" x="248" y="196" text-anchor="middle">+3%</text>
     </svg>
   )}
 
@@ -245,10 +247,13 @@ const L = {
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       {[40,100,160].map((y,i)=>(<text class="cd__ytick" x="38" y={y+4} text-anchor="end">{['+10%','0%','-20%'][i]}</text>))}
+      <line class="cd__ref" x1="44" y1="100" x2="340" y2="100"/>
       <polyline class="cd__line equity" points="56,60 120,68 180,140 230,128 300,52 320,46"/>
       <path class="cd__zone dd" d="M120 68 L180 140 L230 128 L230 68 L180 68 L120 68 Z"/>
       <text class="cd__lbl down" x="150" y="160">{L.drawdown.dd}</text>
+      <text class="cd__val down" x="160" y="176">−18%</text>
       <text class="cd__lbl up" x="262" y="44">{L.drawdown.sommet}</text>
+      <text class="cd__val up" x="262" y="60">+10%</text>
     </svg>
   )}
 
@@ -265,7 +270,6 @@ const L = {
       <text class="cd__lbl" x="64" y="165">{L.plan.raison}</text>
       <path class="cd__line break" d="M280 40 L300 170" marker-end="url(#ah)"/>
       <text class="cd__lbl up" x="258" y="200">{L.plan.exec}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -281,7 +285,6 @@ const L = {
       <path class="cd__line entry" d="M170 148 L170 96" marker-end="url(#ah)"/>
       <text class="cd__lbl" x="96" y="64">{L.zone.zone}</text>
       <text class="cd__lbl up" x="110" y="196">{L.zone.entry}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -300,7 +303,6 @@ const L = {
       <text class="cd__lbl down" x="120" y="160">S 1.1010</text>
       <text class="cd__lbl up" x="214" y="48">T 1.1120</text>
       <text class="cd__lbl" x="50" y="200">{L.annotated.pourquoi}</text>
-      <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--lime)"/></marker></defs>
     </svg>
   )}
 
@@ -324,6 +326,7 @@ const L = {
   .cd__svg { width: 100%; height: auto; display: block; }
   .cd__gridline { stroke: color-mix(in srgb, var(--encre) 6%, transparent); stroke-width: 1; }
   .cd__axis { stroke: var(--encre-2); stroke-width: 1.5; opacity: .5; }
+  .cd__ref { stroke: var(--encre-2); stroke-width: 1; stroke-dasharray: 2 3; opacity: .45; }
   .cd__ytick { fill: var(--encre-2); font: 600 9px/1 'Space Grotesk', sans-serif; opacity: .7; }
   .cd__line { fill: none; stroke: var(--lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 800; stroke-dashoffset: 0; }
   .cd.in .cd__line { animation: cddraw 1.3s ease forwards; }
@@ -333,7 +336,7 @@ const L = {
   .cd.in .cd__fill { animation: cdfill .6s ease forwards; }
   .cd__fill.up rect { fill: var(--emeraude); } .cd__fill.up line { stroke: var(--emeraude); }
   .cd__fill.down rect { fill: var(--rouge); } .cd__fill.down line { stroke: var(--rouge); }
-  .cd__zone { fill: color-mix(in srgb, var(--lime) 12%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .cd__zone { fill: color-mix(in srgb, var(--lime) 12%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; rx: 8; }
   .cd__zone.zn { fill: color-mix(in srgb, var(--bleu) 12%, transparent); stroke: var(--bleu); }
   .cd__zone.dd { fill: color-mix(in srgb, var(--rouge) 14%, transparent); stroke: none; }
   .cd__line.res { stroke: var(--jaune); } .cd__line.sup { stroke: var(--emeraude); }
@@ -349,7 +352,10 @@ const L = {
   .cd__bar.reward { fill: color-mix(in srgb, var(--emeraude) 60%, transparent); }
   .cd__lbl { fill: var(--encre-2); font: 700 10px/1 'Space Grotesk', sans-serif; letter-spacing: 0.08em; }
   .cd__lbl.up { fill: var(--emeraude); } .cd__lbl.down { fill: var(--rouge); }
-  .cd__box rect { fill: var(--carte); stroke: var(--ligne-2); stroke-width: 2; }
+  .cd__lbl.dim { fill: var(--encre-2); opacity: .6; }
+  .cd__val { font: 700 11px/1 'Newsreader', serif; letter-spacing: 0; }
+  .cd__val.up { fill: var(--emeraude); } .cd__val.down { fill: var(--rouge); }
+  .cd__box rect { fill: var(--carte); stroke: var(--ligne-2); stroke-width: 2; rx: 8; filter: drop-shadow(0 6px 14px rgba(20,19,15,0.08)); }
   .cd__box.res rect { fill: color-mix(in srgb, var(--lime) 16%, transparent); stroke: var(--lime); }
   .cd__bx { fill: var(--encre-2); font: 700 9px/1 'Space Grotesk', sans-serif; letter-spacing: 0.04em; }
   .cd__bxv { fill: var(--encre); font: 700 11px/1 'Newsreader', serif; }
