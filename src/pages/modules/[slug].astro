@@ -1,24 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { tools } from '../../data/content';
+import { modules } from '../../data/content';
 import { BASE_URL } from '../../consts';
 
 export function getStaticPaths() {
-  return tools.map((t) => ({ params: { slug: t.slug }, props: { t } }));
+  return modules.map((m) => ({ params: { slug: m.slug }, props: { m } }));
 }
-const { t } = Astro.props;
+const { m } = Astro.props;
 ---
-<BaseLayout title={t.t} active="outils">
+<BaseLayout title={m.title} active="modules">
   <article class="detail wrap" data-reveal>
-    <a href={`${BASE_URL}/outils/`} class="back">← Tous les outils</a>
-    <h1>{t.t}</h1>
-    <p class="lead">{t.d}</p>
+    <a href={`${BASE_URL}/modules/`} class="back">← Tous les modules</a>
+    <span class="badge badge--orange">{m.tag}</span>
+    <h1>{m.title}</h1>
+    <p class="lead">{m.desc}</p>
     <div class="body">
-      {t.body.split('\n').map((p) => <p>{p}</p>)}
+      {m.body.split('\n').map((p) => <p>{p}</p>)}
     </div>
     <div class="cta-row">
-      <a href={`${BASE_URL}/tarifs/`} class="btn">Rejoindre la formation</a>
-      <a href={`${BASE_URL}/formation/`} class="btn btn--ghost">Voir les cours</a>
+      <a href={`${BASE_URL}/abonnement/`} class="btn">Rejoindre la formation</a>
+      <a href={`${BASE_URL}/marche/`} class="btn btn--ghost">Voir le marché</a>
     </div>
   </article>
 </BaseLayout>

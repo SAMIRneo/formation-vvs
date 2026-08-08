@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { plans } from '../data/content';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Abonnement" active="abonnement">
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Les plans</span>
+      <h2>Choisi ton niveau.</h2>
+      <p>Du gratuit pour tester, au Pro pour trader en live. Sans engagement, tu montes en gamme quand tu veux.</p>
+    </div>
+    <div class="plans">
+      {plans.map((p) => (
+        <article class={`plan ${p.hl ? 'plan--hl' : ''}`} data-reveal>
+          {p.hl && <span class="plan__flag">Populaire</span>}
+          <h3 class="plan__nom">{p.nom}</h3>
+          <div class="plan__prix"><span class="plan__montant">{p.prix}</span><span class="plan__per">{p.periode}</span></div>
+          <ul class="plan__feat">
+            {p.feat.map((f) => <li>{f}</li>)}
+          </ul>
+          <a href={p.hl ? `https://discord.gg/` : `mailto:contact@formationvvs.fr`} class={`btn ${p.hl ? '' : 'btn--ghost'}`} target={p.hl ? '_blank' : undefined} rel={p.hl ? 'noopener' : undefined}>{p.cta}</a>
+        </article>
+      ))}
+    </div>
+    <div class="panel-orange cta-panel" data-reveal>
+      <h2>Rejoins la formation.</h2>
+      <p>Accès immédiat aux modules, outils et set-ups en live. Depuis ton iPhone, en 30 secondes.</p>
+      <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sec-head { margin-bottom: 36px; text-align: center; }
+  .sec-head p { color: var(--texte-2); margin-top: 12px; max-width: 50ch; margin-left: auto; margin-right: auto; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
+  .plan {
+    position: relative; background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 26px 22px; display: flex; flex-direction: column;
+    transition: border-color .14s ease, transform .14s ease;
+  }
+  .plan:hover { transform: translateY(-4px); border-color: var(--orange); }
+  .plan--hl { border-color: var(--orange); box-shadow: var(--ombre-dure); }
+  .plan__flag {
+    position: absolute; top: -12px; left: 22px; background: var(--orange); color: var(--charbon);
+    font-family: var(--font-display); font-weight: 700; font-size: 0.62rem; text-transform: uppercase;
+    letter-spacing: 0.08em; padding: 4px 10px; border-radius: 5px;
+  }
+  .plan__nom { font-size: 1.3rem; margin-bottom: 12px; }
+  .plan__prix { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
+  .plan__montant { font-family: var(--font-display); font-weight: 700; font-size: 2.4rem; letter-spacing: -0.04em; color: var(--orange); }
+  .plan__per { color: var(--texte-2); font-weight: 700; font-size: 0.85rem; }
+  .plan__feat { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex: 1 1 auto; }
+  .plan__feat li { color: var(--texte); font-size: 0.92rem; padding-left: 22px; position: relative; }
+  .plan__feat li::before { content: '✓'; position: absolute; left: 0; color: var(--emeraude); font-weight: 700; }
+  .plan .btn { width: 100%; text-align: center; }
+  .cta-panel { margin-top: 40px; padding: 40px; text-align: center; }
+  .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
+  @media (max-width: 760px) { .plans { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
+</style>

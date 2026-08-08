@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MarketBoard from '../components/MarketBoard.astro';
+import { tools } from '../data/content';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Marché" active="marche">
+  <!-- BOARD -->
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Marchés en direct</span>
+      <h2>Le pulse du marché.</h2>
+      <p>Les niveaux qui comptent, mis à jour chaque session. Up en vert, down en rouge — sans bruit.</p>
+    </div>
+    <MarketBoard />
+  </section>
+
+  <!-- OUTILS -->
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Boîte à outils</span>
+      <h2>Tes armes de trader.</h2>
+      <p>Des outils conçus pour réduire le bruit et calibrer ta discipline — du screener au journal.</p>
+    </div>
+    <div class="tools">
+      {tools.map((t) => (
+        <article class="tool" data-reveal>
+          <span class="tool__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={t.icon} /></svg>
+          </span>
+          <h3 class="tool__t">{t.t}</h3>
+          <p class="tool__d">{t.d}</p>
+        </article>
+      ))}
+    </div>
+    <div class="panel-orange cta-panel" data-reveal>
+      <h2>Ouvre un compte propre.</h2>
+      <p>Les outils sont bons, mais c'est la méthode qui fait la différence. Rejoins la formation.</p>
+      <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sec-head { margin-bottom: 32px; }
+  .sec-head p { color: var(--texte-2); margin-top: 10px; max-width: 52ch; }
+  .tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .tool {
+    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    border-radius: var(--radius); padding: 22px; transition: border-color .14s ease, transform .14s ease;
+  }
+  .tool:hover { border-color: var(--orange); transform: translateY(-4px); }
+  .tool__ic { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 9px;
+    background: color-mix(in srgb, var(--orange) 14%, transparent); color: var(--orange); margin-bottom: 14px; }
+  .tool__ic svg { width: 22px; height: 22px; }
+  .tool__t { font-size: 1.2rem; margin-bottom: 8px; }
+  .tool__d { color: var(--texte-2); font-size: 0.9rem; }
+  .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }
+  .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
+  @media (max-width: 760px) { .tools { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
+</style>

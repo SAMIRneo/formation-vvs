@@ -14,8 +14,8 @@ import { BASE_URL } from '../consts';
       <h1>Trader<br/>avec une<br/><span class="hl">méthode</span>.</h1>
       <p class="hero__lead">Pas de promesse miraculeuse. Une formation brute, structurée, qui te donne un cadre pour lire les marchés et gérer ton risque.</p>
       <div class="hero__cta">
-        <a href={`${BASE_URL}/formation`} class="btn">Voir les cours</a>
-        <a href={`${BASE_URL}/tarifs`} class="btn btn--ghost">Les tarifs</a>
+        <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
+        <a href={`${BASE_URL}/abonnement/`} class="btn btn--ghost">Les abonnements</a>
       </div>
     </div>
     <div class="hero__board" data-reveal data-reveal-delay="120">
@@ -69,16 +69,16 @@ import { BASE_URL } from '../consts';
       <p>Quatre modules, du premier chandelier à la gestion en live.</p>
     </div>
     <div class="mods">
-    {modules.map((m) => <ModuleCard {...m} href={`${BASE_URL}/formation/${m.slug}/`} />)}
+    {modules.map((m) => <ModuleCard {...m} href={`${BASE_URL}/modules/${m.slug}/`} />)}
     </div>
   </section>
 
   <!-- PANNEAU COULEUR PLEIN (Color Block Story) -->
   <section class="section wrap">
     <div class="panel-orange cta-panel" data-reveal>
-      <h2>Arrête de trader à l’aveugle.</h2>
+      <h2>Arrête de trader à l'aveugle.</h2>
       <p>Rejoins la formation et reprends le contrôle de ta méthode. Accès immédiat, depuis ton iPhone.</p>
-      <a href={`${BASE_URL}/tarifs`} class="btn">Rejoindre FormationVVS</a>
+      <a href={`${BASE_URL}/abonnement/`} class="btn">Rejoindre FormationVVS</a>
     </div>
   </section>
 </BaseLayout>
@@ -123,9 +123,8 @@ import { BASE_URL } from '../consts';
     .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 40px; }
     .hero__copy { order: 0; }
     .hero__lead { max-width: none; }
-    .hero__board { order: -1; height: 340px; } /* hauteur explicite : jamais coupé/court sur mobile (Safari desktop-mode ~980px) */
+    .hero__board { order: -1; height: 340px; }
     .loop { grid-template-columns: repeat(2, 1fr); }
-    /* board FORCÉ en liste 1 colonne dès 1024px (Safari iOS mode desktop rend ~980px -> évite prix coupés) */
     .board { grid-template-columns: 1fr !important; }
     :global(.board .tile) { flex-direction: row !important; align-items: center; gap: 12px; }
   }
@@ -133,6 +132,6 @@ import { BASE_URL } from '../consts';
     .mods { grid-template-columns: 1fr; }
     .loop { grid-template-columns: 1fr; }
     .cta-panel { padding: 30px 22px; }
-    .hero__board { height: auto; } /* sur petit écran laisse le flux naturel mais reste lisible */
+    .hero__board { height: auto; }
   }
 </style>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ModuleCard from '../components/ModuleCard.astro';
+import { modules } from '../data/content';
+import { BASE_URL } from '../consts';
+---
+<BaseLayout title="Modules" active="modules">
+  <section class="section wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Le cursus</span>
+      <h2>Cuisine ton cadre.</h2>
+      <p>Des modules courts, denses, sans blabla. Tu progresses module par module, à ton rythme, depuis l'iPhone.</p>
+    </div>
+    <div class="mods">
+      {modules.map((m) => <ModuleCard {...m} href={`${BASE_URL}/modules/${m.slug}/`} />)}
+    </div>
+    <div class="panel-orange cta-panel" data-reveal>
+      <h2>Arrête de trader à l'aveugle.</h2>
+      <p>Rejoins la formation et reprends le contrôle de ta méthode. Accès immédiat, depuis ton iPhone.</p>
+      <a href={`${BASE_URL}/abonnement/`} class="btn">Rejoindre FormationVVS</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sec-head { margin-bottom: 32px; }
+  .sec-head p { color: var(--texte-2); margin-top: 10px; max-width: 48ch; }
+  .mods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }
+  .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
+  @media (max-width: 760px) { .mods { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
+</style>
