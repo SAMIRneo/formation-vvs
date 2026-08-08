@@ -3,71 +3,72 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MarketBoard from '../components/MarketBoard.astro';
 import ModuleCard from '../components/ModuleCard.astro';
 import { modules } from '../data/content';
-import { BASE_URL } from '../consts';
+import { getLang, t, localizedPath } from '../i18n/ui';
+const lang = getLang(Astro.url);
 ---
-<BaseLayout title="Accueil" active="accueil">
-  <!-- HERO — texte en premier (pas de marché) -->
+<BaseLayout title={t(lang, 'home.heroTitle').split('\n')[0]} active="accueil">
+  <!-- HERO -->
   <section class="hero wrap">
     <div class="hero__copy" data-reveal>
-      <span class="eyebrow">Formation trading — pour de vrai</span>
-      <h1>Trader<br/>avec une<br/><span class="hl">méthode</span>.</h1>
-      <p class="hero__lead">Pas de promesse miraculeuse. Une formation brute, structurée, qui te donne un cadre pour lire les marchés et gérer ton risque — du premier chandelier au trade en live.</p>
+      <span class="eyebrow">{t(lang, 'home.eyebrow')}</span>
+      <h1 set:html={t(lang, 'home.heroTitle').replace(/\n/g, '<br/>')} />
+      <p class="hero__lead">{t(lang, 'home.heroLead')}</p>
       <div class="hero__cta">
-        <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
-        <a href={`${BASE_URL}/abonnement/`} class="btn btn--ghost">Les abonnements</a>
+        <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'home.ctaModules')}</a>
+        <a href={localizedPath('/abonnement/', lang)} class="btn btn--ghost">{t(lang, 'home.ctaAbo')}</a>
       </div>
     </div>
   </section>
 
-  <!-- LA MÉTHODE — texte, sans widgets schéma -->
+  <!-- MÉTHODE -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">La méthode</span>
-      <h2>Une boucle, pas un truc.</h2>
-      <p>Tu ne devines pas. Tu suis une boucle que tu maîtrises — du premier niveau jusqu'au trade en live :</p>
+      <span class="eyebrow">{t(lang, 'home.methodeEyebrow')}</span>
+      <h2>{t(lang, 'home.methodeTitle')}</h2>
+      <p>{t(lang, 'home.methodeLead')}</p>
     </div>
     <ol class="method">
-      <li data-reveal><span class="method__n">01</span><div><h3>Lis le prix</h3><p>Chandeliers, niveaux, structure. Tu sais où tu es.</p></div></li>
-      <li data-reveal data-reveal-delay="80"><span class="method__n">02</span><div><h3>Repère la tendance</h3><p>Volume + direction. Le bruit s'efface.</p></div></li>
-      <li data-reveal data-reveal-delay="160"><span class="method__n">03</span><div><h3>Borne ton risque</h3><p>1% par trade. Le stop avant l'entrée.</p></div></li>
-      <li data-reveal data-reveal-delay="240"><span class="method__n">04</span><div><h3>Exécute le setup</h3><p>Zone + déclencheur. Tu agis, tu ne réagis pas.</p></div></li>
+      <li data-reveal><span class="method__n">01</span><div><h3>{t(lang, 'home.m1t')}</h3><p>{t(lang, 'home.m1d')}</p></div></li>
+      <li data-reveal data-reveal-delay="80"><span class="method__n">02</span><div><h3>{t(lang, 'home.m2t')}</h3><p>{t(lang, 'home.m2d')}</p></div></li>
+      <li data-reveal data-reveal-delay="160"><span class="method__n">03</span><div><h3>{t(lang, 'home.m3t')}</h3><p>{t(lang, 'home.m3d')}</p></div></li>
+      <li data-reveal data-reveal-delay="240"><span class="method__n">04</span><div><h3>{t(lang, 'home.m4t')}</h3><p>{t(lang, 'home.m4d')}</p></div></li>
     </ol>
   </section>
 
-  <!-- MARCHÉ — section dédiée (PAS en premier) -->
+  <!-- MARCHÉ -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">Marchés en direct</span>
-      <h2>Le pulse du marché.</h2>
-      <p>Les niveaux qui comptent, mis à jour chaque session. Up en vert, down en rouge — sans bruit.</p>
+      <span class="eyebrow">{t(lang, 'home.marcheEyebrow')}</span>
+      <h2>{t(lang, 'home.marcheTitle')}</h2>
+      <p>{t(lang, 'home.marcheLead')}</p>
     </div>
     <div class="market-block" data-reveal>
       <div class="board-head">
-        <span class="board-head__t">MARCHÉS EN DIRECT</span>
+        <span class="board-head__t">{t(lang, 'marche.boardTitle')}</span>
         <span class="board-head__dot"></span>
       </div>
       <MarketBoard />
-      <a href={`${BASE_URL}/marche/`} class="market-link">Voir le marché complet →</a>
+      <a href={localizedPath('/marche/', lang)} class="market-link">{t(lang, 'home.marcheLink')}</a>
     </div>
   </section>
 
   <!-- MODULES -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <h2>Le cursus</h2>
-      <p>Quatre modules, du premier chandelier à la gestion en live.</p>
+      <h2>{t(lang, 'home.cursusTitle')}</h2>
+      <p>{t(lang, 'home.cursusLead')}</p>
     </div>
     <div class="mods">
-    {modules.map((m) => <ModuleCard {...m} href={`${BASE_URL}/modules/${m.slug}/`} />)}
+    {modules.map((m) => <ModuleCard {...m} href={localizedPath(`/modules/${m.slug}/`, lang)} />)}
     </div>
   </section>
 
-  <!-- PANNEAU COULEUR PLEIN -->
+  <!-- CTA -->
   <section class="section wrap">
     <div class="panel-orange cta-panel" data-reveal>
-      <h2>Arrête de trader à l'aveugle.</h2>
-      <p>Rejoins la formation et reprends le contrôle de ta méthode. Accès immédiat, depuis ton iPhone.</p>
-      <a href={`${BASE_URL}/abonnement/`} class="btn">Rejoindre FormationVVS</a>
+      <h2>{t(lang, 'home.ctaPanelTitle')}</h2>
+      <p>{t(lang, 'home.ctaPanelLead')}</p>
+      <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'home.ctaPanelBtn')}</a>
     </div>
   </section>
 </BaseLayout>
@@ -92,7 +93,7 @@ import { BASE_URL } from '../consts';
   }
   .market-link { display: inline-block; margin-top: 16px; color: var(--orange); font-weight: 700; font-size: 0.85rem; }
 
-  .method { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; counter-reset: m; }
+  .method { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .method li {
     display: flex; gap: 14px; align-items: flex-start;
     background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
@@ -109,24 +110,21 @@ import { BASE_URL } from '../consts';
   .cta-panel { padding: 40px; text-align: center; }
   .cta-panel p { max-width: 44ch; margin: 14px auto 26px; color: #2A1500; font-weight: 500; }
 
-  /* TABLETTE */
   @media (max-width: 1024px) {
     .hero { padding-top: 48px; }
     .board { grid-template-columns: 1fr !important; }
     :global(.board .tile) { flex-direction: row !important; align-items: center; gap: 12px; }
   }
-  /* MOBILE — hero lisible, market board liste 1-col, modules 1-col */
   @media (max-width: 760px) {
     .hero { padding: 40px 16px 32px; }
     .hero__lead { font-size: 1.05rem; }
     .hero__cta { flex-direction: column; align-items: stretch; }
     .hero__cta .btn { width: 100%; justify-content: center; }
-    .loop { grid-template-columns: 1fr; }
+    .method { grid-template-columns: 1fr; }
     .mods { grid-template-columns: 1fr; }
     .cta-panel { padding: 30px 22px; }
     .market-block { padding: 16px; }
   }
-  /* PETIT MOBILE */
   @media (max-width: 640px) {
     .hero h1 { font-size: clamp(2.3rem, 11vw, 3.4rem); }
     .sec-head { margin-bottom: 24px; }

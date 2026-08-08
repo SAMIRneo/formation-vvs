@@ -1,32 +1,33 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { BASE_URL } from '../consts';
+import { getLang, t, localizedPath } from '../i18n/ui';
+const lang = getLang(Astro.url);
 ---
-<BaseLayout title="Contact" active="">
+<BaseLayout title={t(lang, 'contact.title')} active="">
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">Contact</span>
-      <h2>On en parle.</h2>
-      <p>Une question sur la formation, un plan, un partenariat ? Écris-moi.</p>
+      <span class="eyebrow">{t(lang, 'contact.title')}</span>
+      <h2>{t(lang, 'contact.finalTitle')}</h2>
+      <p>{t(lang, 'contact.sub')}</p>
     </div>
     <div class="contact">
       <a class="chan" href="mailto:contact@formationvvs.fr">
-        <span class="chan__k">Email</span>
+        <span class="chan__k">{t(lang, 'contact.email')}</span>
         <span class="chan__v">contact@formationvvs.fr</span>
       </a>
       <a class="chan" href="https://discord.gg/" target="_blank" rel="noopener">
-        <span class="chan__k">Discord</span>
+        <span class="chan__k">{t(lang, 'contact.discord')}</span>
         <span class="chan__v">Communauté FormationVVS</span>
       </a>
       <a class="chan" href="https://t.me/" target="_blank" rel="noopener">
-        <span class="chan__k">Telegram</span>
+        <span class="chan__k">{t(lang, 'contact.telegram')}</span>
         <span class="chan__v">@formationvvs</span>
       </a>
     </div>
     <div class="panel-orange cta-final" data-reveal>
-      <h2>Prêt à commencer ?</h2>
-      <p>Rejoins la formation et construis ton cadre de trader.</p>
-      <a href={`${BASE_URL}/abonnement/`} class="btn">Voir les abonnements</a>
+      <h2>{t(lang, 'contact.finalTitle')}</h2>
+      <p>{t(lang, 'contact.finalLead')}</p>
+      <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'contact.finalBtn')}</a>
     </div>
   </section>
 </BaseLayout>

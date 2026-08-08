@@ -1,32 +1,33 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { plans } from '../data/content';
-import { BASE_URL } from '../consts';
+import { getLang, t, localizedPath } from '../i18n/ui';
+const lang = getLang(Astro.url);
 ---
-<BaseLayout title="Abonnement" active="abonnement">
+<BaseLayout title={t(lang, 'abo.title')} active="abonnement">
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">Les plans</span>
-      <h2>Choisi ton niveau.</h2>
-      <p>Du gratuit pour tester, au Pro pour trader en live. Sans engagement, tu montes en gamme quand tu veux.</p>
+      <span class="eyebrow">{t(lang, 'abo.title')}</span>
+      <h2>{t(lang, 'abo.ctaTitle')}</h2>
+      <p>{t(lang, 'abo.lead')}</p>
     </div>
     <div class="plans">
       {plans.map((p) => (
         <article class={`plan ${p.hl ? 'plan--hl' : ''}`} data-reveal>
-          {p.hl && <span class="plan__flag">Populaire</span>}
+          {p.hl && <span class="plan__flag">{t(lang, 'abo.flag')}</span>}
           <h3 class="plan__nom">{p.nom}</h3>
           <div class="plan__prix"><span class="plan__montant">{p.prix}</span><span class="plan__per">{p.periode}</span></div>
           <ul class="plan__feat">
             {p.feat.map((f) => <li>{f}</li>)}
           </ul>
-          <a href={p.hl ? `https://discord.gg/` : `mailto:contact@formationvvs.fr`} class={`btn ${p.hl ? '' : 'btn--ghost'}`} target={p.hl ? '_blank' : undefined} rel={p.hl ? 'noopener' : undefined}>{p.cta}</a>
+          <a href={p.hl ? 'https://discord.gg/' : 'mailto:contact@formationvvs.fr'} class={`btn ${p.hl ? '' : 'btn--ghost'}`} target={p.hl ? '_blank' : undefined} rel={p.hl ? 'noopener' : undefined}>{p.cta}</a>
         </article>
       ))}
     </div>
     <div class="panel-orange cta-panel" data-reveal>
-      <h2>Rejoins la formation.</h2>
-      <p>Accès immédiat aux modules, outils et set-ups en live. Depuis ton iPhone, en 30 secondes.</p>
-      <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
+      <h2>{t(lang, 'abo.ctaPanelTitle')}</h2>
+      <p>{t(lang, 'abo.ctaPanelLead')}</p>
+      <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'abo.ctaBtn')}</a>
     </div>
   </section>
 </BaseLayout>

@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ModuleCard from '../components/ModuleCard.astro';
-import { modules } from '../data/content';
-import { getLang, t, localizedPath } from '../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ModuleCard from '../../../components/ModuleCard.astro';
+import { modules } from '../../../data/content';
+import { getLang, t, localizedPath } from '../../../i18n/ui';
 const lang = getLang(Astro.url);
 ---
 <BaseLayout title={t(lang, 'modules.title')} active="modules">

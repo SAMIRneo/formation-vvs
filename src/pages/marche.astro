@@ -2,41 +2,40 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MarketBoard from '../components/MarketBoard.astro';
 import { tools } from '../data/content';
-import { BASE_URL } from '../consts';
+import { getLang, t, localizedPath } from '../i18n/ui';
+const lang = getLang(Astro.url);
 ---
-<BaseLayout title="Marché" active="marche">
-  <!-- BOARD -->
+<BaseLayout title={t(lang, 'marche.title')} active="marche">
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">Marchés en direct</span>
-      <h2>Le pulse du marché.</h2>
-      <p>Les niveaux qui comptent, mis à jour chaque session. Up en vert, down en rouge — sans bruit.</p>
+      <span class="eyebrow">{t(lang, 'home.marcheEyebrow')}</span>
+      <h2>{t(lang, 'home.marcheTitle')}</h2>
+      <p>{t(lang, 'marche.lead')}</p>
     </div>
     <MarketBoard />
   </section>
 
-  <!-- OUTILS -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">Boîte à outils</span>
-      <h2>Tes armes de trader.</h2>
-      <p>Des outils conçus pour réduire le bruit et calibrer ta discipline — du screener au journal.</p>
+      <span class="eyebrow">{t(lang, 'marche.toolsTitle')}</span>
+      <h2>{t(lang, 'marche.toolsSub')}</h2>
+      <p>{t(lang, 'marche.toolsLead')}</p>
     </div>
     <div class="tools">
-      {tools.map((t) => (
+      {tools.map((tool) => (
         <article class="tool" data-reveal>
           <span class="tool__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={t.icon} /></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={tool.icon} /></svg>
           </span>
-          <h3 class="tool__t">{t.t}</h3>
-          <p class="tool__d">{t.d}</p>
+          <h3 class="tool__t">{t(lang, `marche.${tool.slug}Name`)}</h3>
+          <p class="tool__d">{t(lang, `marche.${tool.slug}Desc`)}</p>
         </article>
       ))}
     </div>
     <div class="panel-orange cta-panel" data-reveal>
-      <h2>Ouvre un compte propre.</h2>
-      <p>Les outils sont bons, mais c'est la méthode qui fait la différence. Rejoins la formation.</p>
-      <a href={`${BASE_URL}/modules/`} class="btn">Voir les modules</a>
+      <h2>{t(lang, 'marche.ctaTitle')}</h2>
+      <p>{t(lang, 'marche.ctaLead')}</p>
+      <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'marche.ctaBtn')}</a>
     </div>
   </section>
 </BaseLayout>

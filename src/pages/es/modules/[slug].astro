@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import ChapterDiagram from '../../components/ChapterDiagram.astro';
-import { modules } from '../../data/content';
-import { getLang, t, localizedPath } from '../../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChapterDiagram from '../../../components/ChapterDiagram.astro';
+import { modules } from '../../../data/content';
+import { getLang, t, localizedPath } from '../../../i18n/ui';
 
 export function getStaticPaths() {
   return modules.map((m) => ({ params: { slug: m.slug }, props: { m } }));

@@ -1,20 +1,26 @@
 ---
 import '../styles/global.css';
 import { BASE_URL } from '../consts';
+import { getLang, t, localizedPath, SUPPORTED, type Lang } from '../i18n/ui';
+import LangSwitcher from '../components/LangSwitcher.astro';
+
 interface Props {
   title: string;
-  active: 'accueil' | 'marche' | 'modules' | 'abonnement';
+  active: 'accueil' | 'marche' | 'modules' | 'abonnement' | 'contact';
+  lang?: Lang;
 }
 const { title, active } = Astro.props;
+const lang = getLang(Astro.url);
+
 const tabs = [
-  { id: 'accueil',    label: 'Accueil',     href: `${BASE_URL}/`,                  icon: 'M3 11.5 12 4l9 7.5M5 10v9h14v-9' },
-  { id: 'marche',     label: 'Marché',      href: `${BASE_URL}/marche/`,           icon: 'M3 17l5-5 4 4 8-9M3 21h18' },
-  { id: 'modules',    label: 'Modules',     href: `${BASE_URL}/modules/`,          icon: 'M4 5h16v14H4zM4 9h16M9 5v14' },
-  { id: 'abonnement', label: 'Abonnement',  href: `${BASE_URL}/abonnement/`,       icon: 'M12 3v18M7 7h7a3 3 0 0 1 0 6H7m0 0h8a3 3 0 0 1 0 6H7' },
+  { id: 'accueil',    key: 'nav.accueil',     href: localizedPath('/', lang),          icon: 'M3 11.5 12 4l9 7.5M5 10v9h14v-9' },
+  { id: 'marche',     key: 'nav.marche',      href: localizedPath('/marche/', lang),   icon: 'M3 17l5-5 4 4 8-9M3 21h18' },
+  { id: 'modules',    key: 'nav.modules',     href: localizedPath('/modules/', lang),  icon: 'M4 5h16v14H4zM4 9h16M9 5v14' },
+  { id: 'abonnement', key: 'nav.abonnement',  href: localizedPath('/abonnement/', lang), icon: 'M12 3v18M7 7h7a3 3 0 0 1 0 6H7m0 0h8a3 3 0 0 1 0 6H7' },
 ];
 ---
 <!doctype html>
-<html lang="fr">
+<html lang={lang}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -30,11 +36,8 @@ const tabs = [
   <link rel="apple-touch-icon" href={`${BASE_URL}/icon-192.png`} />
   <link rel="icon" type="image/svg+xml" href={`${BASE_URL}/favicon.svg`} />
   <script is:inline>
-    // Destruction totale de tout service worker résiduel (évitait les 404 sur navigation).
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then((regs) => {
-        regs.forEach((r) => r.unregister());
-      }).catch(() => {});
+      navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {});
     }
     if ('caches' in window) {
       caches.keys().then((keys) => keys.forEach((k) => caches.delete(k))).catch(() => {});
@@ -45,14 +48,16 @@ const tabs = [
   </script>
 </head>
 <body>
-  <!-- Header app -->
   <header class="app-header">
     <div class="app-header__inner">
-      <a href={`${BASE_URL}/`} class="brand">
+      <a href={localizedPath('/', lang)} class="brand">
         <span class="brand__mark">FV</span>
         <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
       </a>
-      <a href={`${BASE_URL}/abonnement/`} class="app-header__cta">Rejoindre</a>
+      <div class="app-header__right">
+        <LangSwitcher />
+        <a href={localizedPath('/abonnement/', lang)} class="app-header__cta">{t(lang, 'nav.rejoindre')}</a>
+      </div>
     </div>
   </header>
 
@@ -60,40 +65,38 @@ const tabs = [
     <slot />
   </main>
 
-  <!-- Bottom tab bar -->
   <nav class="tabbar" aria-label="Navigation principale">
-    {tabs.map((t) => (
+    {tabs.map((t2) => (
       <a
-        href={t.href}
-        class={`tabbar__item ${active === t.id ? 'is-active' : ''}`}
-        aria-current={active === t.id ? 'page' : undefined}
+        href={t2.href}
+        class={`tabbar__item ${active === t2.id ? 'is-active' : ''}`}
+        aria-current={active === t2.id ? 'page' : undefined}
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d={t.icon} />
+          <path d={t2.icon} />
         </svg>
-        <span>{t.label}</span>
+        <span>{t(lang, t2.key)}</span>
       </a>
     ))}
   </nav>
 
-  <!-- Footer global -->
   <footer class="app-footer">
     <div class="app-footer__inner">
       <div class="app-footer__col">
-        <a href={`${BASE_URL}/`} class="brand brand--footer">
+        <a href={localizedPath('/', lang)} class="brand brand--footer">
           <span class="brand__mark">FV</span>
           <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
         </a>
-        <p class="app-footer__tag">Former brutal, pas bruit. Méthode, risque, setups en live.</p>
+        <p class="app-footer__tag">{t(lang, 'footer.tag')}</p>
       </div>
       <div class="app-footer__col">
-        <h4>Naviguer</h4>
-        <a href={`${BASE_URL}/marche/`}>Marché</a>
-        <a href={`${BASE_URL}/modules/`}>Modules</a>
-        <a href={`${BASE_URL}/abonnement/`}>Abonnement</a>
+        <h4>{t(lang, 'footer.nav')}</h4>
+        <a href={localizedPath('/marche/', lang)}>{t(lang, 'nav.marche')}</a>
+        <a href={localizedPath('/modules/', lang)}>{t(lang, 'nav.modules')}</a>
+        <a href={localizedPath('/abonnement/', lang)}>{t(lang, 'nav.abonnement')}</a>
       </div>
       <div class="app-footer__col app-footer__contact">
-        <h4>Contact</h4>
+        <h4>{t(lang, 'footer.contact')}</h4>
         <a href="mailto:contact@formationvvs.fr">contact@formationvvs.fr</a>
         <a href="https://discord.gg/formationvvs">Discord</a>
         <a href="https://t.me/formationvvs">Telegram</a>
@@ -101,14 +104,14 @@ const tabs = [
     </div>
     <div class="app-footer__base">
       <span>© {new Date().getFullYear()} FormationVVS</span>
-      <span>Tous droits réservés</span>
+      <span>{t(lang, 'footer.rights')}</span>
     </div>
   </footer>
 
   <style>
     .app-header {
       position: sticky; top: 0; z-index: 50;
-      background: var(--charbon); /* opaque par défaut — jamais de flash/blanc sur Safari */
+      background: var(--charbon);
       border-bottom: var(--border-w) solid var(--ligne);
       padding-top: var(--safe-t);
     }
@@ -119,6 +122,7 @@ const tabs = [
       display: flex; align-items: center; justify-content: space-between;
       max-width: 1080px; margin: 0 auto; padding: 12px 16px;
     }
+    .app-header__right { display: flex; align-items: center; gap: 12px; }
     .brand { display: flex; align-items: center; gap: 10px; }
     .brand__mark {
       font-family: var(--font-display); font-weight: 700;
@@ -140,7 +144,7 @@ const tabs = [
     .tabbar {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
       display: flex; justify-content: space-around; align-items: stretch;
-      background: var(--charbon-2); /* opaque par défaut — jamais de flash sur Safari */
+      background: var(--charbon-2);
       border-top: var(--border-w) solid var(--ligne);
       padding-bottom: var(--safe-b);
     }
@@ -166,7 +170,7 @@ const tabs = [
     .app-footer {
       border-top: var(--border-w) solid var(--ligne);
       background: var(--charbon);
-      padding: 40px 20px calc(76px + var(--safe-b)); /* laisse place à la tabbar fixe */
+      padding: 40px 20px calc(76px + var(--safe-b));
       margin-top: 40px;
     }
     .app-footer__inner {

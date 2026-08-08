@@ -1,0 +1,37 @@
+---
+import { SUPPORTED, getLang, localizedPath, t } from '../i18n/ui';
+import { BASE_URL } from '../consts';
+
+const { url } = Astro;
+const lang = getLang(url);
+// Chemin de la page courante sans préfixe de langue, pour reconstruire l'URL cible.
+const base = BASE_URL.replace(/\/$/, '');
+const seg = url.pathname.split('/').filter(Boolean);
+// Retire 'formation-vvs' puis la langue éventuelle
+let i = seg[0] === 'formation-vvs' ? 1 : 0;
+if (SUPPORTED.includes(seg[i] as any)) i++;
+const rest = '/' + seg.slice(i).join('/');
+---
+<div class="lang" role="group" aria-label={t(lang, 'lang.label')}>
+  {SUPPORTED.map((l) => (
+    <a
+      href={localizedPath(rest || '/', l)}
+      class={`lang__btn ${l === lang ? 'is-active' : ''}`}
+      hreflang={l}
+      aria-current={l === lang ? 'true' : undefined}
+    >{t(lang, `lang.${l}`)}</a>
+  ))}
+</div>
+
+<style>
+  .lang { display: flex; gap: 4px; align-items: center; }
+  .lang__btn {
+    font-family: var(--font-display); font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; padding: 5px 9px; border-radius: 6px;
+    color: var(--texte-2); border: var(--border-w) solid var(--ligne);
+    transition: all .12s ease;
+  }
+  .lang__btn:hover { color: var(--texte); border-color: var(--texte-2); }
+  .lang__btn.is-active { color: var(--charbon); background: var(--orange); border-color: var(--orange); }
+  @media (max-width: 640px) { .lang__btn { padding: 4px 7px; font-size: 0.68rem; } }
+</style>
