@@ -6,7 +6,7 @@ import { getContent } from '../data/content';
 import { getLang, t, localizedPath } from '../i18n/ui';
 const lang = getLang(Astro.url);
 const { modules } = getContent(lang);
-// miniatures de schémas par module (variant ChapterDiagram)
+// miniature de schéma par module (variant ChapterDiagram)
 const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 ---
 <BaseLayout title={t(lang, 'home.heroTitle').split('\n')[0]} active="accueil">
@@ -48,36 +48,46 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     </div>
   </section>
 
-  <!-- PARCOURS MODULES (liste éditoriale) -->
+  <!-- MODULES (bento éditorial) -->
   <section class="section wrap">
     <div class="sec-head" data-reveal>
       <h2>{t(lang, 'home.cursusTitle')}</h2>
       <p class="muted">{t(lang, 'home.cursusLead')}</p>
     </div>
-    <ol class="cursus">
+    <div class="modbento">
       {modules.map((m, i) => (
-        <li class="cursus__item" data-reveal data-reveal-delay={i * 70}>
-          <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="cursus__link">
-            <span class="cursus__n">{m.n}</span>
-            <div class="cursus__body">
-              <div class="cursus__meta">
-                <h3 class="cursus__t">{m.title}</h3>
-                <span class="badge">{m.tag}</span>
-              </div>
-              <p class="cursus__d">{m.desc}</p>
-            </div>
-            <div class="cursus__thumb">
-              <ChapterDiagram variant={diagramVariant[i]} lang={lang} />
-            </div>
-            <span class="cursus__arrow">→</span>
-          </a>
-        </li>
+        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}`}>
+          <div class="modbento__top">
+            <span class="modbento__n">{m.n}</span>
+            <span class="badge">{m.tag}</span>
+          </div>
+          <h3 class="modbento__t">{m.title}</h3>
+          <p class="modbento__d">{m.desc}</p>
+          <div class="modbento__diagram">
+            <ChapterDiagram variant={diagramVariant[i]} lang={lang} />
+          </div>
+          <span class="modbento__go">{t(lang, 'home.ctaModules')} <span class="modbento__arrow">→</span></span>
+        </a>
       ))}
-    </ol>
+    </div>
+  </section>
+
+  <!-- MARCHÉ (section dédiée) -->
+  <section class="section section--alt">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2>{t(lang, 'home.marcheTitle')}</h2>
+        <p class="muted">{t(lang, 'home.marcheLead')}</p>
+      </div>
+      <div class="marche-grid" data-reveal>
+        <MarketBoard />
+      </div>
+      <a href={localizedPath('/marche/', lang)} class="board-card__link marche-link">{t(lang, 'home.marcheLink')} →</a>
+    </div>
   </section>
 
   <!-- CTA FINAL -->
-  <section class="section section--alt">
+  <section class="section">
     <div class="wrap cta-final" data-reveal>
       <h2 class="cta-final__title">{t(lang, 'home.ctaPanelTitle')}</h2>
       <p class="cta-final__lead muted">{t(lang, 'home.ctaPanelLead')}</p>
@@ -127,27 +137,42 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   .sec-head { margin-bottom: 30px; }
   .sec-head .muted { margin-top: 8px; max-width: 60ch; }
 
-  /* cursus liste */
-  .cursus { list-style: none; }
-  .cursus__item { border-top: 1.5px solid var(--ligne); }
-  .cursus__item:last-child { border-bottom: 1.5px solid var(--ligne); }
-  .cursus__link {
-    display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 24px;
-    padding: 22px 6px; transition: background .18s ease, padding-left .18s ease;
+  /* bento modules */
+  .modbento {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
   }
-  .cursus__link:hover { background: var(--carte); padding-left: 18px; }
-  .cursus__n { font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 5vw, 3rem); color: color-mix(in srgb, var(--encre) 16%, transparent); line-height: 1; }
-  .cursus__body { min-width: 0; }
-  .cursus__meta { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
-  .cursus__t { font-size: clamp(1.25rem, 3vw, 1.7rem); }
-  .cursus__d { color: var(--encre-2); font-size: 0.92rem; max-width: 56ch; }
-  .cursus__thumb {
-    width: 120px; height: 80px; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
-    background: var(--carte); overflow: hidden; flex-shrink: 0;
+  .modbento__card {
+    position: relative; overflow: hidden; display: flex; flex-direction: column;
+    background: var(--carte); border: 1.5px solid var(--ligne); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--ombre);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
   }
-  .cursus__thumb img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
-  .cursus__arrow { font-size: 1.4rem; color: var(--encre); transition: transform .2s ease; }
-  .cursus__link:hover .cursus__arrow { transform: translateX(6px); color: var(--lime-ink); }
+  .modbento__card::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);
+    opacity: 0; transition: opacity .25s ease;
+  }
+  .modbento__card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 26px 50px -24px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .modbento__card:hover::before { opacity: 1; }
+  .modbento__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .modbento__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; color: var(--accent); letter-spacing: -0.04em; line-height: 1; }
+  .modbento__t { font-size: clamp(1.4rem, 4vw, 1.9rem); margin-bottom: 8px; letter-spacing: -0.01em; }
+  .modbento__d { color: var(--encre-2); font-size: 0.92rem; line-height: 1.5; max-width: 40ch; margin-bottom: 18px; }
+  .modbento__diagram {
+    margin-top: auto; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
+    background: var(--canvas); padding: 12px; overflow: hidden;
+  }
+  .modbento__go {
+    margin-top: 16px; font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem;
+    text-transform: uppercase; letter-spacing: 0.02em; color: var(--encre); display: inline-flex; align-items: center; gap: 8px;
+  }
+  .modbento__card:hover .modbento__go { color: var(--accent); }
+  .modbento__arrow { transition: transform .2s ease; }
+  .modbento__card:hover .modbento__arrow { transform: translateX(5px); }
+
+  /* marché section */
+  .marche-grid { max-width: 760px; }
+  .marche-link { display: inline-block; margin-top: 18px; }
 
   /* cta final */
   .cta-final { text-align: center; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
@@ -156,13 +181,9 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 56px; }
-    .cursus__link { grid-template-columns: auto 1fr auto; gap: 16px; }
-    .cursus__thumb { display: none; }
+    .modbento { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
     .hero__stats { gap: 22px; }
-    .cursus__link { grid-template-columns: auto 1fr; padding: 18px 4px; }
-    .cursus__arrow { display: none; }
-    .cursus__d { display: none; }
   }
 </style>
