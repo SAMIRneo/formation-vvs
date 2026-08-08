@@ -18,7 +18,7 @@
   --canvas-2: #EAE6DC;   /* section alt */
   --carte: #FFFFFF;      /* cartes */
   --encre: #14130F;      /* presque-noir chaud */
-  --encre-2: #5A564C;    /* texte secondaire */
+  --encre-2: #46423A;    /* texte secondaire (contraste 4.5:1 sur canvas) */
   --ligne: #DED9CC;      /* bordures */
   --ligne-2: #C9C2B2;
 
@@ -111,8 +111,8 @@ h3 { font-size: clamp(1.3rem, 3.5vw, 1.7rem); }
 
 /* ---------- Badges ---------- */
 .badge { display: inline-block; font-family: var(--font-mono); font-weight: 700; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; border-radius: var(--radius-pill); background: var(--jaune); color: var(--encre); }
-.badge--up { background: var(--emeraude); color: #fff; }
-.badge--down { background: var(--rouge); color: #fff; }
+.badge--up { background: var(--emeraude); color: var(--encre); }
+.badge--down { background: var(--rouge); color: var(--encre); }
 .badge--lime { background: var(--lime); color: var(--lime-ink); }
 
 /* ---------- Reveal (GSAP pilote; fallback CSS) ---------- */

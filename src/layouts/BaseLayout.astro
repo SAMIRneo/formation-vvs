@@ -112,33 +112,33 @@ const tabs = [
   <style>
     .app-header {
       position: sticky; top: 0; z-index: 50;
-      background: var(--encre);
+      background: var(--canvas);
       border-bottom: 1.5px solid var(--ligne);
       padding-top: var(--safe-t);
     }
     @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .app-header { background: color-mix(in srgb, var(--encre) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+      .app-header { background: color-mix(in srgb, var(--canvas) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
     }
     .app-header__inner {
       display: flex; align-items: center; justify-content: space-between;
       max-width: 1080px; margin: 0 auto; padding: 12px 16px;
     }
     .app-header__right { display: flex; align-items: center; gap: 12px; }
-    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--encre); }
     .brand__mark {
       font-family: var(--font-display); font-weight: 700;
-      background: var(--lime); color: var(--encre);
+      background: var(--lime); color: var(--lime-ink);
       width: 36px; height: 36px; display: grid; place-items: center;
       border-radius: 7px; font-size: 0.95rem; letter-spacing: -0.05em;
     }
-    .brand__name { font-family: var(--font-display); font-weight: 700; font-size: 0.92rem; letter-spacing: -0.02em; text-transform: uppercase; }
-    .brand__vvs { color: var(--lime); }
+    .brand__name { font-family: var(--font-display); font-weight: 700; font-size: 0.92rem; letter-spacing: -0.02em; text-transform: uppercase; color: var(--encre); }
+    .brand__vvs { color: var(--encre); }
     .app-header__cta {
       font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
-      font-size: 0.8rem; padding: 8px 14px; border: 1.5px solid var(--lime);
-      border-radius: 7px; color: var(--lime); transition: all .12s ease;
+      font-size: 0.8rem; padding: 8px 14px; border: 1.5px solid var(--encre);
+      border-radius: 7px; color: var(--encre); background: transparent; transition: all .12s ease;
     }
-    .app-header__cta:hover { background: var(--lime); color: var(--encre); }
+    .app-header__cta:hover { background: var(--encre); color: var(--canvas); }
 
     .app-main { min-height: 70vh; }
 
@@ -154,14 +154,14 @@ const tabs = [
     }
     .tabbar__item {
       flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-      padding: 9px 0 7px; color: var(--encre-2);
+      padding: 9px 0 7px; color: var(--encre);
       font-family: var(--font-body); font-weight: 700; font-size: 0.62rem;
       text-transform: uppercase; letter-spacing: 0.04em;
       transition: color .12s ease, transform .12s ease;
       position: relative;
     }
     .tabbar__item svg { width: 23px; height: 23px; }
-    .tabbar__item.is-active { color: var(--lime); }
+    .tabbar__item.is-active { color: var(--lime-ink); }
     .tabbar__item.is-active::before {
       content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
       width: 26px; height: 3px; background: var(--lime); border-radius: 0 0 3px 3px;
@@ -170,7 +170,7 @@ const tabs = [
 
     .app-footer {
       border-top: 1.5px solid var(--ligne);
-      background: var(--encre);
+      background: var(--canvas-2);
       padding: 40px 20px calc(76px + var(--safe-b));
       margin-top: 40px;
     }
@@ -189,7 +189,7 @@ const tabs = [
       display: block; color: var(--encre); font-size: 0.9rem; font-weight: 500;
       padding: 5px 0; transition: color .12s ease;
     }
-    .app-footer__col a:hover { color: var(--lime); }
+    .app-footer__col a:hover { color: var(--lime-ink); }
     .app-footer__base {
       max-width: 1080px; margin: 32px auto 0; padding-top: 20px;
       border-top: 1px solid var(--ligne);
