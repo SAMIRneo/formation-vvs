@@ -9,7 +9,10 @@ const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Force la révélation de tous les [data-reveal] (utilisé en fallback ET en safety net).
 function revealAll() {
-  document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('in'));
+  document.querySelectorAll('[data-reveal]').forEach((el) => {
+    el.classList.add('in');
+    if (gsap) gsap.set(el, { y: 0 }); // annule tout y:28 résiduel du reveal
+  });
 }
 
 if (reduce || !gsap || !ScrollTrigger) {
@@ -36,11 +39,15 @@ if (reduce || !gsap || !ScrollTrigger) {
       }
     });
 
-    // 2) Parallax héro renforcé
-    const bg = document.querySelector('[data-parallax="0.18"]');
-    const grid = document.querySelector('[data-parallax="0.08"]');
-    if (bg) gsap.to(bg, { yPercent: 18, ease: 'none', scrollTrigger: { trigger: bg.closest('section') || bg, start: 'top top', end: 'bottom top', scrub: true } });
-    if (grid) gsap.to(grid, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: grid.closest('section') || grid, start: 'top top', end: 'bottom top', scrub: true } });
+    // 2) Parallax générique sur tous [data-parallax] (vitesse = valeur de l'attribut)
+    gsap.utils.toArray('[data-parallax]').forEach((el) => {
+      const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
+      gsap.to(el, {
+        yPercent: speed * 100,
+        ease: 'none',
+        scrollTrigger: { trigger: el.closest('section') || el, start: 'top bottom', end: 'bottom top', scrub: true },
+      });
+    });
 
     // 3) Draw-on des diagrammes SVG ChapterDiagram au scroll
     gsap.utils.toArray('.cd__svg .cd__line').forEach((line) => {

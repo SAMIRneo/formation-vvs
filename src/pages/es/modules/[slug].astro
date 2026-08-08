@@ -31,7 +31,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
               <h3 class="chap__t">{c.title}</h3>
             </div>
           </div>
-          <figure class="chap__figure">
+          <figure class="chap__figure" data-parallax="0.1">
             <ChapterDiagram variant={c.diagram} lang={lang} />
             <figcaption class="chap__cap">{t(lang, 'modules.schema')} · {c.title}</figcaption>
           </figure>

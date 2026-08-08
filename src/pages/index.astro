@@ -51,7 +51,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
           </div>
           <h3 class="modbento__t">{m.title}</h3>
           <p class="modbento__d">{m.desc}</p>
-          <div class="modbento__diagram">
+          <div class="modbento__diagram" data-parallax="0.12">
             <ChapterDiagram variant={diagramVariant[i]} lang={lang} />
           </div>
           <span class="modbento__go">{t(lang, 'home.ctaModules')} <span class="modbento__arrow">→</span></span>
