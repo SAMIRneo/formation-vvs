@@ -112,12 +112,12 @@ const tabs = [
   <style>
     .app-header {
       position: sticky; top: 0; z-index: 50;
-      background: var(--charbon);
-      border-bottom: var(--border-w) solid var(--ligne);
+      background: var(--encre);
+      border-bottom: 1.5px solid var(--ligne);
       padding-top: var(--safe-t);
     }
     @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .app-header { background: color-mix(in srgb, var(--charbon) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+      .app-header { background: color-mix(in srgb, var(--encre) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
     }
     .app-header__inner {
       display: flex; align-items: center; justify-content: space-between;
@@ -127,7 +127,7 @@ const tabs = [
     .brand { display: flex; align-items: center; gap: 10px; }
     .brand__mark {
       font-family: var(--font-display); font-weight: 700;
-      background: var(--lime); color: var(--charbon);
+      background: var(--lime); color: var(--encre);
       width: 36px; height: 36px; display: grid; place-items: center;
       border-radius: 7px; font-size: 0.95rem; letter-spacing: -0.05em;
     }
@@ -135,26 +135,26 @@ const tabs = [
     .brand__vvs { color: var(--lime); }
     .app-header__cta {
       font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
-      font-size: 0.8rem; padding: 8px 14px; border: var(--border-w) solid var(--lime);
+      font-size: 0.8rem; padding: 8px 14px; border: 1.5px solid var(--lime);
       border-radius: 7px; color: var(--lime); transition: all .12s ease;
     }
-    .app-header__cta:hover { background: var(--lime); color: var(--charbon); }
+    .app-header__cta:hover { background: var(--lime); color: var(--encre); }
 
     .app-main { min-height: 70vh; }
 
     .tabbar {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
       display: flex; justify-content: space-around; align-items: stretch;
-      background: var(--charbon-2);
-      border-top: var(--border-w) solid var(--ligne);
+      background: var(--carte);
+      border-top: 1.5px solid var(--ligne);
       padding-bottom: var(--safe-b);
     }
     @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .tabbar { background: color-mix(in srgb, var(--charbon-2) 95%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+      .tabbar { background: color-mix(in srgb, var(--carte) 95%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
     }
     .tabbar__item {
       flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-      padding: 9px 0 7px; color: var(--texte-2);
+      padding: 9px 0 7px; color: var(--encre-2);
       font-family: var(--font-body); font-weight: 700; font-size: 0.62rem;
       text-transform: uppercase; letter-spacing: 0.04em;
       transition: color .12s ease, transform .12s ease;
@@ -169,8 +169,8 @@ const tabs = [
     .tabbar__item:active { transform: scale(0.94); }
 
     .app-footer {
-      border-top: var(--border-w) solid var(--ligne);
-      background: var(--charbon);
+      border-top: 1.5px solid var(--ligne);
+      background: var(--encre);
       padding: 40px 20px calc(76px + var(--safe-b));
       margin-top: 40px;
     }
@@ -179,14 +179,14 @@ const tabs = [
       display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 28px;
     }
     .brand--footer { margin-bottom: 14px; }
-    .app-footer__tag { color: var(--texte-2); font-size: 0.9rem; max-width: 34ch; line-height: 1.5; }
+    .app-footer__tag { color: var(--encre-2); font-size: 0.9rem; max-width: 34ch; line-height: 1.5; }
     .app-footer__col h4 {
       font-family: var(--font-body); font-weight: 700; font-size: 0.7rem;
-      text-transform: uppercase; letter-spacing: 0.08em; color: var(--texte-2);
+      text-transform: uppercase; letter-spacing: 0.08em; color: var(--encre-2);
       margin: 0 0 12px;
     }
     .app-footer__col a {
-      display: block; color: var(--texte); font-size: 0.9rem; font-weight: 500;
+      display: block; color: var(--encre); font-size: 0.9rem; font-weight: 500;
       padding: 5px 0; transition: color .12s ease;
     }
     .app-footer__col a:hover { color: var(--lime); }
@@ -194,7 +194,7 @@ const tabs = [
       max-width: 1080px; margin: 32px auto 0; padding-top: 20px;
       border-top: 1px solid var(--ligne);
       display: flex; justify-content: space-between; gap: 12px;
-      font-size: 0.78rem; color: var(--texte-2);
+      font-size: 0.78rem; color: var(--encre-2);
     }
     @media (max-width: 760px) {
       .app-footer__inner { grid-template-columns: 1fr 1fr; gap: 24px 16px; }

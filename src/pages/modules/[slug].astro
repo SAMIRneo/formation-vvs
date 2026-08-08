@@ -66,12 +66,12 @@ const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--ja
 
 <style>
   .detail { max-width: 1080px; padding: 48px 20px 64px; }
-  .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
+  .back { display: inline-block; color: var(--encre-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
   .back:hover { color: var(--lime); }
   .detail__head { max-width: 760px; margin-bottom: 40px; }
   .detail__head h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; text-wrap: balance; }
-  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 18px; max-width: 52ch; }
-  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--texte); }
+  .lead { color: var(--encre-2); font-size: 1.1rem; margin-bottom: 18px; max-width: 52ch; }
+  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--encre); }
 
   .detail__layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
 
@@ -79,21 +79,21 @@ const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--ja
   .toc { position: sticky; top: 84px; align-self: start; }
   .toc__k { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.66rem; color: var(--lime); }
   .toc ol { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 4px; }
-  .toc a { display: block; color: var(--texte-2); font-size: 0.85rem; font-weight: 500; padding: 7px 10px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease; }
-  .toc a:hover { color: var(--texte); border-color: var(--lime); }
+  .toc a { display: block; color: var(--encre-2); font-size: 0.85rem; font-weight: 500; padding: 7px 10px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease; }
+  .toc a:hover { color: var(--encre); border-color: var(--lime); }
 
   /* Chapitres bento */
   .chapters { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
-  .chap { position: relative; overflow: hidden; background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px 22px 22px 26px; box-shadow: var(--ombre-douce); }
+  .chap { position: relative; overflow: hidden; background: var(--carte); border: 1.5px solid var(--ligne); border-radius: 14px; padding: 22px 22px 22px 26px; box-shadow: var(--ombre); }
   .chap__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); opacity: .9; }
   .chap__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
   .chap__n { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--accent); letter-spacing: -0.04em; flex: 0 0 auto; }
   .chap__t { font-size: clamp(1.25rem, 4vw, 1.7rem); margin: 0; text-wrap: balance; }
   .chap__body { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 22px; align-items: start; }
   .chap__diagram { min-width: 0; }
-  .chap__lead { font-size: 0.98rem; line-height: 1.65; color: var(--texte); margin: 0 0 16px; }
+  .chap__lead { font-size: 0.98rem; line-height: 1.65; color: var(--encre); margin: 0 0 16px; }
   .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .chap__pts li { font-size: 0.92rem; color: var(--texte-2); padding-left: 24px; position: relative; line-height: 1.45; }
+  .chap__pts li { font-size: 0.92rem; color: var(--encre-2); padding-left: 24px; position: relative; line-height: 1.45; }
   .chap__pts li::before { content: '►'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
 
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }

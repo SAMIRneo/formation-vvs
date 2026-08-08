@@ -320,20 +320,20 @@ const L = {
 </div>
 
 <style>
-  .cd { width: 100%; border: var(--border-w) solid var(--ligne); border-radius: var(--radius); background: var(--charbon-3); padding: 16px; overflow: hidden; }
+  .cd { width: 100%; border: 1.5px solid var(--ligne); border-radius: var(--radius); background: var(--carte); padding: 16px; overflow: hidden; }
   .cd__svg { width: 100%; height: auto; display: block; }
-  .cd__gridline { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
-  .cd__axis { stroke: var(--texte-2); stroke-width: 1.5; opacity: .5; }
-  .cd__ytick { fill: var(--texte-2); font: 600 9px/1 'Satoshi', sans-serif; opacity: .7; }
+  .cd__gridline { stroke: color-mix(in srgb, var(--encre) 6%, transparent); stroke-width: 1; }
+  .cd__axis { stroke: var(--encre-2); stroke-width: 1.5; opacity: .5; }
+  .cd__ytick { fill: var(--encre-2); font: 600 9px/1 'Space Grotesk', sans-serif; opacity: .7; }
   .cd__line { fill: none; stroke: var(--lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 800; stroke-dashoffset: 0; }
   .cd.in .cd__line { animation: cddraw 1.3s ease forwards; }
-  .cd__line.dim { stroke: var(--texte-2); stroke-width: 2; stroke-dasharray: 4 4; }
-  .cd__wick { stroke: var(--texte-2); stroke-width: 2; }
+  .cd__line.dim { stroke: var(--encre-2); stroke-width: 2; stroke-dasharray: 4 4; }
+  .cd__wick { stroke: var(--encre-2); stroke-width: 2; }
   .cd__fill { opacity: 0; transform: scale(.92); transform-origin: center; }
   .cd.in .cd__fill { animation: cdfill .6s ease forwards; }
   .cd__fill.up rect { fill: var(--emeraude); } .cd__fill.up line { stroke: var(--emeraude); }
   .cd__fill.down rect { fill: var(--rouge); } .cd__fill.down line { stroke: var(--rouge); }
-  .cd__zone { fill: color-mix(in srgb, var(--lime) 10%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .cd__zone { fill: color-mix(in srgb, var(--lime) 12%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; }
   .cd__zone.zn { fill: color-mix(in srgb, var(--bleu) 12%, transparent); stroke: var(--bleu); }
   .cd__zone.dd { fill: color-mix(in srgb, var(--rouge) 14%, transparent); stroke: none; }
   .cd__line.res { stroke: var(--jaune); } .cd__line.sup { stroke: var(--emeraude); }
@@ -347,18 +347,18 @@ const L = {
   .cd.in .cd__bar { animation: cdbar .7s ease forwards; }
   .cd__bar.risk { fill: color-mix(in srgb, var(--rouge) 60%, transparent); }
   .cd__bar.reward { fill: color-mix(in srgb, var(--emeraude) 60%, transparent); }
-  .cd__lbl { fill: var(--texte-2); font: 700 10px/1 'Satoshi', sans-serif; letter-spacing: 0.08em; }
+  .cd__lbl { fill: var(--encre-2); font: 700 10px/1 'Space Grotesk', sans-serif; letter-spacing: 0.08em; }
   .cd__lbl.up { fill: var(--emeraude); } .cd__lbl.down { fill: var(--rouge); }
-  .cd__box rect { fill: var(--charbon-2); stroke: var(--ligne); stroke-width: 2; }
+  .cd__box rect { fill: var(--carte); stroke: var(--ligne-2); stroke-width: 2; }
   .cd__box.res rect { fill: color-mix(in srgb, var(--lime) 16%, transparent); stroke: var(--lime); }
-  .cd__bx { fill: var(--texte-2); font: 700 9px/1 'Satoshi', sans-serif; letter-spacing: 0.04em; }
-  .cd__bxv { fill: var(--texte); font: 700 11px/1 'Clash Display', sans-serif; }
-  .cd__op { fill: var(--lime); font: 700 22px/1 'Clash Display', sans-serif; }
+  .cd__bx { fill: var(--encre-2); font: 700 9px/1 'Space Grotesk', sans-serif; letter-spacing: 0.04em; }
+  .cd__bxv { fill: var(--encre); font: 700 11px/1 'Newsreader', serif; }
+  .cd__op { fill: var(--lime-ink); font: 700 22px/1 'Newsreader', serif; }
   .cd__check rect { fill: none; stroke: var(--emeraude); stroke-width: 2.5; }
   .cd__check path { fill: none; stroke: var(--emeraude); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-  .cd__page { fill: var(--charbon-2); stroke: var(--ligne); stroke-width: 2; }
-  .cd__line.jl { stroke: var(--texte-2); stroke-width: 2; stroke-dasharray: 4 3; }
-  .cd__star { fill: var(--jaune); font: 700 16px/1 'Clash Display', sans-serif; }
+  .cd__page { fill: var(--carte); stroke: var(--ligne-2); stroke-width: 2; }
+  .cd__line.jl { stroke: var(--encre-2); stroke-width: 2; stroke-dasharray: 4 3; }
+  .cd__star { fill: var(--jaune); font: 700 16px/1 'Newsreader', serif; }
   @keyframes cddraw { from { stroke-dashoffset: 800; } to { stroke-dashoffset: 0; } }
   @keyframes cdfill { to { opacity: 1; transform: scale(1); } }
   @keyframes cdpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }

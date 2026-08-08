@@ -34,16 +34,16 @@ const lang = getLang(Astro.url);
 
 <style>
   .sec-head { margin-bottom: 36px; text-align: center; }
-  .sec-head p { color: var(--texte-2); margin-top: 12px; }
+  .sec-head p { color: var(--encre-2); margin-top: 12px; }
   .contact { display: flex; flex-direction: column; gap: 12px; max-width: 520px; margin: 0 auto 32px; }
   .chan {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    background: var(--carte); border: 1.5px solid var(--ligne);
     border-radius: var(--radius); padding: 18px 22px; transition: border-color .14s ease, transform .14s ease;
   }
   .chan:hover { border-color: var(--lime); transform: translateX(4px); }
   .chan__k { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--lime); flex: 0 0 auto; }
-  .chan__v { color: var(--texte); font-size: 0.95rem; text-align: right; }
+  .chan__v { color: var(--encre); font-size: 0.95rem; text-align: right; }
   .cta-final { padding: 38px; text-align: center; }
   .cta-final p { max-width: 40ch; margin: 14px auto 24px; color: #2A1500; font-weight: 500; }
 </style>

@@ -24,25 +24,26 @@ const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--ja
 <style>
   .mod {
     display: block; position: relative; overflow: hidden;
-    background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
-    border-radius: 12px; padding: 18px 18px 16px 22px;
+    background: var(--carte); border: 1.5px solid var(--ligne);
+    border-radius: var(--radius); padding: 20px 20px 18px 24px;
     transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
-    box-shadow: var(--ombre-douce);
+    box-shadow: var(--ombre);
   }
   .mod__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); opacity: .85; }
   .mod::after {
     content: ''; position: absolute; right: -40%; top: -40%; width: 80%; height: 80%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
     opacity: 0; transition: opacity .25s ease; pointer-events: none;
   }
-  .mod:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 22px 46px -22px color-mix(in srgb, var(--accent) 45%, transparent); }
+  .mod:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 22px 46px -22px color-mix(in srgb, var(--accent) 40%, transparent); }
   .mod:hover::after { opacity: 1; }
   .mod__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .mod__n { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--accent); letter-spacing: -0.04em; }
-  .mod__tag { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--texte-2); border: 1px solid var(--ligne); padding: 3px 8px; border-radius: 5px; }
-  .mod__title { font-size: 1.2rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: -0.02em; }
-  .mod__desc { font-size: 0.86rem; color: var(--texte-2); margin-bottom: 14px; line-height: 1.45; }
-  .mod__open { font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; color: var(--accent); display: inline-flex; align-items: center; gap: 6px; }
+  .mod__n { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; color: var(--accent); letter-spacing: -0.03em; }
+  .mod__tag { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--encre-2); border: 1.5px solid var(--ligne); padding: 3px 8px; border-radius: 6px; }
+  .mod__title { font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .mod__desc { font-size: 0.86rem; color: var(--encre-2); margin-bottom: 14px; line-height: 1.45; }
+  .mod__open { font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem; color: var(--encre); display: inline-flex; align-items: center; gap: 6px; }
+  .mod:hover .mod__open { color: var(--accent); }
   .mod__arrow { transition: transform .2s ease; }
   .mod:hover .mod__arrow { transform: translateX(4px); }
 </style>

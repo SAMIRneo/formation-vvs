@@ -1,18 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MarketBoard from '../components/MarketBoard.astro';
-import ModuleCard from '../components/ModuleCard.astro';
+import ChapterDiagram from '../components/ChapterDiagram.astro';
 import { getContent } from '../data/content';
 import { getLang, t, localizedPath } from '../i18n/ui';
 const lang = getLang(Astro.url);
 const { modules } = getContent(lang);
+// miniatures de schémas par module (variant ChapterDiagram)
+const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 ---
 <BaseLayout title={t(lang, 'home.heroTitle').split('\n')[0]} active="accueil">
-  <!-- HERO PARALLAX -->
-  <section class="hero-parallax wrap">
-    <div class="hero-parallax__bg" data-parallax="0.18"></div>
-    <div class="hero-parallax__grid" data-parallax="0.08"></div>
-    <div class="hero-parallax__content hero" data-reveal>
+  <!-- HERO ÉDITORIAL (split) -->
+  <section class="hero wrap">
+    <div class="hero__main" data-reveal>
       <span class="eyebrow">{t(lang, 'home.eyebrow')}</span>
       <h1 set:html={t(lang, 'home.heroTitle').replace(/\n/g, '<br/>')} />
       <p class="hero__lead">{t(lang, 'home.heroLead')}</p>
@@ -20,96 +20,149 @@ const { modules } = getContent(lang);
         <a href={localizedPath('/modules/', lang)} class="btn">{t(lang, 'home.ctaModules')}</a>
         <a href={localizedPath('/abonnement/', lang)} class="btn btn--ghost">{t(lang, 'home.ctaAbo')}</a>
       </div>
+      <div class="hero__stats">
+        <div><span class="num">4</span><span class="lab">modules</span></div>
+        <div><span class="num">FR / ES</span><span class="lab">langues</span></div>
+        <div><span class="num">100%</span><span class="lab">sur iPhone</span></div>
+      </div>
+    </div>
+    <aside class="hero__board" data-reveal data-reveal-delay="120">
+      <div class="board-card">
+        <div class="board-card__head">
+          <span class="board-card__dot"></span>
+          <span class="board-card__title">{t(lang, 'home.marcheTitle')}</span>
+          <span class="board-card__live">LIVE</span>
+        </div>
+        <MarketBoard />
+      </div>
+      <p class="board-card__note">{t(lang, 'home.marcheLead')}</p>
+      <a href={localizedPath('/marche/', lang)} class="board-card__link">{t(lang, 'home.marcheLink')} →</a>
+    </aside>
+  </section>
+
+  <!-- MANIFESTE -->
+  <section class="section section--alt manifesto">
+    <div class="wrap">
+      <span class="eyebrow" data-reveal>{t(lang, 'home.manifesteEyebrow')}</span>
+      <p class="manifesto__text" data-reveal data-reveal-delay="60" set:html={t(lang, 'home.manifeste').replace(/\n/g, '<br/>')} />
     </div>
   </section>
 
-  <!-- BENTO GRID -->
+  <!-- PARCOURS MODULES (liste éditoriale) -->
   <section class="section wrap">
-    <div class="bento">
-
-      <!-- Marché (large) -->
-      <div class="bento__card b-wide is-accent" data-reveal>
-        <span class="bento__k">{t(lang, 'home.marcheEyebrow')}</span>
-        <h2 class="bento__t">{t(lang, 'home.marcheTitle')}</h2>
-        <p class="bento__d" style="margin-bottom:16px">{t(lang, 'home.marcheLead')}</p>
-        <MarketBoard />
-        <a href={localizedPath('/marche/', lang)} class="market-link">{t(lang, 'home.marcheLink')}</a>
-      </div>
-
-      <!-- CTA panneau couleur (half) -->
-      <div class="bento__card b-half panel-lime" data-reveal data-reveal-delay="80">
-        <div class="cta-mini">
-          <h3>{t(lang, 'home.ctaPanelTitle')}</h3>
-          <p>{t(lang, 'home.ctaPanelLead')}</p>
-          <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'home.ctaPanelBtn')}</a>
-        </div>
-      </div>
-
-      <!-- Modules titres (b-full intro) -->
-      <div class="bento__card b-full" data-reveal>
-        <div class="sec-head" style="margin-bottom:20px">
-          <h2 class="bento__t">{t(lang, 'home.cursusTitle')}</h2>
-          <p class="bento__d">{t(lang, 'home.cursusLead')}</p>
-        </div>
-        <div class="mods-bento">
-          {modules.map((m, i) => (
-            <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="mod-bento" data-reveal data-reveal-delay={i*60}>
-              <span class="mod-bento__n">{m.n}</span>
-              <div>
-                <h3 class="mod-bento__t">{m.title}</h3>
-                <p class="mod-bento__d">{m.desc}</p>
+    <div class="sec-head" data-reveal>
+      <h2>{t(lang, 'home.cursusTitle')}</h2>
+      <p class="muted">{t(lang, 'home.cursusLead')}</p>
+    </div>
+    <ol class="cursus">
+      {modules.map((m, i) => (
+        <li class="cursus__item" data-reveal data-reveal-delay={i * 70}>
+          <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="cursus__link">
+            <span class="cursus__n">{m.n}</span>
+            <div class="cursus__body">
+              <div class="cursus__meta">
+                <h3 class="cursus__t">{m.title}</h3>
+                <span class="badge">{m.tag}</span>
               </div>
-              <span class="mod-bento__tag">{m.tag}</span>
-            </a>
-          ))}
-        </div>
-      </div>
+              <p class="cursus__d">{m.desc}</p>
+            </div>
+            <div class="cursus__thumb">
+              <ChapterDiagram variant={diagramVariant[i]} lang={lang} />
+            </div>
+            <span class="cursus__arrow">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
 
+  <!-- CTA FINAL -->
+  <section class="section section--alt">
+    <div class="wrap cta-final" data-reveal>
+      <h2 class="cta-final__title">{t(lang, 'home.ctaPanelTitle')}</h2>
+      <p class="cta-final__lead muted">{t(lang, 'home.ctaPanelLead')}</p>
+      <a href={localizedPath('/abonnement/', lang)} class="btn">{t(lang, 'home.ctaPanelBtn')}</a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hero-parallax { padding: 72px 20px 56px; min-height: 64vh; display: flex; align-items: center; }
-  .hero { width: 100%; max-width: 820px; display: flex; flex-direction: column; gap: 24px; }
-  .hl { color: var(--lime); }
-  .hero__lead { color: var(--texte-2); font-size: 1.12rem; margin: 22px 0 30px; max-width: 52ch; line-height: 1.6; }
+  .hero {
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center;
+    padding: 84px 22px 64px; min-height: 70vh;
+  }
+  .hero__main { display: flex; flex-direction: column; gap: 22px; }
+  .hero__lead { color: var(--encre-2); font-size: 1.12rem; max-width: 48ch; line-height: 1.6; margin-top: 4px; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero__stats { display: flex; gap: 34px; margin-top: 14px; padding-top: 22px; border-top: 1px solid var(--ligne); }
+  .hero__stats > div { display: flex; flex-direction: column; }
+  .hero__stats .num { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; line-height: 1; }
+  .hero__stats .lab { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--encre-2); margin-top: 6px; }
 
-  .market-link { display: inline-block; margin-top: 16px; color: var(--lime); font-weight: 700; font-size: 0.85rem; }
-
-  .cta-mini { display: flex; flex-direction: column; height: 100%; }
-  .cta-mini h3 { font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 10px; color: #1A0D00; text-transform: uppercase; letter-spacing: -0.03em; font-family: var(--font-display); font-weight: 700; line-height: 1; }
-  .cta-mini p { color: #2A1500; font-weight: 500; font-size: 0.92rem; margin-bottom: 16px; flex: 1 1 auto; }
-  .cta-mini .btn { background: var(--charbon); color: var(--lime); border-color: #1A0D00; align-self: flex-start; }
-
-  .sec-head { margin: 0; }
-  .mods-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .mod-bento {
-    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
-    background: var(--charbon-3); border: var(--border-w) solid var(--ligne);
-    border-radius: 12px; padding: 16px 18px; transition: border-color .15s ease, transform .15s ease;
+  /* carte marché hero */
+  .hero__board { display: flex; flex-direction: column; gap: 14px; }
+  .board-card {
+    background: var(--carte); border: 1.5px solid var(--ligne); border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--ombre);
   }
-  .mod-bento:hover { border-color: var(--lime); transform: translateY(-2px); }
-  .mod-bento__n { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--lime); letter-spacing: -0.04em; }
-  .mod-bento__t { font-size: 1.05rem; margin: 0 0 2px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; }
-  .mod-bento__d { font-size: 0.8rem; color: var(--texte-2); margin: 0; }
-  .mod-bento__tag { font-family: var(--font-body); font-weight: 700; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border: var(--border-w) solid var(--ligne); border-radius: 6px; color: var(--texte-2); }
+  .board-card__head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .board-card__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emeraude); box-shadow: 0 0 0 4px color-mix(in srgb, var(--emeraude) 22%, transparent); animation: blink 2s ease-in-out infinite; }
+  .board-card__title { font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.74rem; }
+  .board-card__live { margin-left: auto; font-family: var(--font-mono); font-weight: 700; font-size: 0.6rem; letter-spacing: 0.12em; color: var(--encre); background: var(--lime); padding: 3px 8px; border-radius: var(--radius-pill); }
+  .board-card__note { color: var(--encre-2); font-size: 0.86rem; line-height: 1.5; }
+  .board-card__link { font-family: var(--font-mono); font-weight: 700; font-size: 0.82rem; color: var(--encre); }
+  .board-card__link:hover { color: var(--lime-ink); }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
 
-  @media (max-width: 1024px) {
-    .hero-parallax { padding-top: 56px; }
-    .board { grid-template-columns: 1fr !important; }
-    :global(.board .tile) { flex-direction: row !important; align-items: center; gap: 12px; }
+  /* manifeste */
+  .manifesto .eyebrow { margin-bottom: 22px; }
+  .manifesto__text {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(1.5rem, 3.6vw, 2.5rem); line-height: 1.25; letter-spacing: -0.01em;
+    max-width: 22ch;
   }
-  @media (max-width: 760px) {
-    .hero-parallax { padding: 44px 16px 36px; min-height: 56vh; }
-    .hero__lead { font-size: 1.05rem; }
-    .hero__cta { flex-direction: column; align-items: stretch; }
-    .hero__cta .btn { width: 100%; justify-content: center; }
-    .mods-bento { grid-template-columns: 1fr; }
-    .bento__card { padding: 18px 16px; }
+  .manifesto__text :global(br) { margin-bottom: 0.2em; }
+
+  /* sec-head */
+  .sec-head { margin-bottom: 30px; }
+  .sec-head .muted { margin-top: 8px; max-width: 60ch; }
+
+  /* cursus liste */
+  .cursus { list-style: none; }
+  .cursus__item { border-top: 1.5px solid var(--ligne); }
+  .cursus__item:last-child { border-bottom: 1.5px solid var(--ligne); }
+  .cursus__link {
+    display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 24px;
+    padding: 22px 6px; transition: background .18s ease, padding-left .18s ease;
+  }
+  .cursus__link:hover { background: var(--carte); padding-left: 18px; }
+  .cursus__n { font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 5vw, 3rem); color: color-mix(in srgb, var(--encre) 16%, transparent); line-height: 1; }
+  .cursus__body { min-width: 0; }
+  .cursus__meta { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+  .cursus__t { font-size: clamp(1.25rem, 3vw, 1.7rem); }
+  .cursus__d { color: var(--encre-2); font-size: 0.92rem; max-width: 56ch; }
+  .cursus__thumb {
+    width: 120px; height: 80px; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
+    background: var(--carte); overflow: hidden; flex-shrink: 0;
+  }
+  .cursus__thumb img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+  .cursus__arrow { font-size: 1.4rem; color: var(--encre); transition: transform .2s ease; }
+  .cursus__link:hover .cursus__arrow { transform: translateX(6px); color: var(--lime-ink); }
+
+  /* cta final */
+  .cta-final { text-align: center; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .cta-final__lead { max-width: 48ch; }
+  .cta-final .btn { margin-top: 8px; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 56px; }
+    .cursus__link { grid-template-columns: auto 1fr auto; gap: 16px; }
+    .cursus__thumb { display: none; }
   }
   @media (max-width: 640px) {
-    .hero h1 { font-size: clamp(2.3rem, 11vw, 3.4rem); }
+    .hero__stats { gap: 22px; }
+    .cursus__link { grid-template-columns: auto 1fr; padding: 18px 4px; }
+    .cursus__arrow { display: none; }
+    .cursus__d { display: none; }
   }
 </style>

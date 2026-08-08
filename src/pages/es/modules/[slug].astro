@@ -46,20 +46,20 @@ const lang = getLang(Astro.url);
 
 <style>
   .detail { max-width: 760px; padding: 48px 20px 64px; }
-  .back { display: inline-block; color: var(--texte-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
+  .back { display: inline-block; color: var(--encre-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
   .back:hover { color: var(--lime); }
   .detail h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; }
-  .lead { color: var(--texte-2); font-size: 1.1rem; margin-bottom: 20px; max-width: 52ch; }
-  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--texte); margin-bottom: 36px; }
+  .lead { color: var(--encre-2); font-size: 1.1rem; margin-bottom: 20px; max-width: 52ch; }
+  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--encre); margin-bottom: 36px; }
   .chaps-title { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 24px; }
   .chapters { display: flex; flex-direction: column; gap: 40px; }
-  .chap { border: var(--border-w) solid var(--ligne); border-radius: var(--radius); padding: 22px; background: var(--charbon-2); }
+  .chap { border: 1.5px solid var(--ligne); border-radius: var(--radius); padding: 22px; background: var(--carte); }
   .chap__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
   .chap__n { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--lime); letter-spacing: -0.04em; flex: 0 0 auto; }
   .chap__t { font-size: clamp(1.3rem, 5vw, 1.8rem); margin: 0; }
-  .chap__body { font-size: 1rem; line-height: 1.65; color: var(--texte); margin: 18px 0 16px; }
+  .chap__body { font-size: 1rem; line-height: 1.65; color: var(--encre); margin: 18px 0 16px; }
   .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .chap__pts li { font-size: 0.95rem; color: var(--texte-2); padding-left: 24px; position: relative; }
+  .chap__pts li { font-size: 0.95rem; color: var(--encre-2); padding-left: 24px; position: relative; }
   .chap__pts li::before { content: '►'; position: absolute; left: 0; color: var(--lime); font-size: 0.8rem; }
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
   @media (max-width: 760px) {

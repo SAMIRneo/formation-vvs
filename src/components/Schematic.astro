@@ -69,27 +69,27 @@ const { variant } = Astro.props;
 </div>
 
 <style>
-  .schem { width: 100%; border: var(--border-w) solid var(--ligne); border-radius: var(--radius); background: var(--charbon-3); padding: 12px; overflow: hidden; }
+  .schem { width: 100%; border: 1.5px solid var(--ligne); border-radius: var(--radius); background: var(--carte); padding: 12px; overflow: hidden; }
   .schem__svg { width: 100%; height: auto; display: block; }
   .schem__grid line { stroke: rgba(255,255,255,0.06); stroke-width: 1; }
-  .wick { stroke: var(--texte-2); stroke-width: 1.5; }
+  .wick { stroke: var(--encre-2); stroke-width: 1.5; }
   .up { fill: var(--emeraude); }
   .down { fill: var(--rouge); }
   .key { stroke: var(--jaune); stroke-width: 2; stroke-dasharray: 6 4; }
-  .key-t { fill: var(--jaune); font: 700 9px/1 'Satoshi', sans-serif; letter-spacing: 0.1em; }
+  .key-t { fill: var(--jaune); font: 700 9px/1 'Space Grotesk', sans-serif; letter-spacing: 0.1em; }
   .trend-line { fill: none; stroke: var(--lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 2.4s ease forwards; }
   .vol-bar { fill: color-mix(in srgb, var(--bleu) 60%, transparent); }
   .pulse-dot { fill: var(--lime); animation: dotpulse 1.8s ease-in-out infinite; }
   .ring { fill: none; stroke: var(--ligne); stroke-width: 10; }
   .risk-arc { fill: none; stroke: var(--rouge); stroke-width: 10; stroke-linecap: round; transform-origin: 110px 90px; transform: rotate(-90deg); stroke-dasharray: 377; stroke-dashoffset: 377; animation: draw 1.8s ease forwards; }
-  .risk-t { fill: var(--rouge); font: 700 22px/1 'Clash Display', sans-serif; }
-  .entry { stroke: var(--texte); stroke-width: 2; }
+  .risk-t { fill: var(--rouge); font: 700 22px/1 'Newsreader', sans-serif; }
+  .entry { stroke: var(--encre); stroke-width: 2; }
   .stop { stroke: var(--rouge); stroke-width: 2; }
   .tp { stroke: var(--emeraude); stroke-width: 2; }
-  .lbl { fill: var(--texte-2); font: 700 8px/1 'Satoshi', sans-serif; letter-spacing: 0.08em; }
+  .lbl { fill: var(--encre-2); font: 700 8px/1 'Space Grotesk', sans-serif; letter-spacing: 0.08em; }
   .lbl.up { fill: var(--emeraude); } .lbl.down { fill: var(--rouge); }
   .zone { fill: color-mix(in srgb, var(--lime) 12%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; }
-  .zone-t { fill: var(--lime); font: 700 11px/1 'Clash Display', sans-serif; }
+  .zone-t { fill: var(--lime); font: 700 11px/1 'Newsreader', sans-serif; }
   .arrow { fill: none; stroke: var(--lime); stroke-width: 2.5; stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 2s ease .4s forwards; }
   @keyframes draw { to { stroke-dashoffset: 0; } }
   @keyframes dotpulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }

@@ -64,31 +64,31 @@ const UNIVERSE = [
 </div>
 
 <style>
-  .screen { background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre-douce); }
+  .screen { background: var(--carte); border: 1.5px solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre); }
   .screen__head { margin-bottom: 16px; }
   .screen__t { font-size: clamp(1.3rem, 5vw, 1.9rem); margin: 0; }
-  .screen__sub { color: var(--texte-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 48ch; }
+  .screen__sub { color: var(--encre-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 48ch; }
 
   .screen__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
   .sf { font-family: var(--font-body); font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em;
-    padding: 8px 14px; border: var(--border-w) solid var(--ligne); border-radius: 8px; background: transparent; color: var(--texte-2); cursor: pointer; transition: all .12s ease; }
+    padding: 8px 14px; border: 1.5px solid var(--ligne); border-radius: 8px; background: transparent; color: var(--encre-2); cursor: pointer; transition: all .12s ease; }
   .sf:hover { border-color: var(--lime); color: var(--lime); }
-  .sf.is-active { background: var(--lime); color: var(--charbon); border-color: var(--lime); }
+  .sf.is-active { background: var(--lime); color: var(--encre); border-color: var(--lime); }
 
   .screen__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   @media (max-width: 640px) { .screen__grid { grid-template-columns: 1fr; } }
 
-  .scard { background: var(--charbon-3); border: var(--border-w) solid var(--ligne); border-radius: 11px; padding: 14px 16px; transition: border-color .15s ease, transform .15s ease; }
+  .scard { background: var(--carte); border: 1.5px solid var(--ligne); border-radius: 11px; padding: 14px 16px; transition: border-color .15s ease, transform .15s ease; }
   .scard:hover { border-color: color-mix(in srgb, var(--lime) 50%, var(--ligne)); transform: translateY(-2px); }
   .scard__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
   .scard__pair { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; }
   .scard__bias { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.06em; }
   .scard__bias--up { background: color-mix(in srgb, var(--emeraude) 20%, transparent); color: var(--emeraude); }
   .scard__bias--down { background: color-mix(in srgb, var(--rouge) 20%, transparent); color: var(--rouge); }
-  .scard__tag { display: inline-block; font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border: var(--border-w) solid var(--jaune); color: var(--jaune); border-radius: 6px; }
-  .scard__why { color: var(--texte-2); font-size: 0.82rem; line-height: 1.45; margin: 10px 0 0; }
-  .scard__why b { color: var(--texte); }
-  .screen__hint { color: var(--texte-2); font-size: 0.72rem; opacity: 0.65; margin: 16px 0 0; text-align: center; }
+  .scard__tag { display: inline-block; font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border: 1.5px solid var(--jaune); color: var(--jaune); border-radius: 6px; }
+  .scard__why { color: var(--encre-2); font-size: 0.82rem; line-height: 1.45; margin: 10px 0 0; }
+  .scard__why b { color: var(--encre); }
+  .screen__hint { color: var(--encre-2); font-size: 0.72rem; opacity: 0.65; margin: 16px 0 0; text-align: center; }
 </style>
 
 <script is:inline>

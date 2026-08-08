@@ -38,26 +38,26 @@ const L = {
 </div>
 
 <style>
-  .watch { background: var(--charbon-2); border: var(--border-w) solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre-douce); }
+  .watch { background: var(--carte); border: 1.5px solid var(--ligne); border-radius: 14px; padding: 22px; box-shadow: var(--ombre); }
   .watch__head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
   .watch__t { font-size: clamp(1.3rem, 5vw, 1.9rem); margin: 0; }
-  .watch__sub { color: var(--texte-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 44ch; }
+  .watch__sub { color: var(--encre-2); font-size: 0.9rem; margin: 4px 0 0; max-width: 44ch; }
   .watch__tools { display: flex; gap: 8px; flex: 0 0 auto; align-items: center; }
   .journal__btn { font-family: var(--font-body); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
-    padding: 7px 11px; border: var(--border-w) solid var(--ligne); border-radius: 7px; background: transparent; color: var(--texte-2); cursor: pointer; transition: all .12s ease; }
+    padding: 7px 11px; border: 1.5px solid var(--ligne); border-radius: 7px; background: transparent; color: var(--encre-2); cursor: pointer; transition: all .12s ease; }
   .journal__btn:hover { border-color: var(--lime); color: var(--lime); }
   .journal__btn--ghost:hover { border-color: var(--rouge); color: var(--rouge); }
 
   .watch__add { display: flex; gap: 10px; margin-bottom: 18px; }
-  .watch__add input { flex: 1; font-family: var(--font-body); font-size: 0.95rem; color: var(--texte);
-    background: var(--charbon); border: var(--border-w) solid var(--ligne); border-radius: 8px; padding: 11px 12px; }
+  .watch__add input { flex: 1; font-family: var(--font-body); font-size: 0.95rem; color: var(--encre);
+    background: var(--encre); border: 1.5px solid var(--ligne); border-radius: 8px; padding: 11px 12px; }
   .watch__add input:focus { outline: 2px solid var(--lime); outline-offset: 1px; border-color: var(--lime); }
 
   .watch__list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .watch__empty { color: var(--texte-2); font-size: 0.9rem; text-align: center; padding: 18px; border: 1px dashed var(--ligne); border-radius: 10px; }
-  .wrow { display: flex; align-items: center; gap: 10px; background: var(--charbon-3); border: var(--border-w) solid var(--ligne); border-radius: 10px; padding: 10px 14px; }
-  .wrow__txt { flex: 1; font-size: 0.92rem; color: var(--texte); cursor: text; }
-  .wrow__del { background: none; border: none; color: var(--texte-2); cursor: pointer; font-size: 1.05rem; padding: 2px 6px; border-radius: 6px; }
+  .watch__empty { color: var(--encre-2); font-size: 0.9rem; text-align: center; padding: 18px; border: 1px dashed var(--ligne); border-radius: 10px; }
+  .wrow { display: flex; align-items: center; gap: 10px; background: var(--carte); border: 1.5px solid var(--ligne); border-radius: 10px; padding: 10px 14px; }
+  .wrow__txt { flex: 1; font-size: 0.92rem; color: var(--encre); cursor: text; }
+  .wrow__del { background: none; border: none; color: var(--encre-2); cursor: pointer; font-size: 1.05rem; padding: 2px 6px; border-radius: 6px; }
   .wrow__del:hover { color: var(--rouge); background: color-mix(in srgb, var(--rouge) 12%, transparent); }
 </style>
 

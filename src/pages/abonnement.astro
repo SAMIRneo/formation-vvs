@@ -35,26 +35,26 @@ const { plans } = getContent(lang);
 
 <style>
   .sec-head { margin-bottom: 36px; text-align: center; }
-  .sec-head p { color: var(--texte-2); margin-top: 12px; max-width: 50ch; margin-left: auto; margin-right: auto; }
+  .sec-head p { color: var(--encre-2); margin-top: 12px; max-width: 50ch; margin-left: auto; margin-right: auto; }
   .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
   .plan {
-    position: relative; background: var(--charbon-2); border: var(--border-w) solid var(--ligne);
+    position: relative; background: var(--carte); border: 1.5px solid var(--ligne);
     border-radius: var(--radius); padding: 26px 22px; display: flex; flex-direction: column;
     transition: border-color .14s ease, transform .14s ease;
   }
   .plan:hover { transform: translateY(-4px); border-color: var(--lime); }
   .plan--hl { border-color: var(--lime); box-shadow: var(--ombre-dure); }
   .plan__flag {
-    position: absolute; top: -12px; left: 22px; background: var(--lime); color: var(--charbon);
+    position: absolute; top: -12px; left: 22px; background: var(--lime); color: var(--encre);
     font-family: var(--font-display); font-weight: 700; font-size: 0.62rem; text-transform: uppercase;
     letter-spacing: 0.08em; padding: 4px 10px; border-radius: 5px;
   }
   .plan__nom { font-size: 1.3rem; margin-bottom: 12px; }
   .plan__prix { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
   .plan__montant { font-family: var(--font-display); font-weight: 700; font-size: 2.4rem; letter-spacing: -0.04em; color: var(--lime); }
-  .plan__per { color: var(--texte-2); font-weight: 700; font-size: 0.85rem; }
+  .plan__per { color: var(--encre-2); font-weight: 700; font-size: 0.85rem; }
   .plan__feat { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex: 1 1 auto; }
-  .plan__feat li { color: var(--texte); font-size: 0.92rem; padding-left: 22px; position: relative; }
+  .plan__feat li { color: var(--encre); font-size: 0.92rem; padding-left: 22px; position: relative; }
   .plan__feat li::before { content: '✓'; position: absolute; left: 0; color: var(--emeraude); font-weight: 700; }
   .plan .btn { width: 100%; text-align: center; }
   .cta-panel { margin-top: 40px; padding: 40px; text-align: center; }
