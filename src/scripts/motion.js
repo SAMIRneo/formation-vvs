@@ -40,25 +40,62 @@
   attachRipple(document.querySelectorAll('.btn'));
   attachRipple(document.querySelectorAll('.tabbar__item'));
 
-  // ---- 3) Market board "live" (simulation douce, respect reduce) ----
-  const tiles = Array.from(document.querySelectorAll('.tile[data-base]'));
-  if (tiles.length && !reduce) {
-    const fmt = (n) => n.toLocaleString('fr-FR').replace(/,/g, ' ');
-    setInterval(() => {
-      tiles.forEach((t) => {
-        const base = parseFloat(t.getAttribute('data-base'));
-        const drift = (Math.random() - 0.5) * base * 0.004; // ±0.2%
-        const next = Math.max(1, Math.round(base + drift));
-        const priceEl = t.querySelector('.tile__price');
-        if (!priceEl) return;
-        const prev = parseFloat((priceEl.dataset.val || base));
-        priceEl.textContent = fmt(next);
-        priceEl.dataset.val = next;
-        t.classList.remove('flash-up', 'flash-down');
-        void t.offsetWidth; // reflow pour relancer l'anim
-        t.classList.add(next >= prev ? 'flash-up' : 'flash-down');
-      });
-    }, 2600);
+  // ---- 3) Market board LIVE (CoinGecko crypto + open.er-api FX, sans clé, CORS *) ----
+  const board = document.getElementById('market-board');
+  if (board) {
+    const tiles = Array.from(board.querySelectorAll('.tile'));
+    const fmtPrice = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: n >= 100 ? 2 : 4 }).replace(/ /g, ' ');
+    const setTile = (sym, price, chg, dir) => {
+      const tile = tiles.find((t) => t.dataset.sym === sym);
+      if (!tile) return;
+      const priceEl = tile.querySelector('[data-price]');
+      const chgEl = tile.querySelector('[data-chg]');
+      if (priceEl) {
+        const prev = parseFloat(priceEl.dataset.val || 'NaN');
+        priceEl.textContent = fmtPrice(price);
+        priceEl.dataset.val = price;
+        if (!reduce && !isNaN(prev) && prev !== price) {
+          tile.classList.remove('flash-up', 'flash-down');
+          void tile.offsetWidth; // reflow pour relancer l'anim
+          tile.classList.add(price >= prev ? 'flash-up' : 'flash-down');
+        }
+      }
+      if (chgEl) {
+        chgEl.textContent = chg;
+        chgEl.className = `tile__badge badge ${dir === 'up' ? 'badge--up' : 'badge--down'}`;
+      }
+      tile.classList.toggle('tile--up', dir === 'up');
+      tile.classList.toggle('tile--down', dir === 'down');
+    };
+    const CG_IDS = tiles.filter((t) => t.dataset.source === 'cg').map((t) => t.dataset.sym);
+    async function refresh() {
+      try {
+        const cg = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=${CG_IDS.join(',')}&order=market_cap_desc&price_change_percentage=24h`, { cache: 'no-store' });
+        if (cg.ok) {
+          const data = await cg.json();
+          data.forEach((c) => {
+            const pct = c.price_change_percentage_24h ?? 0;
+            const dir = pct >= 0 ? 'up' : 'down';
+            setTile(c.id, c.current_price, `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`, dir);
+          });
+        }
+      } catch (e) { /* échec réseau : on garde la dernière valeur affichée */ }
+      try {
+        const fx = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+        if (fx.ok) {
+          const j = await fx.json();
+          if (j.rates && j.rates.EUR) {
+            const eurUsd = 1 / j.rates.EUR;
+            const prevEl = board.querySelector('.tile[data-sym="eurusd"] [data-price]');
+            const prev = prevEl ? parseFloat(prevEl.dataset.val || 'NaN') : NaN;
+            const dir = isNaN(prev) ? 'up' : (eurUsd >= prev ? 'up' : 'down');
+            setTile('eurusd', eurUsd, 'LIVE', dir);
+          }
+        }
+      } catch (e) { /* ignore */ }
+    }
+    refresh();
+    setInterval(refresh, 30000);
   }
 
   // ---- 4) Tilt léger sur cartes (desktop, pointer fine) ----

@@ -1,19 +1,29 @@
 ---
-import { marketTickers } from '../data/content';
-// Board statique — ZÉRO canvas → zéro bug mobile. Données dans src/data/content.ts
-// data-base = valeur numérique pour la simulation "live" (motion.js)
+// Board marché — 100% LIVE, zéro simulation
+// Crypto (EUR) via CoinGecko, EUR/USD via open.er-api (toutes deux CORS * + sans clé)
+// Seeds = valeurs affichées AVANT le 1er fetch (ou en cas d'échec réseau)
+const SYMBOLS = [
+  { id: 'bitcoin',  label: 'BTC/EUR',  seed: '61 240', chg: '+2.4%', dir: 'up' },
+  { id: 'ethereum', label: 'ETH/EUR',  seed: '3 180',  chg: '+1.1%', dir: 'up' },
+  { id: 'solana',   label: 'SOL/EUR',  seed: '148.2',  chg: '+3.8%', dir: 'up' },
+  { id: 'ripple',   label: 'XRP/EUR',  seed: '0.52',   chg: '-1.2%', dir: 'down' },
+  { id: 'cardano',  label: 'ADA/EUR',  seed: '0.38',   chg: '+0.6%', dir: 'up' },
+  { id: 'dogecoin', label: 'DOGE/EUR', seed: '0.11',   chg: '-2.1%', dir: 'down' },
+  { id: 'eurusd',   label: 'EUR/USD',  seed: '1.0842', chg: 'LIVE', dir: 'up', source: 'fx' },
+];
 ---
-<div class="board">
-  {marketTickers.map((t) => (
-    <div class={`tile tile--${t.dir}`} data-base={t.price.replace(/\D/g, '')}>
+<div class="board" id="market-board" data-live>
+  {SYMBOLS.map((s) => (
+    <div class={`tile tile--${s.dir}`} data-sym={s.id} data-source={s.source || 'cg'}>
       <span class="tile__bar"></span>
       <div class="tile__row">
-        <span class="tile__sym">{t.sym}</span>
-        <span class={`tile__badge badge ${t.dir === 'up' ? 'badge--up' : 'badge--down'}`}>{t.chg}</span>
+        <span class="tile__sym">{s.label}</span>
+        <span class={`tile__badge badge ${s.dir === 'up' ? 'badge--up' : 'badge--down'}`} data-chg>{s.chg}</span>
       </div>
-      <span class="tile__price" data-val={t.price.replace(/\D/g, '')}>{t.price}</span>
+      <span class="tile__price" data-price data-val="">{s.seed}</span>
     </div>
   ))}
+  <span class="board__src">Données live · CoinGecko + open.er-api</span>
 </div>
 
 <style>
@@ -32,9 +42,10 @@ import { marketTickers } from '../data/content';
   .tile__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
   .tile__sym { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tile__badge { font-size: 0.62rem; padding: 2px 7px; white-space: nowrap; flex: 0 0 auto; }
-  .tile__price { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; letter-spacing: -0.03em; }
+  .tile__price { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; letter-spacing: -0.03em; transition: text-shadow .2s ease; }
   .tile--up .tile__price { color: var(--emeraude); }
   .tile--down .tile__price { color: var(--rouge); }
+  .board__src { grid-column: 1 / -1; font-size: 0.62rem; color: var(--texte-2); letter-spacing: 0.04em; opacity: 0.6; text-align: right; }
 
   @media (max-width: 760px) {
     .board { grid-template-columns: 1fr; } /* liste verticale pleine largeur : jamais de prix coupé */
