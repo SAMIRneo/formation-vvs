@@ -20,7 +20,7 @@ if (reduce || !gsap || !ScrollTrigger) {
 } else {
   try {
     gsap.registerPlugin(ScrollTrigger);
-
+    document.body.classList.add('gsap-ready'); // active le masquage animé (cf .gsap-ready scoping en CSS)
     // 0) Titres : split-reveal (mots) + line-reveal (hero) + pulse CTA au scroll
     function revealTitles() {
       document.querySelectorAll('.anim-title, .anim-hero').forEach((el) => {

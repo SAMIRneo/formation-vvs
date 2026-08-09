@@ -87,6 +87,7 @@ const L = {
   {/* ============ 3. RANGE & CASSURE ============ */}
   {variant === 'range' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.range.aria}>
+      <defs><marker id="ah-range" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -94,7 +95,7 @@ const L = {
       <line class="cd__line res" x1="44" y1="70" x2="340" y2="70"/>
       <line class="cd__line sup" x1="44" y1="168" x2="340" y2="168"/>
       <polyline class="cd__line price" points="60,150 100,80 140,150 180,90 220,148 260,95"/>
-      <path class="cd__line break" d="M260 95 L320 52" marker-end="url(#ah)"/>
+      <path class="cd__line break" d="M260 95 L320 52" marker-end="url(#ah-range)"/>
       <text class="cd__lbl" x="50" y="64">{L.range.range}</text>
       <text class="cd__lbl" x="50" y="190">{L.range.range}</text>
       <text class="cd__lbl up" x="262" y="48">{L.range.cassure}</text>
@@ -120,6 +121,7 @@ const L = {
   {/* ============ 5. TENDANCE HH/HL ============ */}
   {variant === 'trend' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.trend.aria}>
+      <defs><marker id="ah-trend" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -131,20 +133,21 @@ const L = {
       <circle class="cd__pulse" cx="280" cy="52" r="5"/>
       <text class="cd__lbl up" x="140" y="120">{L.trend.hh}</text>
       <text class="cd__lbl up" x="64" y="168">{L.trend.hl}</text>
-      <path class="cd__line dim" d="M130 128 L200 104" marker-end="url(#ah)"/>
+      <path class="cd__line dim" d="M130 128 L200 104" marker-end="url(#ah-trend)"/>
     </svg>
   )}
 
   {/* ============ 6. RETOURNEMENT (W) ============ */}
   {variant === 'reversal' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.reversal.aria}>
+      <defs><marker id="ah-reversal" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <polyline class="cd__line price" points="60,72 120,168 180,72 240,168 300,72"/>
       <line class="cd__line neck" x1="60" y1="72" x2="300" y2="72"/>
-      <path class="cd__line break" d="M300 72 L320 44" marker-end="url(#ah)"/>
+      <path class="cd__line break" d="M300 72 L320 44" marker-end="url(#ah-reversal)"/>
       <text class="cd__lbl down" x="110" y="200">{L.reversal.w}</text>
       <text class="cd__lbl up" x="180" y="64">{L.reversal.cou}</text>
     </svg>
@@ -172,13 +175,14 @@ const L = {
   {/* ============ 8. PULLBACK / RETEST ============ */}
   {variant === 'pullback' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.pullback.aria}>
+      <defs><marker id="ah-pullback" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <polyline class="cd__line trend" points="50,170 120,104 180,124 240,68 320,60"/>
       <line class="cd__line sup" x1="44" y1="124" x2="340" y2="124"/>
-      <path class="cd__line entry" d="M180 124 L180 88" marker-end="url(#ah)"/>
+      <path class="cd__line entry" d="M180 124 L180 88" marker-end="url(#ah-pullback)"/>
       <circle class="cd__pulse" cx="180" cy="124" r="5"/>
       <text class="cd__lbl up" x="140" y="118">{L.pullback.retest}</text>
       <text class="cd__lbl" x="190" y="84">{L.pullback.entree}</text>
@@ -201,6 +205,7 @@ const L = {
   {/* ============ 10. ENTRÉE / STOP / TARGET ============ */}
   {variant === 'stop' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.stop.aria}>
+      <defs><marker id="ah-stop" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
@@ -213,7 +218,7 @@ const L = {
       <text class="cd__lbl" x="126" y="52">{L.stop.entree} 61.0</text>
       <text class="cd__lbl down" x="60" y="190">{L.stop.stop} 60.0</text>
       <text class="cd__lbl up" x="244" y="42">{L.stop.target} 62.0</text>
-      <path class="cd__line dim" d="M120 110 L96 110" marker-end="url(#ah)"/>
+      <path class="cd__line dim" d="M120 110 L96 110" marker-end="url(#ah-stop)"/>
       <text class="cd__lbl" x="92" y="104">{L.stop.r1}</text>
       <text class="cd__val" x="150" y="116">1R = 1.0</text>
     </svg>
@@ -260,6 +265,7 @@ const L = {
   {/* ============ 13. PLAN DE TRADE ============ */}
   {variant === 'plan' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.plan.aria}>
+      <defs><marker id="ah-plan" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__check"><rect x="30" y="28" width="22" height="22" rx="5"/><path d="M35 39 L40 45 L49 31" /></g>
       <text class="cd__lbl" x="64" y="45">{L.plan.contexte}</text>
       <g class="cd__check"><rect x="30" y="68" width="22" height="22" rx="5"/><path d="M35 79 L40 85 L49 71" /></g>
@@ -268,7 +274,7 @@ const L = {
       <text class="cd__lbl" x="64" y="125">{L.plan.est}</text>
       <g class="cd__check"><rect x="30" y="148" width="22" height="22" rx="5"/><path d="M35 159 L40 165 L49 151" /></g>
       <text class="cd__lbl" x="64" y="165">{L.plan.raison}</text>
-      <path class="cd__line break" d="M280 40 L300 170" marker-end="url(#ah)"/>
+      <path class="cd__line break" d="M280 40 L300 170" marker-end="url(#ah-plan)"/>
       <text class="cd__lbl up" x="258" y="200">{L.plan.exec}</text>
     </svg>
   )}
@@ -276,13 +282,14 @@ const L = {
   {/* ============ 14. ZONE D'ENTRÉE ============ */}
   {variant === 'zone' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.zone.aria}>
+      <defs><marker id="ah-zone" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <rect class="cd__zone zn" x="80" y="70" width="130" height="80"/>
       <polyline class="cd__line price" points="50,170 110,128 170,148 230,96 300,64"/>
-      <path class="cd__line entry" d="M170 148 L170 96" marker-end="url(#ah)"/>
+      <path class="cd__line entry" d="M170 148 L170 96" marker-end="url(#ah-zone)"/>
       <text class="cd__lbl" x="96" y="64">{L.zone.zone}</text>
       <text class="cd__lbl up" x="110" y="196">{L.zone.entry}</text>
     </svg>
@@ -291,12 +298,13 @@ const L = {
   {/* ============ 15. SETUP ANNOTÉ ============ */}
   {variant === 'annotated' && (
     <svg viewBox="0 0 340 220" class="cd__svg" role="img" aria-label={L.annotated.aria}>
+      <defs><marker id="ah-annotated" markerWidth="11" markerHeight="11" refX="6.5" refY="3.2" orient="auto"><path d="M0 0 L6.5 3.2 L0 6.4 Z" fill="#1FD6A6"/></marker></defs>
       <g class="cd__grid">
         {Array.from({length:7}).map((_,i)=>(<line class="cd__gridline" x1="44" y1={20+i*28} x2="340" y2={20+i*28}/>))}
       </g>
       <line class="cd__axis" x1="44" y1="16" x2="44" y2="208"/>
       <polyline class="cd__line price" points="50,160 110,104 170,124 240,64 310,54"/>
-      <path class="cd__line entry" d="M170 124 L170 96" marker-end="url(#ah)"/>
+      <path class="cd__line entry" d="M170 124 L170 96" marker-end="url(#ah-annotated)"/>
       <line class="cd__line stop" x1="158" y1="146" x2="158" y2="162"/>
       <line class="cd__line tp" x1="256" y1="54" x2="256" y2="70"/>
       <text class="cd__lbl up" x="176" y="92">E 1.1040</text>
@@ -324,7 +332,7 @@ const L = {
 <style>
   .cd { width: 100%; border: 1.5px solid var(--ligne); border-radius: var(--radius); background: var(--carte); padding: 16px; overflow: hidden; }
   .cd__svg { width: 100%; height: auto; display: block; }
-  .cd__gridline { stroke: color-mix(in srgb, var(--encre) 6%, transparent); stroke-width: 1; }
+  .cd__gridline { stroke: rgba(var(--encre-rgb), 0.06); stroke-width: 1; }
   .cd__axis { stroke: var(--encre-2); stroke-width: 1.5; opacity: .5; }
   .cd__ref { stroke: var(--encre-2); stroke-width: 1; stroke-dasharray: 2 3; opacity: .45; }
   .cd__ytick { fill: var(--encre-2); font: 600 9px/1 'Space Grotesk', sans-serif; opacity: .7; }
@@ -336,9 +344,9 @@ const L = {
   .cd.in .cd__fill { animation: cdfill .6s ease forwards; }
   .cd__fill.up rect { fill: var(--emeraude); } .cd__fill.up line { stroke: var(--emeraude); }
   .cd__fill.down rect { fill: var(--rouge); } .cd__fill.down line { stroke: var(--rouge); }
-  .cd__zone { fill: color-mix(in srgb, var(--lime) 12%, transparent); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; rx: 8; }
-  .cd__zone.zn { fill: color-mix(in srgb, var(--bleu) 12%, transparent); stroke: var(--bleu); }
-  .cd__zone.dd { fill: color-mix(in srgb, var(--rouge) 14%, transparent); stroke: none; }
+  .cd__zone { fill: rgba(var(--lime-rgb), 0.12); stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 5 4; rx: 8; }
+  .cd__zone.zn { fill: rgba(var(--bleu-rgb), 0.12); stroke: var(--bleu); }
+  .cd__zone.dd { fill: rgba(var(--rouge-rgb), 0.14); stroke: none; }
   .cd__line.res { stroke: var(--jaune); } .cd__line.sup { stroke: var(--emeraude); }
   .cd__line.trend { stroke: var(--lime); } .cd__line.price { stroke: var(--bleu); }
   .cd__line.neck { stroke: var(--jaune); } .cd__line.entry { stroke: var(--lime); }
@@ -346,17 +354,17 @@ const L = {
   .cd__line.equity { stroke: var(--emeraude); } .cd__line.zone { stroke: var(--jaune); stroke-dasharray: 6 4; }
   .cd__line.break { stroke: var(--lime); }
   .cd__pulse { fill: var(--lime); animation: cdpulse 1.8s ease-in-out infinite; }
-  .cd__bar { fill: color-mix(in srgb, var(--bleu) 60%, transparent); transform: scaleY(0); transform-origin: bottom; }
+  .cd__bar { fill: rgba(var(--bleu-rgb), 0.60); transform: scaleY(0); transform-origin: bottom; }
   .cd.in .cd__bar { animation: cdbar .7s ease forwards; }
-  .cd__bar.risk { fill: color-mix(in srgb, var(--rouge) 60%, transparent); }
-  .cd__bar.reward { fill: color-mix(in srgb, var(--emeraude) 60%, transparent); }
+  .cd__bar.risk { fill: rgba(var(--rouge-rgb), 0.60); }
+  .cd__bar.reward { fill: rgba(var(--emeraude-rgb), 0.60); }
   .cd__lbl { fill: var(--encre-2); font: 700 10px/1 'Space Grotesk', sans-serif; letter-spacing: 0.08em; }
   .cd__lbl.up { fill: var(--emeraude); } .cd__lbl.down { fill: var(--rouge); }
   .cd__lbl.dim { fill: var(--encre-2); opacity: .6; }
   .cd__val { font: 700 11px/1 'Newsreader', serif; letter-spacing: 0; }
   .cd__val.up { fill: var(--emeraude); } .cd__val.down { fill: var(--rouge); }
   .cd__box rect { fill: var(--carte); stroke: var(--ligne-2); stroke-width: 2; rx: 8; filter: drop-shadow(0 6px 14px rgba(20,19,15,0.08)); }
-  .cd__box.res rect { fill: color-mix(in srgb, var(--lime) 16%, transparent); stroke: var(--lime); }
+  .cd__box.res rect { fill: rgba(var(--lime-rgb), 0.16); stroke: var(--lime); }
   .cd__bx { fill: var(--encre-2); font: 700 9px/1 'Space Grotesk', sans-serif; letter-spacing: 0.04em; }
   .cd__bxv { fill: var(--encre); font: 700 11px/1 'Newsreader', serif; }
   .cd__op { fill: var(--lime-ink); font: 700 22px/1 'Newsreader', serif; }

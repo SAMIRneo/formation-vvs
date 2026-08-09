@@ -15,6 +15,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     <div class="hero__main" data-reveal>
       <span class="eyebrow">{t(lang, 'home.eyebrow')}</span>
       <h1 class="hero__title anim-hero" set:html={t(lang, 'home.heroTitle').replace(/\n/g, '<br/>')} />
+      <span class="hero__rule anim-cta" aria-hidden="true" />
       <p class="hero__lead">{t(lang, 'home.heroLead')}</p>
       <div class="hero__cta">
         <a href={localizedPath('/modules/', lang)} class="btn anim-cta">{t(lang, 'home.ctaModules')}</a>
@@ -44,7 +45,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     </div>
     <div class="modbento">
       {modules.map((m, i) => (
-        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} data-parallax={i % 2 ? "0.09" : "-0.09"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}`}>
+        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} data-parallax={i % 2 ? "0.09" : "-0.09"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
           <div class="modbento__top">
             <span class="modbento__n">{m.n}</span>
             <span class="badge">{m.tag}</span>
@@ -89,7 +90,20 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     display: flex; flex-direction: column; align-items: center; text-align: center;
     padding: 96px 22px 72px; min-height: 62vh; justify-content: center;
   }
+  /* Trait accent sous le H1 — renforce la hiérarchie visuelle (Safari-safe : visible par défaut) */
+  .hero__rule { display: block; width: 64px; height: 4px; border-radius: 999px;
+    background: var(--lime); margin: 4px auto 0; box-shadow: 0 0 18px rgba(var(--lime-rgb), 0.55);
+    transform: scaleX(1); transform-origin: center; }
+  @media (prefers-reduced-motion: no-preference) {
+    .gsap-ready .hero__rule { transform: scaleX(0); transition: transform .7s cubic-bezier(.2,.8,.2,1) .35s; }
+    .gsap-ready .hero.in .hero__rule { transform: scaleX(1); }
+  }
   .hero__main { display: flex; flex-direction: column; align-items: center; gap: 22px; max-width: 880px; }
+  .hero__title {
+    font-family: var(--font-display); font-weight: 500; line-height: 1.02; letter-spacing: -0.025em;
+    font-size: clamp(2.9rem, 10vw, 6.4rem);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+  }
   .hero__lead { color: var(--encre); font-size: 1.18rem; max-width: 52ch; line-height: 1.6; margin-top: 4px; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
   .hero__stats { display: flex; gap: 40px; margin-top: 16px; padding-top: 24px; border-top: 1px solid var(--ligne); }
@@ -108,6 +122,11 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
 
   /* sec-head */
   .sec-head { margin-bottom: 30px; }
+  .sec-head h2 { position: relative; padding-top: 18px; }
+  .sec-head h2::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 48px; height: 4px;
+    border-radius: 999px; background: var(--lime); box-shadow: 0 0 16px rgba(var(--lime-rgb), 0.5);
+  }
   .sec-head .muted { margin-top: 8px; max-width: 60ch; }
 
   /* bento modules */
@@ -124,7 +143,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   }
   .modbento__card::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);
+    background: radial-gradient(120% 80% at 100% 0%, rgba(var(--accent-rgb), 0.12), transparent 60%);
     opacity: 0; transition: opacity .25s ease;
   }
   .modbento__card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 30px 56px -22px color-mix(in srgb, var(--accent) 42%, rgba(20,19,15,0.3)); }

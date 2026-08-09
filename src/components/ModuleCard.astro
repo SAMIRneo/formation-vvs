@@ -13,7 +13,7 @@ const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--ja
 const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune: 'var(--jaune-ink)', emeraude: 'var(--emeraude-ink)' }[accent];
 import ChapterDiagram from './ChapterDiagram.astro';
 ---
-<a class="mod" href={href} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}`} data-reveal>
+<a class="mod" href={href} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}; --accent-rgb:${ { orange: '31,214,166', bleu: '47,111,224', jaune: '201,154,18', emeraude: '16,158,106' }[accent] }`} data-reveal>
   <span class="mod__bar"></span>
   <div class="mod__top">
     <span class="mod__n">{n}</span>
@@ -40,10 +40,10 @@ import ChapterDiagram from './ChapterDiagram.astro';
   .mod__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); opacity: .85; }
   .mod::after {
     content: ''; position: absolute; right: -40%; top: -40%; width: 80%; height: 80%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+    background: radial-gradient(circle, rgba(var(--accent-rgb), 0.16), transparent 70%);
     opacity: 0; transition: opacity .25s ease; pointer-events: none;
   }
-  .mod:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 22px 46px -22px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .mod:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 22px 46px -22px rgba(var(--accent-rgb), 0.40); }
   .mod:hover::after { opacity: 1; }
   .mod__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .mod__n { font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; color: var(--accent-ink); letter-spacing: -0.04em; }

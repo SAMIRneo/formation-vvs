@@ -24,7 +24,7 @@ const { tools } = getContent(lang);
     </div>
     <div class="tools">
       {tools.map((tool, i) => (
-        <a class="tool" href={localizedPath(`/outils/${tool.slug}/`, lang)} data-reveal data-parallax={i % 2 ? "0.04" : "-0.04"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}`}>
+        <a class="tool" href={localizedPath(`/outils/${tool.slug}/`, lang)} data-reveal data-parallax={i % 2 ? "0.04" : "-0.04"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
           <span class="tool__ic" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={tool.icon} /></svg>
           </span>
@@ -53,9 +53,9 @@ const { tools } = getContent(lang);
     box-shadow: 0 12px 28px -18px rgba(20,19,15,0.22); will-change: transform;
   }
   .tool::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); opacity: .85; }
-  .tool:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 26px 50px -24px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .tool:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 26px 50px -24px rgba(var(--accent-rgb), 0.40); }
   .tool__ic { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 10px;
-    background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--encre); margin-bottom: 14px; }
+    background: rgba(var(--accent-rgb), 0.14); color: var(--encre); margin-bottom: 14px; }
   .tool__ic svg { width: 22px; height: 22px; }
   .tool__t { font-size: 1.2rem; margin-bottom: 8px; }
   .tool__d { color: var(--encre-2); font-size: 0.9rem; }

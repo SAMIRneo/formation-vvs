@@ -46,17 +46,17 @@ const { plans } = getContent(lang);
   .plan:hover { transform: translateY(-4px); border-color: var(--encre); }
   .plan--hl {
     border-color: var(--lime-press);
-    box-shadow: 0 22px 48px -22px color-mix(in srgb, var(--lime) 55%, transparent);
+    box-shadow: 0 22px 48px -22px rgba(var(--lime-rgb), 0.55);
     transform: translateY(-6px);
   }
   .plan--hl::after {
     content: ''; position: absolute; inset: 0; border-radius: var(--radius); pointer-events: none;
-    background: radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--lime) 12%, transparent), transparent 60%);
+    background: radial-gradient(120% 60% at 50% 0%, rgba(var(--lime-rgb), 0.12), transparent 60%);
   }
   .plan__flag {
     position: absolute; top: -13px; left: 22px; background: var(--lime); color: var(--lime-ink);
     font-family: var(--font-display); font-weight: 700; font-size: 0.62rem; text-transform: uppercase;
-    letter-spacing: 0.08em; padding: 5px 11px; border-radius: 6px; box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--lime) 60%, transparent);
+    letter-spacing: 0.08em; padding: 5px 11px; border-radius: 6px; box-shadow: 0 8px 18px -8px rgba(var(--lime-rgb), 0.60);
   }
   .plan__nom { font-size: 1.3rem; margin-bottom: 12px; }
   .plan__prix { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
