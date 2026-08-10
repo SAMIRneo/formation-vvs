@@ -98,13 +98,15 @@ const UNIVERSE = [
     if (!root) return;
     const filters = root.querySelectorAll('[data-f]');
     const cards = Array.from(root.querySelectorAll('.scard'));
-    filters.forEach((b) => b.addEventListener('click', () => {
-      filters.forEach((x) => x.classList.remove('is-active'));
-      b.classList.add('is-active');
-      const f = b.dataset.f;
-      cards.forEach((c) => {
-        const show = f === 'all' || c.dataset.struct === f;
-        c.style.display = show ? '' : 'none';
+    filters.forEach((b) => {
+      b.addEventListener('click', () => {
+        filters.forEach((x) => x.classList.remove('is-active'));
+        b.classList.add('is-active');
+        const f = b.dataset.f;
+        cards.forEach((c) => {
+          const show = f === 'all' || c.dataset.struct === f;
+          c.style.display = show ? '' : 'none';
+        });
       });
     });
     };
