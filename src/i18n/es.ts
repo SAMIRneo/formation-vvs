@@ -74,6 +74,10 @@ export default {
   'modules.chapitre': 'Capítulo',
   'modules.schema': 'Esquema',
   'modules.cursusTitle': 'El curso',
+  'modules.take': 'Para recordar',
+  'modules.toc': 'Índice',
+  'modules.next': 'Siguiente capítulo',
+  'modules.finish': 'Terminar el módulo',
 
   'abo.title': 'Suscripción',
   'abo.lead': 'Elige tu nivel. Acceso inmediato, desde tu iPhone.',

@@ -11,60 +11,144 @@ const { m } = Astro.props;
 const lang = getLang(Astro.url);
 const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[m.accent || 'orange'];
 const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune: 'var(--jaune-ink)', emeraude: 'var(--emeraude-ink)' }[m.accent || 'orange'];
+const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
 ---
 <BaseLayout title={m.title} active="modules">
-  <article class="detail wrap" data-reveal>
+  <article class="detail wrap">
     <a href={localizedPath('/modules/', lang)} class="back">{t(lang, 'modules.back')}</a>
-    <span class="badge badge--orange">{m.tag}</span>
-    <h1 class="anim-title">{m.title}</h1>
-    <p class="lead">{m.desc}</p>
-    <p class="intro">{m.body}</p>
+    <header class="detail__head" data-reveal>
+      <span class="detail__water" aria-hidden="true">{m.n}</span>
+      <div class="detail__meta">
+        <span class="badge badge--orange">{m.tag}</span>
+        <span class="detail__meta-n">{m.n} · {m.chapters.length} {t(lang, 'modules.chapitres').toLowerCase()} · ~{totalMin} min</span>
+      </div>
+      <h1 class="anim-title">{m.title}</h1>
+      <p class="lead">{m.desc}</p>
+      <p class="intro">{m.body}</p>
+    </header>
 
-    <h2 class="chaps-title">{t(lang, 'modules.chapitres')}</h2>
-    <div class="chapters">
-      {m.chapters.map((c, i) => (
-        <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}; --accent-rgb:${ { orange: '31,214,166', bleu: '47,111,224', jaune: '201,154,18', emeraude: '16,158,106' }[m.accent || 'orange'] }`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
-          <div class="chap__head">
-            <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
-            <div class="chap__headtext">
-              <span class="chap__kicker">{t(lang, 'modules.chapitre')} {String(i + 1).padStart(2, '0')}</span>
-              <h3 class="chap__t anim-title">{c.title}</h3>
+    <div class="detail__layout">
+      <!-- Sommaire sticky -->
+      <aside class="toc" id="toc" aria-label="Índice del módulo">
+        <span class="toc__k">{t(lang, 'modules.chapitres')}</span>
+        <ol>
+          {m.chapters.map((c, i) => (
+            <li><a href={`#chap-${i+1}`}><span class="toc__n">{String(i+1).padStart(2,'0')}</span>{c.title}</a></li>
+          ))}
+        </ol>
+      </aside>
+
+      <!-- Chapitres en cartes bento -->
+      <div class="chapters">
+        {m.chapters.map((c, i) => (
+          <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}; --accent-rgb:${ { orange: '31,214,166', bleu: '47,111,224', jaune: '201,154,18', emeraude: '16,158,106' }[m.accent || 'orange'] }`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
+            <span class="chap__watermark" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div class="chap__head">
+              <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
+              <div class="chap__headtext">
+                <span class="chap__kicker">{t(lang, 'modules.chapitre')} {String(i + 1).padStart(2, '0')} · {4 + i * 2} min</span>
+                <h2 class="chap__t anim-title">{c.title}</h2>
+              </div>
+              <span class="chap__idx" aria-hidden="true">/ {m.chapters.length}</span>
             </div>
-          </div>
-          <figure class="chap__figure" data-parallax="0.1">
-            <ChapterDiagram variant={c.diagram} lang={lang} />
-            <figcaption class="chap__cap">{t(lang, 'modules.schema')} · {c.title}</figcaption>
-          </figure>
-          <p class="chap__body">{c.body}</p>
-          {c.points && (
-            <ul class="chap__pts">
-              {c.points.map((p) => <li>{p}</li>)}
-            </ul>
-          )}
-        </section>
-      ))}
+            <div class="chap__body">
+              <figure class="chap__figure" data-parallax="0.1">
+                <ChapterDiagram variant={c.diagram} lang={lang} />
+                <figcaption class="chap__cap">{t(lang, 'modules.schema')} · {c.title}</figcaption>
+              </figure>
+              <div class="chap__text">
+                <p class="chap__lead">{c.body}</p>
+              </div>
+            </div>
+            {c.points && (
+              <div class="chap__take">
+                <span class="chap__take-k">{t(lang, 'modules.take')}</span>
+                <ul class="chap__pts">
+                  {c.points.map((p, j) => <li><span class="chap__ptn" aria-hidden="true">{String(j + 1).padStart(2, '0')}</span>{p}</li>)}
+                </ul>
+              </div>
+            )}
+            <footer class="chap__foot">
+              <a href="#toc" class="chap__back">↑ {t(lang, 'modules.toc')}</a>
+              {i < m.chapters.length - 1 ? (
+                <a href={`#chap-${i+2}`} class="chap__next">{t(lang, 'modules.next')} →</a>
+              ) : (
+                <a href={localizedPath('/abonnement/', lang)} class="chap__next">{t(lang, 'modules.finish')} →</a>
+              )}
+            </footer>
+          </section>
+        ))}
+      </div>
     </div>
 
     <div class="cta-row">
       <a href={localizedPath('/abonnement/', lang)} class="btn anim-cta">{t(lang, 'nav.abonnement')}</a>
-      <a href={localizedPath('/marche/', lang)} class="btn btn--ghost">{t(lang, 'nav.marche')}</a>
+      <a href={localizedPath('/marche/', lang)} class="btn btn--ghost anim-cta">{t(lang, 'nav.marche')}</a>
     </div>
   </article>
 </BaseLayout>
 
+<script>
+  // Scroll-spy : met en évidence le chapitre courant dans le sommaire
+  const sections = Array.from(document.querySelectorAll('.chap'));
+  const links = Array.from(document.querySelectorAll('.toc a'));
+  const root = document.getElementById('scroll-root');
+  if (sections.length && links.length && root) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = sections.indexOf(entry.target);
+            links.forEach((l) => l.classList.remove('is-active'));
+            if (links[idx]) links[idx].classList.add('is-active');
+          }
+        });
+      },
+      { root, rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+</script>
+
 <style>
-  .detail { max-width: 760px; padding: 48px 20px 64px; }
-  .back { display: inline-block; color: var(--encre-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
-  .back:hover { color: var(--encre); }
-  .detail h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; }
-  .lead { color: var(--encre-2); font-size: 1.1rem; margin-bottom: 20px; max-width: 52ch; }
-  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--encre); margin-bottom: 36px; }
-  .chaps-title { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 24px; }
-  .chapters { display: flex; flex-direction: column; gap: 30px; overflow: visible; padding: 26px 0; }
+  .detail { max-width: 1080px; padding: 48px 20px 64px; }
+  .back { display: inline-block; color: var(--encre-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
+  .back:hover { color: var(--lime-ink); }
+
+  /* En-tête éditorial : filigrane numéro + meta */
+  .detail__head { position: relative; max-width: 760px; margin-bottom: 40px; padding-top: 8px; }
+  .detail__water {
+    position: absolute; top: -44px; right: -30px; z-index: 0; pointer-events: none;
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(6rem, 22vw, 11rem);
+    line-height: 1; color: var(--encre); opacity: .045; letter-spacing: -0.06em; user-select: none;
+  }
+  .detail__meta { position: relative; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .detail__meta-n { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--encre-2); }
+  .detail__head h1 { position: relative; font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; text-wrap: balance; }
+  .lead { color: var(--encre-2); font-size: 1.1rem; margin-bottom: 18px; max-width: 52ch; }
+  .intro { font-size: 1.02rem; line-height: 1.7; color: var(--encre); }
+
+  .detail__layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+
+  /* TOC sticky + scroll-spy */
+  .toc { position: sticky; top: 84px; align-self: start; }
+  .toc__k { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.66rem; color: var(--encre); }
+  .toc ol { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+  .toc a {
+    display: flex; align-items: baseline; gap: 8px; color: var(--encre-2); font-size: 0.85rem; font-weight: 500;
+    padding: 11px 10px; min-height: 44px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .toc__n { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; color: var(--encre-2); opacity: .6; }
+  .toc a:hover { color: var(--encre); border-color: var(--encre); }
+  .toc a.is-active { color: var(--encre); border-color: var(--lime); background: rgba(var(--lime-rgb), 0.06); }
+  .toc a.is-active .toc__n { color: var(--lime-ink); opacity: 1; }
+
+  /* Chapitres bento */
+  .chapters { display: flex; flex-direction: column; gap: 30px; min-width: 0; overflow: visible; padding: 26px 0; }
   .chap {
     position: relative; overflow: hidden; isolation: isolate;
-    border: 1.5px solid var(--ligne); border-radius: var(--radius);
-    padding: 24px; background: var(--carte);
+    background: var(--carte); border: 1.5px solid var(--ligne);
+    border-radius: var(--radius); padding: 26px 26px 20px 30px;
     box-shadow: 0 14px 32px -16px rgba(20,19,15,0.22);
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     will-change: transform;
@@ -80,11 +164,17 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
   }
   .chap:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 32px 60px -26px color-mix(in srgb, var(--accent) 40%, rgba(20,19,15,0.3)); }
   .chap:hover::before { opacity: 1; }
-  .chap__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .chap__watermark {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 0;
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(5rem, 16vw, 9rem);
+    line-height: 1; color: var(--accent); opacity: .05; letter-spacing: -0.05em; user-select: none; pointer-events: none;
+  }
+  .chap__head, .chap__body, .chap__take, .chap__foot { position: relative; z-index: 1; }
+  .chap__head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
   .chap__n {
-    font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; line-height: 1;
+    font-family: var(--font-display); font-weight: 700; font-size: 2.1rem; line-height: 1;
     color: var(--accent-ink); letter-spacing: -0.04em; flex: 0 0 auto;
-    width: 58px; height: 58px; display: grid; place-items: center;
+    width: 64px; height: 64px; display: grid; place-items: center;
     border: 1.5px solid rgba(var(--accent-rgb), 0.35);
     border-radius: 12px; background: rgba(var(--accent-rgb), 0.08);
   }
@@ -93,31 +183,70 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     font-family: var(--font-mono); font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.14em; font-size: 0.62rem; color: var(--accent-ink);
   }
-  .chap__t { font-size: clamp(1.3rem, 5vw, 1.8rem); margin: 0; }
+  .chap__t { font-size: clamp(1.3rem, 4vw, 1.85rem); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .chap__idx { margin-left: auto; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--encre-2); opacity: .35; letter-spacing: -0.02em; }
+  .chap__body { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 24px; align-items: center; }
+  .chap:nth-child(even) .chap__body { grid-template-columns: 1.08fr 0.92fr; }
+  .chap:nth-child(even) .chap__figure { order: 2; }
   .chap__figure {
-    margin: 0 0 18px; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
-    background: var(--canvas); padding: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+    margin: 0; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
+    background: var(--canvas); padding: 16px; box-shadow: 0 10px 24px -16px rgba(20,19,15,0.25);
+    transition: transform .3s ease, box-shadow .3s ease;
   }
+  .chap__figure:hover { transform: scale(1.012); box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--accent) 35%, rgba(20,19,15,0.3)); }
   .chap__figure :global(.cd) { border: none; padding: 0; background: transparent; box-shadow: none; }
   .chap__cap {
     margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--ligne);
     font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase;
     color: var(--encre-2); text-align: center;
   }
-  .chap__body { font-size: 1rem; line-height: 1.68; color: var(--encre); margin: 0 0 16px; }
-  .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .chap__lead { font-size: 1rem; line-height: 1.68; color: var(--encre); margin: 0; }
+
+  /* À retenir : takeaways numérotés */
+  .chap__take { margin-top: 20px; padding: 14px 16px 14px 18px; border: 1px solid var(--ligne); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--accent) 5%, var(--canvas)); }
+  .chap__take-k { display: inline-block; font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6rem; color: var(--accent-ink); margin-bottom: 10px; }
+  .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 7px; }
   .chap__pts li {
-    font-size: 0.92rem; color: var(--encre); padding: 9px 12px 9px 34px; position: relative;
-    background: var(--canvas); border: 1px solid var(--ligne); border-radius: 9px;
+    font-size: 0.9rem; color: var(--encre); padding: 8px 10px 8px 12px; position: relative;
+    background: transparent; border: none; border-radius: 8px; line-height: 1.45;
+    display: flex; align-items: flex-start; gap: 10px;
   }
-  .chap__pts li::before {
-    content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-    width: 8px; height: 8px; border-radius: 2px; background: var(--accent);
+  .chap__ptn {
+    flex: 0 0 auto; display: inline-grid; place-items: center; margin-top: 1px;
+    width: 20px; height: 20px; border-radius: 6px;
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--accent-ink);
+    background: rgba(var(--accent-rgb), 0.12); border: 1px solid rgba(var(--accent-rgb), 0.28);
   }
+
+  /* Footer de navigation entre chapitres */
+  .chap__foot {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    margin-top: 20px; padding-top: 14px; border-top: 1px dashed var(--ligne);
+  }
+  .chap__back, .chap__next {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px;
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.04em;
+    color: var(--encre-2); border-radius: 8px; transition: color .14s ease, background .14s ease, transform .14s ease;
+  }
+  .chap__next { color: var(--accent-ink); background: rgba(var(--accent-rgb), 0.10); }
+  .chap__back:hover { color: var(--encre); background: rgba(var(--encre-rgb), 0.06); }
+  .chap__next:hover { background: rgba(var(--accent-rgb), 0.18); transform: translateX(2px); }
+
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+
+  @media (max-width: 1024px) {
+    .detail__layout { grid-template-columns: 1fr; gap: 20px; }
+    .toc { position: static; }
+    .toc ol { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .toc a { border-left: none; border: 1px solid var(--ligne); border-radius: 6px; }
+    .toc a.is-active { border-color: var(--lime); }
+  }
   @media (max-width: 760px) {
     .detail { padding: 36px 16px 56px; }
-    .chap { padding: 18px 16px; }
-    .chapters { gap: 28px; }
+    .detail__water { top: -30px; right: -10px; }
+    .chap { padding: 18px 16px 14px 22px; }
+    .chap__body { grid-template-columns: 1fr; gap: 16px; }
+    .chapters { gap: 26px; padding: 22px 0; }
+    .chap__idx { display: none; }
   }
 </style>

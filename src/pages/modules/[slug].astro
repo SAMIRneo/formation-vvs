@@ -11,12 +11,17 @@ const { m } = Astro.props;
 const lang = getLang(Astro.url);
 const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[m.accent || 'orange'];
 const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune: 'var(--jaune-ink)', emeraude: 'var(--emeraude-ink)' }[m.accent || 'orange'];
+const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
 ---
 <BaseLayout title={m.title} active="modules">
   <article class="detail wrap">
     <a href={localizedPath('/modules/', lang)} class="back">{t(lang, 'modules.back')}</a>
     <header class="detail__head" data-reveal>
-      <span class="badge badge--orange">{m.tag}</span>
+      <span class="detail__water" aria-hidden="true">{m.n}</span>
+      <div class="detail__meta">
+        <span class="badge badge--orange">{m.tag}</span>
+        <span class="detail__meta-n">{m.n} · {m.chapters.length} {t(lang, 'modules.chapitres').toLowerCase()} · ~{totalMin} min</span>
+      </div>
       <h1 class="anim-title">{m.title}</h1>
       <p class="lead">{m.desc}</p>
       <p class="intro">{m.body}</p>
@@ -24,11 +29,11 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
 
     <div class="detail__layout">
       <!-- Sommaire sticky -->
-      <aside class="toc" aria-label="Sommaire du module">
+      <aside class="toc" id="toc" aria-label="Sommaire du module">
         <span class="toc__k">{t(lang, 'modules.chapitres')}</span>
         <ol>
           {m.chapters.map((c, i) => (
-            <li><a href={`#chap-${i+1}`}>{String(i+1).padStart(2,'0')} · {c.title}</a></li>
+            <li><a href={`#chap-${i+1}`}><span class="toc__n">{String(i+1).padStart(2,'0')}</span>{c.title}</a></li>
           ))}
         </ol>
       </aside>
@@ -37,12 +42,14 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
       <div class="chapters">
         {m.chapters.map((c, i) => (
           <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}; --accent-rgb:${ { orange: '31,214,166', bleu: '47,111,224', jaune: '201,154,18', emeraude: '16,158,106' }[m.accent || 'orange'] }`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
+            <span class="chap__watermark" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <div class="chap__head">
               <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
               <div class="chap__headtext">
-                <span class="chap__kicker">{t(lang, 'modules.chapitre')} {String(i + 1).padStart(2, '0')}</span>
+                <span class="chap__kicker">{t(lang, 'modules.chapitre')} {String(i + 1).padStart(2, '0')} · {4 + i * 2} min</span>
                 <h2 class="chap__t anim-title">{c.title}</h2>
               </div>
+              <span class="chap__idx" aria-hidden="true">/ {m.chapters.length}</span>
             </div>
             <div class="chap__body">
               <figure class="chap__figure" data-parallax="0.1">
@@ -51,13 +58,24 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
               </figure>
               <div class="chap__text">
                 <p class="chap__lead">{c.body}</p>
-                {c.points && (
-                  <ul class="chap__pts">
-                    {c.points.map((p) => <li>{p}</li>)}
-                  </ul>
-                )}
               </div>
             </div>
+            {c.points && (
+              <div class="chap__take">
+                <span class="chap__take-k">{t(lang, 'modules.take')}</span>
+                <ul class="chap__pts">
+                  {c.points.map((p, j) => <li><span class="chap__ptn" aria-hidden="true">{String(j + 1).padStart(2, '0')}</span>{p}</li>)}
+                </ul>
+              </div>
+            )}
+            <footer class="chap__foot">
+              <a href="#toc" class="chap__back">↑ {t(lang, 'modules.toc')}</a>
+              {i < m.chapters.length - 1 ? (
+                <a href={`#chap-${i+2}`} class="chap__next">{t(lang, 'modules.next')} →</a>
+              ) : (
+                <a href={localizedPath('/abonnement/', lang)} class="chap__next">{t(lang, 'modules.finish')} →</a>
+              )}
+            </footer>
           </section>
         ))}
       </div>
@@ -70,30 +88,67 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
   </article>
 </BaseLayout>
 
+<script>
+  // Scroll-spy : met en évidence le chapitre courant dans le sommaire
+  const sections = Array.from(document.querySelectorAll('.chap'));
+  const links = Array.from(document.querySelectorAll('.toc a'));
+  const root = document.getElementById('scroll-root');
+  if (sections.length && links.length && root) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = sections.indexOf(entry.target);
+            links.forEach((l) => l.classList.remove('is-active'));
+            if (links[idx]) links[idx].classList.add('is-active');
+          }
+        });
+      },
+      { root, rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+</script>
+
 <style>
   .detail { max-width: 1080px; padding: 48px 20px 64px; }
   .back { display: inline-block; color: var(--encre-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
   .back:hover { color: var(--lime-ink); }
-  .detail__head { max-width: 760px; margin-bottom: 40px; }
-  .detail__head h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; text-wrap: balance; }
+
+  /* En-tête éditorial : filigrane numéro + meta */
+  .detail__head { position: relative; max-width: 760px; margin-bottom: 40px; padding-top: 8px; }
+  .detail__water {
+    position: absolute; top: -44px; right: -30px; z-index: 0; pointer-events: none;
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(6rem, 22vw, 11rem);
+    line-height: 1; color: var(--encre); opacity: .045; letter-spacing: -0.06em; user-select: none;
+  }
+  .detail__meta { position: relative; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .detail__meta-n { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--encre-2); }
+  .detail__head h1 { position: relative; font-size: clamp(2rem, 7vw, 3.4rem); margin: 14px 0 16px; text-wrap: balance; }
   .lead { color: var(--encre-2); font-size: 1.1rem; margin-bottom: 18px; max-width: 52ch; }
   .intro { font-size: 1.02rem; line-height: 1.7; color: var(--encre); }
 
   .detail__layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
 
-  /* TOC sticky */
+  /* TOC sticky + scroll-spy */
   .toc { position: sticky; top: 84px; align-self: start; }
   .toc__k { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.66rem; color: var(--encre); }
   .toc ol { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 4px; }
-  .toc a { display: block; color: var(--encre-2); font-size: 0.85rem; font-weight: 500; padding: 7px 10px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease; }
+  .toc a {
+    display: flex; align-items: baseline; gap: 8px; color: var(--encre-2); font-size: 0.85rem; font-weight: 500;
+    padding: 11px 10px; min-height: 44px; border-left: 2px solid var(--ligne); transition: color .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .toc__n { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; color: var(--encre-2); opacity: .6; }
   .toc a:hover { color: var(--encre); border-color: var(--encre); }
+  .toc a.is-active { color: var(--encre); border-color: var(--lime); background: rgba(var(--lime-rgb), 0.06); }
+  .toc a.is-active .toc__n { color: var(--lime-ink); opacity: 1; }
 
   /* Chapitres bento */
   .chapters { display: flex; flex-direction: column; gap: 30px; min-width: 0; overflow: visible; padding: 26px 0; }
   .chap {
     position: relative; overflow: hidden; isolation: isolate;
     background: var(--carte); border: 1.5px solid var(--ligne);
-    border-radius: var(--radius); padding: 26px 26px 26px 30px;
+    border-radius: var(--radius); padding: 26px 26px 20px 30px;
     box-shadow: 0 14px 32px -16px rgba(20,19,15,0.22);
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     will-change: transform;
@@ -109,6 +164,12 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
   }
   .chap:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 32px 60px -26px color-mix(in srgb, var(--accent) 40%, rgba(20,19,15,0.3)); }
   .chap:hover::before { opacity: 1; }
+  .chap__watermark {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 0;
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(5rem, 16vw, 9rem);
+    line-height: 1; color: var(--accent); opacity: .05; letter-spacing: -0.05em; user-select: none; pointer-events: none;
+  }
+  .chap__head, .chap__body, .chap__take, .chap__foot { position: relative; z-index: 1; }
   .chap__head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
   .chap__n {
     font-family: var(--font-display); font-weight: 700; font-size: 2.1rem; line-height: 1;
@@ -123,6 +184,7 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     letter-spacing: 0.14em; font-size: 0.62rem; color: var(--accent-ink);
   }
   .chap__t { font-size: clamp(1.3rem, 4vw, 1.85rem); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .chap__idx { margin-left: auto; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--encre-2); opacity: .35; letter-spacing: -0.02em; }
   .chap__body { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 24px; align-items: center; }
   .chap:nth-child(even) .chap__body { grid-template-columns: 1.08fr 0.92fr; }
   .chap:nth-child(even) .chap__figure { order: 2; }
@@ -138,16 +200,37 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase;
     color: var(--encre-2); text-align: center;
   }
-  .chap__lead { font-size: 1rem; line-height: 1.68; color: var(--encre); margin: 0 0 16px; }
-  .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .chap__lead { font-size: 1rem; line-height: 1.68; color: var(--encre); margin: 0; }
+
+  /* À retenir : takeaways numérotés */
+  .chap__take { margin-top: 20px; padding: 14px 16px 14px 18px; border: 1px solid var(--ligne); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--accent) 5%, var(--canvas)); }
+  .chap__take-k { display: inline-block; font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6rem; color: var(--accent-ink); margin-bottom: 10px; }
+  .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 7px; }
   .chap__pts li {
-    font-size: 0.9rem; color: var(--encre); padding: 9px 12px 9px 34px; position: relative;
-    background: var(--canvas); border: 1px solid var(--ligne); border-radius: 9px; line-height: 1.4;
+    font-size: 0.9rem; color: var(--encre); padding: 8px 10px 8px 12px; position: relative;
+    background: transparent; border: none; border-radius: 8px; line-height: 1.45;
+    display: flex; align-items: flex-start; gap: 10px;
   }
-  .chap__pts li::before {
-    content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-    width: 8px; height: 8px; border-radius: 2px; background: var(--accent);
+  .chap__ptn {
+    flex: 0 0 auto; display: inline-grid; place-items: center; margin-top: 1px;
+    width: 20px; height: 20px; border-radius: 6px;
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--accent-ink);
+    background: rgba(var(--accent-rgb), 0.12); border: 1px solid rgba(var(--accent-rgb), 0.28);
   }
+
+  /* Footer de navigation entre chapitres */
+  .chap__foot {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    margin-top: 20px; padding-top: 14px; border-top: 1px dashed var(--ligne);
+  }
+  .chap__back, .chap__next {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px;
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.04em;
+    color: var(--encre-2); border-radius: 8px; transition: color .14s ease, background .14s ease, transform .14s ease;
+  }
+  .chap__next { color: var(--accent-ink); background: rgba(var(--accent-rgb), 0.10); }
+  .chap__back:hover { color: var(--encre); background: rgba(var(--encre-rgb), 0.06); }
+  .chap__next:hover { background: rgba(var(--accent-rgb), 0.18); transform: translateX(2px); }
 
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 
@@ -156,11 +239,14 @@ const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune
     .toc { position: static; }
     .toc ol { flex-direction: row; flex-wrap: wrap; gap: 8px; }
     .toc a { border-left: none; border: 1px solid var(--ligne); border-radius: 6px; }
+    .toc a.is-active { border-color: var(--lime); }
   }
   @media (max-width: 760px) {
     .detail { padding: 36px 16px 56px; }
-    .chap { padding: 18px 16px 18px 22px; }
+    .detail__water { top: -30px; right: -10px; }
+    .chap { padding: 18px 16px 14px 22px; }
     .chap__body { grid-template-columns: 1fr; gap: 16px; }
     .chapters { gap: 26px; padding: 22px 0; }
+    .chap__idx { display: none; }
   }
 </style>
