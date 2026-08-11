@@ -186,16 +186,14 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
   }
   .chap__t { font-size: clamp(1.3rem, 4vw, 1.85rem); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
   .chap__idx { margin-left: auto; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--encre-2); opacity: .35; letter-spacing: -0.02em; }
-  .chap__body { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 24px; align-items: center; }
-  .chap:nth-child(even) .chap__body { grid-template-columns: 1.08fr 0.92fr; }
+  .chap__body { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 24px; align-items: center; }
+    .chap:nth-child(even) .chap__body { grid-template-columns: 0.92fr 1.08fr; }
   .chap:nth-child(even) .chap__figure { order: 2; }
   .chap__figure {
-    margin: 0; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
-    background: var(--canvas); padding: 16px; box-shadow: 0 10px 24px -16px rgba(20,19,15,0.25);
-    transition: transform .3s ease, box-shadow .3s ease;
+    margin: 0;
+    transition: transform .3s ease;
   }
-  .chap__figure:hover { transform: scale(1.012); box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--accent) 35%, rgba(20,19,15,0.3)); }
-  .chap__figure :global(.cd) { border: none; padding: 0; background: transparent; box-shadow: none; }
+  .chap__figure:hover { transform: scale(1.012); }
   .chap__cap {
     margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--ligne);
     font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase;
