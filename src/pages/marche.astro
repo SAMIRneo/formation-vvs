@@ -24,7 +24,7 @@ const { tools } = getContent(lang);
     </div>
     <div class="tools">
       {tools.map((tool, i) => (
-        <a class="tool" href={localizedPath(`/outils/${tool.slug}/`, lang)} data-reveal data-parallax={i % 2 ? "0.04" : "-0.04"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
+        <a class="tool" href={localizedPath(`/outils/${tool.slug}/`, lang)} data-reveal data-parallax={i % 2 ? "0.04" : "-0.04"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-text:${['var(--lime-text)','var(--bleu-text)','var(--jaune-text)','var(--emeraude-text)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
           <span class="tool__ic" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={tool.icon} /></svg>
           </span>
@@ -60,7 +60,7 @@ const { tools } = getContent(lang);
   .tool__t { font-size: 1.2rem; margin-bottom: 8px; }
   .tool__d { color: var(--encre-2); font-size: 0.9rem; }
   .tool__go { margin-top: 12px; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; color: var(--encre); display: inline-flex; align-items: center; gap: 6px; transition: gap .18s ease, color .18s ease; }
-  .tool:hover .tool__go { gap: 11px; color: var(--accent-ink); }
+  .tool:hover .tool__go { gap: 11px; color: var(--accent-text); }
   .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }
   .cta-panel p { max-width: 44ch; margin: 14px auto 26px;  font-weight: 500; }
   @media (max-width: 760px) { .tools { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }

@@ -11,6 +11,7 @@ const { m } = Astro.props;
 const lang = getLang(Astro.url);
 const accentVar = { orange: 'var(--lime)', bleu: 'var(--bleu)', jaune: 'var(--jaune)', emeraude: 'var(--emeraude)' }[m.accent || 'orange'];
 const accentInkVar = { orange: 'var(--lime-ink)', bleu: 'var(--bleu-ink)', jaune: 'var(--jaune-ink)', emeraude: 'var(--emeraude-ink)' }[m.accent || 'orange'];
+const accentTextVar = { orange: 'var(--lime-text)', bleu: 'var(--bleu-text)', jaune: 'var(--jaune-text)', emeraude: 'var(--emeraude-text)' }[m.accent || 'orange'];
 const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
 ---
 <BaseLayout title={m.title} active="modules">
@@ -41,7 +42,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
       <!-- Chapitres en cartes bento -->
       <div class="chapters">
         {m.chapters.map((c, i) => (
-          <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}; --accent-rgb:${ { orange: '31,214,166', bleu: '47,111,224', jaune: '201,154,18', emeraude: '16,158,106' }[m.accent || 'orange'] }`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
+          <section class="chap" id={`chap-${i+1}`} style={`--accent:${accentVar}; --accent-ink:${accentInkVar}; --accent-text:${accentTextVar}; --accent-rgb:${ { orange: '31,214,166', bleu: '47,111,224', jaune: '201,154,18', emeraude: '16,158,106' }[m.accent || 'orange'] }`} data-reveal data-parallax={i % 2 ? "0.07" : "-0.07"}>
             <span class="chap__watermark" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <div class="chap__head">
               <span class="chap__n">{String(i + 1).padStart(2, '0')}</span>
@@ -113,7 +114,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
 <style>
   .detail { max-width: 1080px; padding: 48px 20px 64px; }
   .back { display: inline-block; color: var(--encre-2); font-weight: 700; font-size: 0.85rem; margin-bottom: 18px; }
-  .back:hover { color: var(--lime-ink); }
+  .back:hover { color: var(--lime-text); }
 
   /* En-tête éditorial : filigrane numéro + meta */
   .detail__head { position: relative; max-width: 760px; margin-bottom: 40px; padding-top: 8px; }
@@ -141,7 +142,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
   .toc__n { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; color: var(--encre-2); opacity: .6; }
   .toc a:hover { color: var(--encre); border-color: var(--encre); }
   .toc a.is-active { color: var(--encre); border-color: var(--lime); background: rgba(var(--lime-rgb), 0.06); }
-  .toc a.is-active .toc__n { color: var(--lime-ink); opacity: 1; }
+  .toc a.is-active .toc__n { color: var(--lime-text); opacity: 1; }
 
   /* Chapitres bento */
   .chapters { display: flex; flex-direction: column; gap: 30px; min-width: 0; overflow: visible; padding: 26px 0; }
@@ -173,7 +174,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
   .chap__head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
   .chap__n {
     font-family: var(--font-display); font-weight: 700; font-size: 2.1rem; line-height: 1;
-    color: var(--accent-ink); letter-spacing: -0.04em; flex: 0 0 auto;
+    color: var(--accent-text); letter-spacing: -0.04em; flex: 0 0 auto;
     width: 64px; height: 64px; display: grid; place-items: center;
     border: 1.5px solid rgba(var(--accent-rgb), 0.35);
     border-radius: 12px; background: rgba(var(--accent-rgb), 0.08);
@@ -181,7 +182,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
   .chap__headtext { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .chap__kicker {
     font-family: var(--font-mono); font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.14em; font-size: 0.62rem; color: var(--accent-ink);
+    letter-spacing: 0.14em; font-size: 0.62rem; color: var(--accent-text);
   }
   .chap__t { font-size: clamp(1.3rem, 4vw, 1.85rem); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
   .chap__idx { margin-left: auto; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--encre-2); opacity: .35; letter-spacing: -0.02em; }
@@ -204,7 +205,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
 
   /* À retenir : takeaways numérotés */
   .chap__take { margin-top: 20px; padding: 14px 16px 14px 18px; border: 1px solid var(--ligne); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--accent) 5%, var(--canvas)); }
-  .chap__take-k { display: inline-block; font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6rem; color: var(--accent-ink); margin-bottom: 10px; }
+  .chap__take-k { display: inline-block; font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6rem; color: var(--accent-text); margin-bottom: 10px; }
   .chap__pts { list-style: none; display: flex; flex-direction: column; gap: 7px; }
   .chap__pts li {
     font-size: 0.9rem; color: var(--encre); padding: 8px 10px 8px 12px; position: relative;
@@ -214,7 +215,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
   .chap__ptn {
     flex: 0 0 auto; display: inline-grid; place-items: center; margin-top: 1px;
     width: 20px; height: 20px; border-radius: 6px;
-    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--accent-ink);
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--accent-text);
     background: rgba(var(--accent-rgb), 0.12); border: 1px solid rgba(var(--accent-rgb), 0.28);
   }
 
@@ -228,7 +229,7 @@ const totalMin = m.chapters.reduce((acc, _, i) => acc + (4 + i * 2), 0);
     font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.04em;
     color: var(--encre-2); border-radius: 8px; transition: color .14s ease, background .14s ease, transform .14s ease;
   }
-  .chap__next { color: var(--accent-ink); background: rgba(var(--accent-rgb), 0.10); }
+  .chap__next { color: var(--accent-text); background: rgba(var(--accent-rgb), 0.10); }
   .chap__back:hover { color: var(--encre); background: rgba(var(--encre-rgb), 0.06); }
   .chap__next:hover { background: rgba(var(--accent-rgb), 0.18); transform: translateX(2px); }
 

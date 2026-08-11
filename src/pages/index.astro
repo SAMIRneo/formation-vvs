@@ -45,7 +45,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     </div>
     <div class="modbento">
       {modules.map((m, i) => (
-        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} data-parallax={i % 2 ? "0.09" : "-0.09"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
+        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} data-parallax={i % 2 ? "0.09" : "-0.09"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-text:${['var(--lime-text)','var(--bleu-text)','var(--jaune-text)','var(--emeraude-text)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
           <div class="modbento__top">
             <span class="modbento__n">{m.n}</span>
             <span class="badge">{m.tag}</span>
@@ -149,7 +149,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
   .modbento__card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 30px 56px -22px color-mix(in srgb, var(--accent) 42%, rgba(20,19,15,0.3)); }
   .modbento__card:hover::before { opacity: 1; }
   .modbento__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-  .modbento__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; color: var(--accent-ink); letter-spacing: -0.04em; line-height: 1; }
+  .modbento__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; color: var(--accent-text); letter-spacing: -0.04em; line-height: 1; }
   .modbento__t { font-size: clamp(1.4rem, 4vw, 1.9rem); margin-bottom: 8px; letter-spacing: -0.01em; }
   .modbento__d { color: var(--encre-2); font-size: 0.92rem; line-height: 1.5; max-width: 40ch; margin-bottom: 18px; }
   .modbento__diagram {
@@ -160,7 +160,7 @@ const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
     margin-top: 16px; font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem;
     text-transform: uppercase; letter-spacing: 0.02em; color: var(--encre); display: inline-flex; align-items: center; gap: 8px;
   }
-  .modbento__card:hover .modbento__go { color: var(--accent-ink); }
+  .modbento__card:hover .modbento__go { color: var(--accent-text); }
   .modbento__arrow { transition: transform .2s ease; }
   .modbento__card:hover .modbento__arrow { transform: translateX(5px); }
 
