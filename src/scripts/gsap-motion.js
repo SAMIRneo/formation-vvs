@@ -21,6 +21,9 @@ if (reduce || !gsap || !ScrollTrigger) {
   try {
     gsap.registerPlugin(ScrollTrigger);
     document.body.classList.add('gsap-ready'); // active le masquage animé (cf .gsap-ready scoping en CSS)
+    // App-shell iOS 26 : le document est verrouillé, le scroll vit dans #scroll-root.
+    // Sans ça, ScrollTrigger écoute window.scrollY (immobile) => aucun reveal ne part.
+    ScrollTrigger.defaults({ scroller: '#scroll-root' });
     // 0) Titres : split-reveal (mots) + line-reveal (hero) + pulse CTA au scroll
     function revealTitles() {
       document.querySelectorAll('.anim-title, .anim-hero').forEach((el) => {

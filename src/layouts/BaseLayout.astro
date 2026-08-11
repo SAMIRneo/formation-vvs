@@ -64,9 +64,39 @@ const tabs = [
     </div>
   </header>
 
-  <main class="app-main">
-    <slot />
-  </main>
+  <div id="scroll-root">
+    <main class="app-main">
+      <slot />
+    </main>
+
+    <footer class="app-footer">
+      <div class="app-footer__inner">
+        <div class="app-footer__col">
+          <a href={localizedPath('/', lang)} class="brand brand--footer">
+            <span class="brand__mark">FV</span>
+            <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
+          </a>
+          <p class="app-footer__tag">{t(lang, 'footer.tag')}</p>
+        </div>
+        <div class="app-footer__col">
+          <h4>{t(lang, 'footer.nav')}</h4>
+          <a href={localizedPath('/marche/', lang)}>{t(lang, 'nav.marche')}</a>
+          <a href={localizedPath('/modules/', lang)}>{t(lang, 'nav.modules')}</a>
+          <a href={localizedPath('/abonnement/', lang)}>{t(lang, 'nav.abonnement')}</a>
+        </div>
+        <div class="app-footer__col app-footer__contact">
+          <h4>{t(lang, 'footer.contact')}</h4>
+          <a href="mailto:contact@formationvvs.fr">contact@formationvvs.fr</a>
+          <a href="https://discord.gg/formationvvs">Discord</a>
+          <a href="https://t.me/formationvvs">Telegram</a>
+        </div>
+      </div>
+      <div class="app-footer__base">
+        <span>© {new Date().getFullYear()} FormationVVS</span>
+        <span>{t(lang, 'footer.rights')}</span>
+      </div>
+    </footer>
+  </div>
 
   <nav class="tabbar" aria-label="Navigation principale">
     {tabs.map((t2) => (
@@ -83,37 +113,9 @@ const tabs = [
     ))}
   </nav>
 
-  <footer class="app-footer">
-    <div class="app-footer__inner">
-      <div class="app-footer__col">
-        <a href={localizedPath('/', lang)} class="brand brand--footer">
-          <span class="brand__mark">FV</span>
-          <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
-        </a>
-        <p class="app-footer__tag">{t(lang, 'footer.tag')}</p>
-      </div>
-      <div class="app-footer__col">
-        <h4>{t(lang, 'footer.nav')}</h4>
-        <a href={localizedPath('/marche/', lang)}>{t(lang, 'nav.marche')}</a>
-        <a href={localizedPath('/modules/', lang)}>{t(lang, 'nav.modules')}</a>
-        <a href={localizedPath('/abonnement/', lang)}>{t(lang, 'nav.abonnement')}</a>
-      </div>
-      <div class="app-footer__col app-footer__contact">
-        <h4>{t(lang, 'footer.contact')}</h4>
-        <a href="mailto:contact@formationvvs.fr">contact@formationvvs.fr</a>
-        <a href="https://discord.gg/formationvvs">Discord</a>
-        <a href="https://t.me/formationvvs">Telegram</a>
-      </div>
-    </div>
-    <div class="app-footer__base">
-      <span>© {new Date().getFullYear()} FormationVVS</span>
-      <span>{t(lang, 'footer.rights')}</span>
-    </div>
-  </footer>
-
   <style>
     .app-header {
-      position: sticky; top: 0; z-index: 50;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
       background: var(--canvas);
       border-bottom: 1.5px solid var(--ligne);
       padding-top: var(--safe-t);
@@ -144,7 +146,12 @@ const tabs = [
     /* Cible tactile Apple HIG ≥ 44px (iPhone) */
     .app-header__cta { min-height: 44px; display: inline-flex; align-items: center; }
 
-    .app-main { min-height: 70vh; }
+    .app-main {
+      min-height: 70vh;
+      /* Compense le header fixed (hors flux) : le contenu commence sous lui.
+         Hauteur mesurée = lang min-height 44px HIG + paddings 24px + border 1.5 = 69px */
+      padding-top: calc(69px + var(--safe-t));
+    }
 
     .tabbar {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
@@ -211,6 +218,7 @@ const tabs = [
       /* Header compact sur petit iPhone (375px) : on compacte la LARGEUR (padding/gap/font),
          jamais la hauteur tactile (reste 44px HIG). */
       .app-header__inner { gap: 6px; padding: 8px 10px; }
+      .app-main { padding-top: calc(61px + var(--safe-t)); } /* header compact réel = lang 44 + paddings 16 + border = 61px */
       .brand { gap: 6px; }
       .brand__mark { width: 30px; height: 30px; font-size: 0.8rem; border-radius: 6px; flex: 0 0 auto; }
       .brand__name { font-size: 0.62rem; letter-spacing: -0.03em; }
