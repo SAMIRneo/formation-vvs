@@ -1,72 +1,189 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getContent } from '../data/content';
-import { getLang, t, localizedPath } from '../i18n/ui';
-const lang = getLang(Astro.url);
-const { plans } = getContent(lang);
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLang, localizedPath } from "../i18n/ui";
+const lang = getLang(Astro.url),
+  es = lang === "es";
+const offers = es
+  ? [
+      [
+        "Descubrimiento",
+        "0 €",
+        "Disponible ahora",
+        [
+          "4 módulos publicados",
+          "16 preguntas de comprensión",
+          "Herramientas educativas",
+          "Progreso local",
+        ],
+      ],
+      [
+        "Trader",
+        "29 €",
+        "/ mes · propuesta",
+        [
+          "Recorrido estructurado",
+          "Trabajo sobre escenarios",
+          "Seguimiento educativo por definir",
+        ],
+      ],
+      [
+        "Pro",
+        "79 €",
+        "/ mes · propuesta",
+        [
+          "Acompañamiento por definir",
+          "Revisión de escenarios",
+          "Modalidades y disponibilidad a confirmar",
+        ],
+      ],
+    ]
+  : [
+      [
+        "Découverte",
+        "0 €",
+        "Disponible maintenant",
+        [
+          "4 modules publiés",
+          "16 questions de compréhension",
+          "Outils pédagogiques",
+          "Progression locale",
+        ],
+      ],
+      [
+        "Trader",
+        "29 €",
+        "/ mois · proposition",
+        [
+          "Parcours structuré",
+          "Travail sur les scénarios",
+          "Suivi pédagogique à définir",
+        ],
+      ],
+      [
+        "Pro",
+        "79 €",
+        "/ mois · proposition",
+        [
+          "Accompagnement à définir",
+          "Revue de scénarios",
+          "Modalités et disponibilité à confirmer",
+        ],
+      ],
+    ];
 ---
-<BaseLayout title={t(lang, 'abo.title')} active="abonnement">
-  <section class="section wrap">
-    <div class="sec-head" data-reveal>
-      <span class="eyebrow">{t(lang, 'abo.title')}</span>
-      <h2>{t(lang, 'abo.ctaTitle')}</h2>
-      <p>{t(lang, 'abo.lead')}</p>
-    </div>
-    <div class="plans">
-      {plans.map((p) => (
-        <article class={`plan ${p.hl ? 'plan--hl' : ''}`} data-reveal>
-          {p.hl && <span class="plan__flag">{t(lang, 'abo.flag')}</span>}
-          <h3 class="plan__nom">{p.nom}</h3>
-          <div class="plan__prix"><span class="plan__montant">{p.prix}</span><span class="plan__per">{p.periode}</span></div>
-          <ul class="plan__feat">
-            {p.feat.map((f) => <li>{f}</li>)}
-          </ul>
-          <a href={p.hl ? 'https://discord.gg/' : 'mailto:contact@formationvvs.fr'} class={`btn ${p.hl ? '' : 'btn--ghost'}`} target={p.hl ? '_blank' : undefined} rel={p.hl ? 'noopener' : undefined}>{p.cta}</a>
-        </article>
-      ))}
-    </div>
-    <div class="cta-panel" data-reveal>
-      <h2>{t(lang, 'abo.ctaPanelTitle')}</h2>
-      <p>{t(lang, 'abo.ctaPanelLead')}</p>
-      <a href={localizedPath('/modules/', lang)} class="btn anim-cta">{t(lang, 'abo.ctaBtn')}</a>
-    </div>
-  </section>
-</BaseLayout>
 
+<BaseLayout
+  title={es ? "Acceso y acompañamiento" : "Accès et accompagnement"}
+  active="abonnement"
+  ><section class="section wrap">
+    <span class="eyebrow">{es ? "TU PRÓXIMA ETAPA" : "TA PROCHAINE ÉTAPE"}</span
+    ><h1 style="max-width:17ch;margin:22px 0">
+      {es ? "Empieza por comprender." : "Commence par comprendre."}
+    </h1><p class="muted">
+      {
+        es
+          ? "Los cursos y herramientas publicados son de acceso libre. Las fórmulas de acompañamiento siguientes son propuestas: no hay pago ni suscripción automática en este sitio."
+          : "Les cours et outils publiés sont en accès libre. Les formules d’accompagnement ci-dessous sont des propositions : aucun paiement ni abonnement automatique n’est activé sur ce site."
+      }
+    </p><div class="offers">
+      {
+        offers.map((offer, i) => (
+          <article
+            class={`lab-panel offer ${i === 0 ? "offer--available" : ""}`}
+          >
+            <>
+              <span class="eyebrow">
+                {i === 0
+                  ? es
+                    ? "ACCESO LIBRE"
+                    : "ACCÈS LIBRE"
+                  : es
+                    ? "POR CONFIRMAR"
+                    : "À CONFIRMER"}
+              </span>
+              <h2>{offer[0]}</h2>
+              <strong class="offer-price">{offer[1]}</strong>
+              <p class="lab-note">{offer[2]}</p>
+              <ul>
+                {(offer[3] as string[]).map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+              <a
+                class={`btn ${i ? "btn--ghost" : ""}`}
+                href={localizedPath(i ? "/contact/" : "/modules/", lang)}
+              >
+                {i
+                  ? es
+                    ? "Consultar modalidades"
+                    : "Demander les modalités"
+                  : es
+                    ? "Empezar ahora"
+                    : "Commencer maintenant"}{" "}
+                ↗
+              </a>
+            </>
+          </article>
+        ))
+      }
+    </div><p class="info-note">
+      {
+        es
+          ? "Un acompañamiento educativo no es gestión de cartera ni garantía de resultados. El contenido, calendario y condiciones de cualquier oferta de pago deben confirmarse antes de contratar."
+          : "Un accompagnement pédagogique ne constitue ni une gestion de portefeuille ni une garantie de résultats. Le contenu, le calendrier et les conditions de toute offre payante restent à confirmer avant engagement."
+      }
+    </p>
+  </section></BaseLayout
+>
 <style>
-  .sec-head { margin-bottom: 36px; text-align: center; }
-  .sec-head p { color: var(--encre-2); margin-top: 12px; max-width: 50ch; margin-left: auto; margin-right: auto; }
-  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; overflow: visible; }
-  .plan {
-    position: relative; background: var(--carte); border: 1.5px solid var(--ligne);
-    border-radius: var(--radius); padding: 26px 22px; display: flex; flex-direction: column;
-    transition: border-color .14s ease, transform .14s ease, box-shadow .14s ease;
-    box-shadow: 0 12px 28px -18px rgba(20,19,15,0.22);
+  .offers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 40px;
   }
-  .plan:hover { transform: translateY(-4px); border-color: var(--encre); }
-  .plan--hl {
-    border-color: var(--lime-press);
-    box-shadow: 0 22px 48px -22px rgba(var(--lime-rgb), 0.55);
-    transform: translateY(-6px);
+  .offer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
   }
-  .plan--hl::after {
-    content: ''; position: absolute; inset: 0; border-radius: var(--radius); pointer-events: none;
-    background: radial-gradient(120% 60% at 50% 0%, rgba(var(--lime-rgb), 0.12), transparent 60%);
+  .offer h2 {
+    font-size: 1.7rem;
+    margin: 20px 0;
   }
-  .plan__flag {
-    position: absolute; top: -13px; left: 22px; background: var(--lime); color: var(--lime-ink);
-    font-family: var(--font-display); font-weight: 700; font-size: 0.62rem; text-transform: uppercase;
-    letter-spacing: 0.08em; padding: 5px 11px; border-radius: 6px; box-shadow: 0 8px 18px -8px rgba(var(--lime-rgb), 0.60);
+  .offer-price {
+    font-size: 3.2rem;
+    font-weight: 500;
+    letter-spacing: -0.06em;
   }
-  .plan__nom { font-size: 1.3rem; margin-bottom: 12px; }
-  .plan__prix { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
-  .plan__montant { font-family: var(--font-display); font-weight: 700; font-size: 2.6rem; letter-spacing: -0.04em; color: var(--encre); }
-  .plan__per { color: var(--encre-2); font-weight: 700; font-size: 0.85rem; }
-  .plan__feat { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex: 1 1 auto; }
-  .plan__feat li { color: var(--encre); font-size: 0.92rem; padding-left: 22px; position: relative; }
-  .plan__feat li::before { content: '✓'; position: absolute; left: 0; color: var(--emeraude); font-weight: 700; }
-  .plan .btn { width: 100%; text-align: center; }
-  .cta-panel { margin-top: 40px; padding: 40px; text-align: center; }
-  .cta-panel p { max-width: 44ch; margin: 14px auto 26px;  font-weight: 500; }
-  @media (max-width: 760px) { .plans { grid-template-columns: 1fr; } .plan--hl { transform: none; } .cta-panel { padding: 30px 22px; } }
+  .offer ul {
+    list-style: none;
+    margin: 25px 0 30px;
+    flex: 1;
+    display: grid;
+    gap: 12px;
+    font-size: 0.88rem;
+    color: var(--encre-2);
+  }
+  .offer li {
+    padding-left: 20px;
+    position: relative;
+  }
+  .offer li::before {
+    content: "+";
+    position: absolute;
+    left: 0;
+    color: var(--lime);
+  }
+  .offer--available {
+    border-color: var(--lime);
+  }
+  @media (max-width: 850px) {
+    .offers {
+      grid-template-columns: 1fr;
+    }
+    .offer .btn {
+      width: 100%;
+    }
+  }
 </style>

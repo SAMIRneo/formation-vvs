@@ -1,0 +1,148 @@
+---
+const { lang = "fr" } = Astro.props;
+const es = lang === "es";
+const errorId = "risk-error-" + Math.random().toString(36).slice(2, 8);
+const fields = es
+  ? [
+      "Capital ficticio (€)",
+      "Presupuesto de riesgo (%)",
+      "Entrada (€)",
+      "Stop (€)",
+      "Objetivo (€)",
+      "Costes totales estimados (€)",
+    ]
+  : [
+      "Capital fictif (€)",
+      "Budget de risque (%)",
+      "Entrée (€)",
+      "Stop (€)",
+      "Objectif (€)",
+      "Frais totaux estimés (€)",
+    ];
+---
+
+<section class="risk-lab lab-panel" data-risk-lab data-lang={lang}>
+  <div class="lab-heading">
+    <span class="eyebrow">LAB / 02</span><h2>
+      {es ? "El riesgo, en números." : "Le risque, en chiffres."}
+    </h2><p>
+      {
+        es
+          ? "Compra al contado · ejemplo ficticio · sin apalancamiento"
+          : "Achat au comptant · exemple fictif · sans levier"
+      }
+    </p>
+  </div>
+  <div class="risk-fields">
+    {
+      ["capital", "percent", "entry", "stop", "target", "fees"].map(
+        (key, i) => (
+          <label>
+            {fields[i]}
+            <input
+              data-field={key}
+              type="number"
+              inputmode="decimal"
+              value={[10000, 0.5, 100, 95, 115, 0][i]}
+              min={i === 5 ? 0 : 0.01}
+              max={i === 1 ? 100 : undefined}
+              step="any"
+              aria-describedby={errorId}
+            />
+          </label>
+        ),
+      )
+    }
+  </div>
+  <div class="risk-results" aria-live="polite" aria-atomic="true">
+    <p data-error id={errorId}></p><div>
+      <span>{es ? "Cantidad" : "Quantité"}</span><strong data-result="units"
+        >—</strong
+      ><small>{es ? "unidades, no lotes" : "unités, pas des lots"}</small>
+    </div><div>
+      <span>{es ? "Pérdida estimada" : "Perte estimée"}</span><strong
+        data-result="loss">—</strong>
+    </div><div>
+      <span>{es ? "Ganancia estimada" : "Gain estimé"}</span><strong
+        data-result="gain">—</strong>
+    </div><div>
+      <span>{es ? "Ratio neto" : "Ratio net"}</span><strong data-result="rr"
+        >—</strong>
+    </div><p data-detail></p>
+  </div>
+  <p class="lab-note">
+    {
+      es
+        ? "La cantidad se limita al capital disponible. Los costes son un importe fijo total por escenario. Un stop no garantiza el precio de ejecución; gaps y deslizamiento pueden aumentar la pérdida. Este modelo no dimensiona derivados ni contratos."
+        : "La quantité est plafonnée au capital disponible. Les frais sont un montant fixe total par scénario. Un stop ne garantit pas le prix d’exécution ; gaps et glissement peuvent augmenter la perte. Ce modèle ne dimensionne ni dérivés ni contrats."
+    }
+  </p>
+</section>
+<script>
+  import { calculateRisk } from "../lib/risk";
+  document.querySelectorAll<HTMLElement>("[data-risk-lab]").forEach((root) => {
+    const es = root.dataset.lang === "es";
+    const inputs = Array.from(root.querySelectorAll<HTMLInputElement>("input"));
+    const fmt = new Intl.NumberFormat(es ? "es-ES" : "fr-FR", {
+      maximumFractionDigits: 4,
+    });
+    const money = new Intl.NumberFormat(es ? "es-ES" : "fr-FR", {
+      style: "currency",
+      currency: "EUR",
+    });
+    function update() {
+      const [capital, percent, entry, stop, target, fees] = inputs.map((i) =>
+        i.value === "" ? NaN : Number(i.value),
+      );
+      const result = calculateRisk(capital, percent, entry, stop, target, fees);
+      const invalid = [
+        !Number.isFinite(capital) || capital <= 0,
+        !Number.isFinite(percent) || percent <= 0 || percent > 100,
+        !Number.isFinite(entry) || entry <= 0 || entry <= stop,
+        !Number.isFinite(stop) || stop <= 0 || stop >= entry,
+        !Number.isFinite(target) || target <= entry,
+        !Number.isFinite(fees) || fees < 0 || fees >= (capital * percent) / 100,
+      ];
+      inputs.forEach((input, i) =>
+        input.setAttribute("aria-invalid", String(invalid[i])),
+      );
+      root.querySelector("[data-error]")!.textContent = result
+        ? ""
+        : es
+          ? "Introduce valores positivos: stop < entrada < objetivo, riesgo ≤ 100 % y costes inferiores al presupuesto."
+          : "Saisis des valeurs positives : stop < entrée < objectif, risque ≤ 100 % et frais inférieurs au budget.";
+      ["units", "loss", "gain", "rr"].forEach((key) => {
+        const el = root.querySelector(`[data-result="${key}"]`)!;
+        if (!result) {
+          el.textContent = "—";
+          return;
+        }
+        el.textContent =
+          key === "units"
+            ? fmt.format(result.units)
+            : key === "rr"
+              ? fmt.format(result.rr) + " R"
+              : money.format(result[key as "loss" | "gain"]);
+      });
+      root.querySelector("[data-detail]")!.textContent = result
+        ? (es ? "Exposición: " : "Exposition : ") +
+          money.format(result.exposure) +
+          " · " +
+          (result.breakEven !== null
+            ? (es ? "Equilibrio teórico: " : "Équilibre théorique : ") +
+              fmt.format(result.breakEven) +
+              " %"
+            : es
+              ? "El objetivo no cubre los costes."
+              : "L’objectif ne couvre pas les frais.") +
+          (result.capped
+            ? es
+              ? " · Cantidad limitada por el capital."
+              : " · Quantité limitée par le capital."
+            : "")
+        : "";
+    }
+    inputs.forEach((i) => i.addEventListener("input", update));
+    update();
+  });
+</script>

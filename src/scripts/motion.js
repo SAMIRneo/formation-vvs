@@ -1,100 +1,132 @@
-// FormationVVS — moteur de mouvement léger (zéro dépendance)
-// Reveals + parallax héro + draw-on SVG désormais pilotés par gsap-motion.js.
-// Ici: ripple tactile, market board LIVE, tilt léger. Respect reduced-motion.
-(function () {
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Reveals + parallax héro + draw-on SVG pilotés par gsap-motion.js
-  // (qui gère aussi le fallback si GSAP indisponible). Rien ici.
-
-  // ---- Ripple tactile sur .btn et .tabbar__item ----
-  function attachRipple(els) {
-    els.forEach((el) => {
-      el.addEventListener('pointerdown', (ev) => {
-        if (reduce) return;
-        const r = el.getBoundingClientRect();
-        const size = Math.max(r.width, r.height);
-        const rip = document.createElement('span');
-        rip.className = 'ripple';
-        rip.style.width = rip.style.height = size + 'px';
-        rip.style.left = (ev.clientX - r.left - size / 2) + 'px';
-        rip.style.top = (ev.clientY - r.top - size / 2) + 'px';
-        el.appendChild(rip);
-        setTimeout(() => rip.remove(), 600);
-      });
+// Content is visible before enhancement. Motion only introduces sections once.
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduce && "IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.animate(
+          [
+            { opacity: 0.5, transform: "translateY(10px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          { duration: 350, easing: "cubic-bezier(.2,.7,.3,1)" },
+        );
+        observer.unobserve(entry.target);
+      }),
+    { root: document.getElementById("scroll-root"), threshold: 0.08 },
+  );
+  document
+    .querySelectorAll("[data-reveal],.curriculum-heading,.lab-heading")
+    .forEach((el) => observer.observe(el));
+}
+const board = document.querySelector("[data-live]");
+if (board) {
+  const es = document.documentElement.lang === "es";
+  const format = new Intl.NumberFormat(es ? "es-ES" : "fr-FR", {
+    maximumFractionDigits: 4,
+  });
+  const dateFormat = new Intl.DateTimeFormat(es ? "es-ES" : "fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const status = board.querySelector("[data-market-status]");
+  const button = board.querySelector("[data-refresh]");
+  const tiles = [...board.querySelectorAll("[data-sym]")];
+  async function request(url) {
+    const r = await fetch(url, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(9000),
     });
+    if (!r.ok) throw Error("Provider unavailable");
+    return r.json();
   }
-  attachRipple(document.querySelectorAll('.btn'));
-  attachRipple(document.querySelectorAll('.tabbar__item'));
-
-  // ---- Market board LIVE (CoinGecko crypto + open.er-api FX, sans clé, CORS *) ----
-  const board = document.getElementById('market-board');
-  if (board) {
-    const tiles = Array.from(board.querySelectorAll('.tile'));
-    const fmtPrice = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: n >= 100 ? 2 : 4 }).replace(/ /g, ' ');
-    const setTile = (sym, price, chg, dir) => {
-      const tile = tiles.find((t) => t.dataset.sym === sym);
-      if (!tile) return;
-      const priceEl = tile.querySelector('[data-price]');
-      const chgEl = tile.querySelector('[data-chg]');
-      if (priceEl) {
-        const prev = parseFloat(priceEl.dataset.val || 'NaN');
-        priceEl.textContent = fmtPrice(price);
-        priceEl.dataset.val = price;
-        if (!reduce && !isNaN(prev) && prev !== price) {
-          tile.classList.remove('flash-up', 'flash-down');
-          void tile.offsetWidth; // reflow pour relancer l'anim
-          tile.classList.add(price >= prev ? 'flash-up' : 'flash-down');
+  function setTile(id, price, change, date) {
+    if (!Number.isFinite(price) || price <= 0) throw Error("Invalid price");
+    const stamp = new Date(date);
+    if (!Number.isFinite(stamp.getTime())) throw Error("Invalid timestamp");
+    const tile = tiles.find((t) => t.dataset.sym === id);
+    if (!tile) return;
+    tile.querySelector("[data-price]").textContent = format.format(price);
+    const chg = tile.querySelector("[data-chg]");
+    chg.textContent = Number.isFinite(change)
+      ? (change >= 0 ? "+" : "") + format.format(change) + " %"
+      : es
+        ? "Referencia"
+        : "Référence";
+    tile.classList.toggle("tile--up", Number.isFinite(change) && change >= 0);
+    tile.classList.toggle("tile--down", Number.isFinite(change) && change < 0);
+    tile.querySelector("time").dateTime = stamp.toISOString();
+    tile.querySelector("time").textContent =
+      (es ? "Fuente: " : "Source : ") + dateFormat.format(stamp);
+    tile.dataset.loaded = "true";
+    tile.dataset.stale = "false";
+  }
+  async function refresh() {
+    button.disabled = true;
+    status.textContent = es
+      ? "Consultando proveedores…"
+      : "Interrogation des fournisseurs…";
+    const results = await Promise.allSettled([
+      (async () => {
+        const ids = tiles
+          .filter((t) => t.dataset.source === "cg")
+          .map((t) => t.dataset.sym);
+        const data = await request(
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=" +
+            ids.join(",") +
+            "&order=market_cap_desc&price_change_percentage=24h",
+        );
+        if (!Array.isArray(data)) throw Error("Invalid response");
+        for (const id of ids) {
+          const c = data.find((c) => c.id === id);
+          if (!c) throw Error("Missing asset");
+          setTile(
+            c.id,
+            c.current_price,
+            c.price_change_percentage_24h,
+            c.last_updated,
+          );
         }
-      }
-      if (chgEl) {
-        chgEl.textContent = chg;
-        chgEl.className = `tile__badge badge ${dir === 'up' ? 'badge--up' : 'badge--down'}`;
-      }
-      tile.classList.toggle('tile--up', dir === 'up');
-      tile.classList.toggle('tile--down', dir === 'down');
-    };
-    const CG_IDS = tiles.filter((t) => t.dataset.source === 'cg').map((t) => t.dataset.sym);
-    async function refresh() {
-      try {
-        const cg = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=${CG_IDS.join(',')}&order=market_cap_desc&price_change_percentage=24h`, { cache: 'no-store' });
-        if (cg.ok) {
-          const data = await cg.json();
-          data.forEach((c) => {
-            const pct = c.price_change_percentage_24h ?? 0;
-            const dir = pct >= 0 ? 'up' : 'down';
-            setTile(c.id, c.current_price, `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`, dir);
+      })(),
+      (async () => {
+        const data = await request("https://open.er-api.com/v6/latest/USD");
+        if (
+          data.result !== "success" ||
+          !Number.isFinite(data.rates?.EUR) ||
+          data.rates.EUR <= 0
+        )
+          throw Error("Invalid FX");
+        setTile("eurusd", 1 / data.rates.EUR, null, data.time_last_update_utc);
+      })(),
+    ]);
+    results.forEach((r, i) => {
+      if (r.status === "rejected")
+        tiles
+          .filter((t) => t.dataset.source === (i ? "fx" : "cg"))
+          .forEach((t) => {
+            t.dataset.stale = "true";
+            const time = t.querySelector("time");
+            time.textContent =
+              (es ? "Proveedor no disponible" : "Fournisseur indisponible") +
+              (t.dataset.loaded === "true"
+                ? (es ? " · referencia del " : " · référence du ") +
+                  dateFormat.format(new Date(time.dateTime))
+                : "");
           });
-        }
-      } catch (e) { /* échec réseau : on garde la dernière valeur affichée */ }
-      try {
-        const fx = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
-        if (fx.ok) {
-          const j = await fx.json();
-          if (j.rates && j.rates.EUR) {
-            const eurUsd = 1 / j.rates.EUR;
-            const prevEl = board.querySelector('.tile[data-sym="eurusd"] [data-price]');
-            const prev = prevEl ? parseFloat(prevEl.dataset.val || 'NaN') : NaN;
-            const dir = isNaN(prev) ? 'up' : (eurUsd >= prev ? 'up' : 'down');
-            setTile('eurusd', eurUsd, 'LIVE', dir);
-          }
-        }
-      } catch (e) { /* ignore */ }
-    }
-    refresh();
-    setInterval(refresh, 30000);
-  }
-
-  // ---- Tilt léger sur cartes (desktop, pointer fine) ----
-  if (!reduce && window.matchMedia('(pointer:fine)').matches) {
-    document.querySelectorAll('[data-tilt]').forEach((card) => {
-      card.addEventListener('pointermove', (e) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `perspective(800px) rotateX(${(-py * 4).toFixed(2)}deg) rotateY(${(px * 4).toFixed(2)}deg) translateY(-4px)`;
-      });
-      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
     });
+    const failed = results.some((r) => r.status === "rejected");
+    status.textContent = failed
+      ? es
+        ? "Datos incompletos. Puedes volver a intentarlo."
+        : "Données incomplètes. Tu peux réessayer."
+      : es
+        ? "Referencias recibidas. Consulta la fecha de cada fuente."
+        : "Références reçues. Consulte la date de chaque source.";
+    button.disabled = false;
   }
-})();
+  button.addEventListener("click", refresh);
+  refresh();
+}

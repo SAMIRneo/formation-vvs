@@ -1,0 +1,164 @@
+---
+const { lang } = Astro.props;
+const es = lang === "es";
+---
+
+<section class="lab-panel expectancy" data-expectancy data-lang={lang}>
+  <span class="eyebrow">LAB / 03 · {es ? "ESPERANZA" : "ESPÉRANCE"}</span><h2>
+    {es ? "El ratio no basta." : "Le ratio ne suffit pas."}
+  </h2><p class="muted">
+    {
+      es
+        ? "Compara frecuencia y resultado medio en R. Modelo teórico con pérdida constante de 1R, antes de costes."
+        : "Compare fréquence et résultat moyen en R. Modèle théorique avec une perte constante de 1R, avant frais."
+    }
+  </p>
+  <label
+    >{es ? "Frecuencia de ganancias" : "Fréquence de gains"}
+    <output data-frequency>25 %</output><input
+      type="range"
+      min="0"
+      max="100"
+      value="25"
+      step="5"
+      aria-label={es
+        ? "Frecuencia de ganancias en porcentaje"
+        : "Fréquence de gains en pourcentage"}
+    /></label
+  >
+  <label
+    >{es ? "Ganancia media" : "Gain moyen"}
+    <output data-reward>3 R</output><input
+      type="range"
+      min=".5"
+      max="5"
+      value="3"
+      step=".5"
+      aria-label={es ? "Ganancia media en R" : "Gain moyen en R"}
+    /></label
+  >
+  <div class="expectancy-strip" aria-hidden="true">
+    <span data-win></span><span data-loss></span>
+  </div>
+  <div class="expectancy-result" aria-live="polite">
+    <strong data-value>0 R</strong><p data-expectancy-copy>
+      {
+        es
+          ? "por operación, en promedio teórico"
+          : "par opération, en moyenne théorique"
+      }
+    </p>
+  </div><p class="lab-note">
+    {
+      es
+        ? "Esperanza = frecuencia × ganancia − (1 − frecuencia) × pérdida. Cambiar un objetivo no cambia automáticamente la ganancia observada ni la frecuencia de éxito."
+        : "Espérance = fréquence × gain − (1 − fréquence) × perte. Modifier un objectif ne change pas automatiquement le gain observé ni la fréquence de réussite."
+    }
+  </p>
+</section>
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-expectancy]")
+    .forEach((root) => {
+      const es = root.dataset.lang === "es";
+      const [frequency, reward] = Array.from(root.querySelectorAll("input"));
+      const fmt = new Intl.NumberFormat(es ? "es-ES" : "fr-FR", {
+        maximumFractionDigits: 2,
+      });
+      function update() {
+        const p = Number(frequency.value) / 100,
+          r = Number(reward.value),
+          value = p * r - (1 - p);
+        root.querySelector("[data-frequency]")!.textContent =
+          fmt.format(p * 100) + " %";
+        root.querySelector("[data-reward]")!.textContent = fmt.format(r) + " R";
+        root.querySelector("[data-value]")!.textContent =
+          (value > 0 ? "+" : "") + fmt.format(value) + " R";
+        root.querySelector<HTMLElement>("[data-win]")!.style.width =
+          p * 100 + "%";
+        root.querySelector<HTMLElement>("[data-loss]")!.style.width =
+          (1 - p) * 100 + "%";
+        root.querySelector("[data-expectancy-copy]")!.textContent =
+          (es
+            ? "por operación, en promedio teórico · "
+            : "par opération, en moyenne théorique · ") +
+          (value > 0
+            ? es
+              ? "positivo antes de costes"
+              : "positif avant frais"
+            : value < 0
+              ? es
+                ? "negativo antes de costes"
+                : "négatif avant frais"
+              : es
+                ? "equilibrio antes de costes"
+                : "équilibre avant frais");
+      }
+      frequency.addEventListener("input", update);
+      reward.addEventListener("input", update);
+      update();
+    });
+</script>
+<style>
+  .expectancy h2 {
+    font-size: 1.7rem;
+    margin: 15px 0;
+  }
+  .expectancy > p {
+    font-size: 0.88rem;
+  }
+  .expectancy label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    margin: 24px 0;
+    font-size: 0.83rem;
+  }
+  .expectancy output {
+    color: var(--lime);
+    font-variant-numeric: tabular-nums;
+  }
+  .expectancy input {
+    grid-column: 1/-1;
+    width: 100%;
+  }
+  .expectancy-strip {
+    height: 10px;
+    display: flex;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .expectancy-strip span {
+    transition: width 0.2s ease;
+  }
+  .expectancy-strip span:first-child {
+    background: var(--emeraude);
+  }
+  .expectancy-strip span:last-child {
+    background: var(--rouge);
+  }
+  .expectancy-result {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin: 25px 0;
+  }
+  .expectancy-result strong {
+    font-size: 2.8rem;
+    white-space: nowrap;
+    color: var(--lime);
+    letter-spacing: -0.04em;
+  }
+  .expectancy-result p {
+    font-size: 0.83rem;
+    color: var(--encre-2);
+  }
+  @media (max-width: 480px) {
+    .expectancy-result {
+      display: block;
+    }
+    .expectancy-result p {
+      margin-top: 9px;
+    }
+  }
+</style>

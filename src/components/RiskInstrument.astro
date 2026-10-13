@@ -1,0 +1,72 @@
+---
+import instrument from "../assets/risk-instrument.svg?raw";
+const { lang } = Astro.props;
+const es = lang === "es";
+---
+
+<figure class="hero-instrument" data-instrument data-lang={lang}>
+  <div class="instrument-label">
+    <span>VVS / RISK CALIBRATION</span><span
+      >{es ? "SIMULACIÓN" : "SIMULATION"}</span>
+  </div>
+  <div
+    class="instrument-art"
+    set:html={instrument.replace(
+      "Instrument illustratif de calibration du budget de risque",
+      es
+        ? "Instrumento ilustrativo de calibración del presupuesto de riesgo"
+        : "Instrument illustratif de calibration du budget de risque",
+    )}
+  />
+  <label class="instrument-input"
+    >{es ? "Presupuesto" : "Budget"}
+    <output data-percent>0,50 %</output><input
+      type="range"
+      min=".25"
+      max="2"
+      step=".25"
+      value=".5"
+      aria-label={es
+        ? "Presupuesto de riesgo en porcentaje"
+        : "Budget de risque en pourcentage"}
+    /></label
+  >
+  <figcaption class="instrument-bottom">
+    <strong data-budget>50 €</strong><p>
+      {
+        es
+          ? "de pérdida estimada para un capital ficticio de 10 000 €, antes de costes y deslizamiento."
+          : "de perte estimée pour un capital fictif de 10 000 €, avant frais et glissement."
+      }
+    </p>
+  </figcaption>
+</figure>
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-instrument]")
+    .forEach((root) => {
+      const input = root.querySelector("input")!;
+      const needle = root.querySelector<SVGPathElement>("[data-needle]")!;
+      const fmt = new Intl.NumberFormat(
+        root.dataset.lang === "es" ? "es-ES" : "fr-FR",
+        { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+      );
+      function update() {
+        const v = Number(input.value);
+        const a = ((-140 + ((v - 0.25) / 1.75) * 280) * Math.PI) / 180;
+        const d = needle.dataset;
+        const dx = Math.cos(a) * 32,
+          dy = Math.sin(a) * 32;
+        needle.setAttribute(
+          "d",
+          `M${d.ox} ${d.oy}L${Number(d.ox) + dx * Number(d.xx) + dy * Number(d.yx)} ${Number(d.oy) + dx * Number(d.xy) + dy * Number(d.yy)}`,
+        );
+        root.querySelector("[data-percent]")!.textContent =
+          fmt.format(v) + " %";
+        root.querySelector("[data-budget]")!.textContent =
+          String(v * 100) + " €";
+      }
+      input.addEventListener("input", update);
+      update();
+    });
+</script>

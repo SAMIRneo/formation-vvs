@@ -1,57 +1,169 @@
 ---
-// Board marché — 100% LIVE, zéro simulation
+// Provider references; no invented fallback prices.
 // Crypto (EUR) via CoinGecko, EUR/USD via open.er-api (toutes deux CORS * + sans clé)
-// Seeds = valeurs affichées AVANT le 1er fetch (ou en cas d'échec réseau)
+
+const { lang = "fr" } = Astro.props;
+const es = lang === "es";
 const SYMBOLS = [
-  { id: 'bitcoin',  label: 'BTC/EUR',  seed: '61 240', chg: '+2.4%', dir: 'up' },
-  { id: 'ethereum', label: 'ETH/EUR',  seed: '3 180',  chg: '+1.1%', dir: 'up' },
-  { id: 'solana',   label: 'SOL/EUR',  seed: '148.2',  chg: '+3.8%', dir: 'up' },
-  { id: 'ripple',   label: 'XRP/EUR',  seed: '0.52',   chg: '-1.2%', dir: 'down' },
-  { id: 'cardano',  label: 'ADA/EUR',  seed: '0.38',   chg: '+0.6%', dir: 'up' },
-  { id: 'dogecoin', label: 'DOGE/EUR', seed: '0.11',   chg: '-2.1%', dir: 'down' },
-  { id: 'eurusd',   label: 'EUR/USD',  seed: '1.0842', chg: 'LIVE', dir: 'up', source: 'fx' },
+  { id: "bitcoin", label: "BTC/EUR" },
+  { id: "ethereum", label: "ETH/EUR" },
+  { id: "solana", label: "SOL/EUR" },
+  { id: "ripple", label: "XRP/EUR" },
+  { id: "cardano", label: "ADA/EUR" },
+  { id: "dogecoin", label: "DOGE/EUR" },
+  { id: "eurusd", label: "EUR/USD", source: "fx" },
 ];
 ---
+
 <div class="board" id="market-board" data-live>
-  {SYMBOLS.map((s) => (
-    <div class={`tile tile--${s.dir}`} data-sym={s.id} data-source={s.source || 'cg'}>
-      <span class="tile__bar"></span>
-      <div class="tile__row">
-        <span class="tile__sym">{s.label}</span>
-        <span class={`tile__badge badge ${s.dir === 'up' ? 'badge--up' : 'badge--down'}`} data-chg>{s.chg}</span>
+  <noscript
+    ><p class="info-note">
+      {
+        es
+          ? "Activa JavaScript para consultar las referencias de los proveedores."
+          : "Active JavaScript pour consulter les références des fournisseurs."
+      }
+    </p></noscript
+  >
+  {
+    SYMBOLS.map((s) => (
+      <div class="tile" data-sym={s.id} data-source={s.source || "cg"}>
+        <span class="tile__bar" />
+        <div class="tile__row">
+          <span class="tile__sym">{s.label}</span>
+          <span class="tile__badge badge" data-chg>
+            —
+          </span>
+        </div>
+        <span class="tile__price" data-price data-val="">
+          —
+        </span>
+        <time>{es ? "Pendiente" : "En attente"}</time>
       </div>
-      <span class="tile__price" data-price data-val="">{s.seed}</span>
-    </div>
-  ))}
-  <span class="board__src">Données live · CoinGecko + open.er-api</span>
+    ))
+  }
+  <div class="market-controls">
+    <button type="button" data-refresh
+      >{es ? "Actualizar" : "Actualiser"} ↻</button
+    ><p>
+      {
+        es
+          ? "Referencias externas · variación cripto 24 h · no es un flujo de ejecución"
+          : "Références externes · variation crypto 24 h · pas un flux d’exécution"
+      }
+    </p>
+  </div>
+  <p class="market-status" role="status" aria-live="polite" data-market-status>
+    {es ? "Consultando proveedores…" : "Interrogation des fournisseurs…"}
+  </p>
+  <span class="board__src"
+    >{es ? "Fuentes" : "Sources"} : <a
+      href="https://www.coingecko.com/"
+      target="_blank"
+      rel="noopener">CoinGecko</a
+    > · <a
+      href="https://www.exchangerate-api.com/"
+      target="_blank"
+      rel="noopener">ExchangeRate-API</a
+    ></span
+  >
 </div>
 
 <style>
   .board {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   .tile {
-    position: relative; overflow: hidden;
-    background: var(--carte); border: 1.5px solid var(--ligne);
-    border-radius: var(--radius); padding: 14px 14px 14px 18px;
-    display: flex; flex-direction: column; gap: 6px;
+    position: relative;
+    overflow: hidden;
+    background: var(--carte);
+    border: 1.5px solid var(--ligne);
+    border-radius: var(--radius);
+    padding: 14px 14px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
-  .tile__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
-  .tile--up .tile__bar { background: var(--emeraude); }
-  .tile--down .tile__bar { background: var(--rouge); }
-  .tile__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
-  .tile__sym { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tile__badge { font-size: 0.62rem; padding: 2px 7px; white-space: nowrap; flex: 0 0 auto; }
-  .tile__price { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; letter-spacing: -0.03em; transition: text-shadow .2s ease; }
-  .tile--up .tile__price { color: var(--emeraude); }
-  .tile--down .tile__price { color: var(--rouge); }
-  .board__src { grid-column: 1 / -1; font-size: 0.62rem; color: var(--encre-2); letter-spacing: 0.04em; opacity: 0.6; text-align: right; }
+  .tile__bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+  }
+  .tile--up .tile__bar {
+    background: var(--emeraude);
+  }
+  .tile--down .tile__bar {
+    background: var(--rouge);
+  }
+  .tile__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+  }
+  .tile__sym {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tile__badge {
+    font-size: 0.62rem;
+    padding: 2px 7px;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  .tile__price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: -0.03em;
+    transition: text-shadow 0.2s ease;
+  }
+  .tile--up .tile__price {
+    color: var(--emeraude);
+  }
+  .tile--down .tile__price {
+    color: var(--rouge);
+  }
+  .board__src {
+    grid-column: 1 / -1;
+    font-size: 0.62rem;
+    color: var(--encre-2);
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+    text-align: right;
+  }
 
   @media (max-width: 760px) {
-    .board { grid-template-columns: 1fr; } /* liste verticale pleine largeur : jamais de prix coupé */
-    .tile { flex-direction: row; align-items: center; gap: 12px; padding: 13px 14px 13px 18px; }
-    .tile__sym { flex: 0 0 auto; min-width: 6.5ch; }
-    .tile__price { flex: 1 1 auto; text-align: right; white-space: nowrap; }
-    .tile__badge { flex: 0 0 auto; }
+    .board {
+      grid-template-columns: 1fr;
+    } /* liste verticale pleine largeur : jamais de prix coupé */
+    .tile {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px 13px 18px;
+    }
+    .tile__sym {
+      flex: 0 0 auto;
+      min-width: 6.5ch;
+    }
+    .tile__price {
+      flex: 1 1 auto;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .tile__badge {
+      flex: 0 0 auto;
+    }
   }
 </style>

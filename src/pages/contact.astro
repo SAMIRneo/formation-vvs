@@ -1,49 +1,62 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getLang, t, localizedPath } from '../i18n/ui';
-const lang = getLang(Astro.url);
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLang, localizedPath } from "../i18n/ui";
+const lang = getLang(Astro.url),
+  es = lang === "es";
+const subject = encodeURIComponent(
+  es ? "FormationVVS — mi pregunta" : "FormationVVS — ma question",
+);
 ---
-<BaseLayout title={t(lang, 'contact.title')} active="">
-  <section class="section wrap">
-    <div class="sec-head" data-reveal>
-      <span class="eyebrow">{t(lang, 'contact.title')}</span>
-      <h2>{t(lang, 'contact.finalTitle')}</h2>
-      <p>{t(lang, 'contact.sub')}</p>
-    </div>
-    <div class="contact">
-      <a class="chan" href="mailto:contact@formationvvs.fr">
-        <span class="chan__k">{t(lang, 'contact.email')}</span>
-        <span class="chan__v">contact@formationvvs.fr</span>
-      </a>
-      <a class="chan" href="https://discord.gg/" target="_blank" rel="noopener">
-        <span class="chan__k">{t(lang, 'contact.discord')}</span>
-        <span class="chan__v">Communauté FormationVVS</span>
-      </a>
-      <a class="chan" href="https://t.me/" target="_blank" rel="noopener">
-        <span class="chan__k">{t(lang, 'contact.telegram')}</span>
-        <span class="chan__v">@formationvvs</span>
-      </a>
-    </div>
-    <div class="cta-final" data-reveal>
-      <h2>{t(lang, 'contact.finalTitle')}</h2>
-      <p>{t(lang, 'contact.finalLead')}</p>
-      <a href={localizedPath('/abonnement/', lang)} class="btn anim-cta">{t(lang, 'contact.finalBtn')}</a>
-    </div>
-  </section>
-</BaseLayout>
 
-<style>
-  .sec-head { margin-bottom: 36px; text-align: center; }
-  .sec-head p { color: var(--encre-2); margin-top: 12px; }
-  .contact { display: flex; flex-direction: column; gap: 12px; max-width: 520px; margin: 0 auto 32px; }
-  .chan {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    background: var(--carte); border: 1.5px solid var(--ligne);
-    border-radius: var(--radius); padding: 18px 22px; transition: border-color .14s ease, transform .14s ease;
-  }
-  .chan:hover { border-color: var(--encre); transform: translateX(4px); }
-  .chan__k { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--encre); flex: 0 0 auto; }
-  .chan__v { color: var(--encre); font-size: 0.95rem; text-align: right; }
-  .cta-final { padding: 38px; text-align: center; }
-  .cta-final p { max-width: 40ch; margin: 14px auto 24px;  font-weight: 500; }
-</style>
+<BaseLayout
+  title={es ? "Contacto y preguntas" : "Contact et questions"}
+  active="contact"
+  ><section class="section wrap">
+    <span class="eyebrow">{es ? "HABLEMOS" : "PARLONS-EN"} / VVS</span><h1
+      style="max-width:15ch;margin:22px 0"
+    >
+      {
+        es
+          ? "Una pregunta puede cambiar tu lectura."
+          : "Une question peut changer ta lecture."
+      }
+    </h1><p class="muted" style="max-width:52ch;margin-bottom:32px">
+      {
+        es
+          ? "¿Una duda sobre un concepto, un error en un ejercicio o una idea para el recorrido? Escribe a Samir con el módulo y la situación que quieres aclarar."
+          : "Une notion à éclaircir, une erreur dans un exercice ou une idée pour le parcours ? Écris à Samir avec le module et la situation que tu veux préciser."
+      }
+    </p><a class="btn" href={`mailto:neovvs75@gmail.com?subject=${subject}`}
+      >{es ? "Escribir a Samir" : "Écrire à Samir"} ↗</a
+    ><p class="lab-note" style="margin-top:16px">
+      neovvs75@gmail.com · {
+        es
+          ? "Se abre tu aplicación de correo."
+          : "Ouvre ton application de messagerie."
+      }
+    </p><div class="lab-duo" style="margin-top:50px">
+      <article class="lab-panel">
+        <h2>
+          {es ? "Para preparar el intercambio" : "Pour préparer l’échange"}
+        </h2><p class="muted" style="margin-top:20px">
+          {
+            es
+              ? "Indica tu nivel, el concepto que te interesa y tu objetivo de aprendizaje. No envíes contraseñas ni información de acceso a una cuenta."
+              : "Précise ton niveau, la notion qui t’intéresse et ton objectif d’apprentissage. N’envoie aucun mot de passe ni accès à un compte."
+          }
+        </p>
+      </article><article class="lab-panel">
+        <h2>
+          {es ? "Mientras tanto, practica." : "En attendant, pratique."}
+        </h2><p class="muted" style="margin:20px 0">
+          {
+            es
+              ? "El recorrido y los ejercicios están disponibles sin crear una cuenta."
+              : "Le parcours et les exercices sont disponibles sans créer de compte."
+          }
+        </p><a href={localizedPath("/modules/", lang)}
+          >{es ? "Volver al recorrido" : "Retrouver le parcours"} →</a>
+      </article>
+    </div>
+  </section></BaseLayout
+>

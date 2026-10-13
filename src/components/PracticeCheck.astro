@@ -1,0 +1,69 @@
+---
+const { chapter, id, lang } = Astro.props;
+const es = lang === "es";
+---
+
+<form
+  class="practice lab-panel"
+  data-practice
+  data-id={id}
+  data-correct={chapter.correct}
+  data-lang={lang}
+  data-explanation={chapter.explanation}
+>
+  <span class="eyebrow"
+    >{es ? "COMPROBAR / UNA PREGUNTA" : "VÉRIFIER / UNE QUESTION"}</span
+  >
+  <fieldset>
+    <legend>{chapter.question}</legend>{
+      chapter.answers.map((answer: string, i: number) => (
+        <label>
+          <>
+            <input type="radio" name={id} value={i} required />
+            <span>{answer}</span>
+          </>
+        </label>
+      ))
+    }
+  </fieldset>
+  <button class="btn" type="submit"
+    >{es ? "Comprobar mi respuesta" : "Vérifier ma réponse"}</button
+  >
+  <p class="practice-feedback" role="status" aria-live="polite"></p>
+</form>
+<script>
+  import { readProgress, saveProgress } from "../lib/progress";
+  document
+    .querySelectorAll<HTMLFormElement>("[data-practice]")
+    .forEach((form) => {
+      const es = form.dataset.lang === "es";
+      const status = form.querySelector<HTMLElement>('[role="status"]')!;
+      if (readProgress().includes(form.dataset.id!))
+        status.textContent = es
+          ? "Concepto ya comprobado. Puedes practicar de nuevo."
+          : "Notion déjà vérifiée. Tu peux t’entraîner à nouveau.";
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const selected = new FormData(form).get(form.dataset.id!);
+        if (selected === null) return;
+        const correct = selected === form.dataset.correct;
+        form.dataset.state = correct ? "correct" : "retry";
+        const stored = correct ? saveProgress(form.dataset.id!) : true;
+        status.textContent =
+          (correct
+            ? es
+              ? "Correcto. "
+              : "Bien vu. "
+            : es
+              ? "Revisa la idea y prueba otra vez. "
+              : "Reprends la notion et réessaie. ") +
+          form.dataset.explanation +
+          (!stored
+            ? es
+              ? " El navegador no permite guardar el progreso."
+              : " Le navigateur ne permet pas de sauvegarder la progression."
+            : "");
+        if (correct) window.dispatchEvent(new Event("vvs-progress"));
+      });
+    });
+</script>

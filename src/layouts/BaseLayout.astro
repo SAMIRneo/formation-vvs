@@ -1,230 +1,514 @@
 ---
-import '../styles/global.css';
-import { BASE_URL } from '../consts';
-import { getLang, t, localizedPath, SUPPORTED, type Lang } from '../i18n/ui';
-import LangSwitcher from '../components/LangSwitcher.astro';
+import "../styles/global.css";
+import "../styles/lab.css";
+import { BASE_URL } from "../consts";
+import { getLang, t, localizedPath, type Lang } from "../i18n/ui";
 
 interface Props {
   title: string;
-  active: 'accueil' | 'marche' | 'modules' | 'abonnement' | 'contact';
+  description?: string;
+  active: "" | "accueil" | "marche" | "modules" | "abonnement" | "contact";
   lang?: Lang;
 }
-const { title, active } = Astro.props;
+const { title, active, description: pageDescription } = Astro.props;
+const canonical = new URL(
+  Astro.url.pathname.replace(/\/$/, "") + "/",
+  Astro.site,
+);
+const description =
+  pageDescription ||
+  "Lire le marché, calculer le risque et construire des scénarios. Cours et exercices interactifs gratuits — " +
+    title;
 const lang = getLang(Astro.url);
 
 const tabs = [
-  { id: 'accueil',    key: 'nav.accueil',     href: localizedPath('/', lang),          icon: 'M3 11.5 12 4l9 7.5M5 10v9h14v-9' },
-  { id: 'marche',     key: 'nav.marche',      href: localizedPath('/marche/', lang),   icon: 'M3 17l5-5 4 4 8-9M3 21h18' },
-  { id: 'modules',    key: 'nav.modules',     href: localizedPath('/modules/', lang),  icon: 'M4 5h16v14H4zM4 9h16M9 5v14' },
-  { id: 'abonnement', key: 'nav.abonnement',  href: localizedPath('/abonnement/', lang), icon: 'M12 3v18M7 7h7a3 3 0 0 1 0 6H7m0 0h8a3 3 0 0 1 0 6H7' },
-  { id: 'contact',    key: 'nav.contact',     href: localizedPath('/contact/', lang),    icon: 'M4 4h16v16H4zM4 7l8 6 8-6' },
+  {
+    id: "accueil",
+    key: "nav.accueil",
+    href: localizedPath("/", lang),
+    icon: "M3 11.5 12 4l9 7.5M5 10v9h14v-9",
+  },
+  {
+    id: "marche",
+    key: "nav.marche",
+    href: localizedPath("/marche/", lang),
+    icon: "M3 17l5-5 4 4 8-9M3 21h18",
+  },
+  {
+    id: "modules",
+    key: "nav.modules",
+    href: localizedPath("/modules/", lang),
+    icon: "M4 5h16v14H4zM4 9h16M9 5v14",
+  },
+  {
+    id: "abonnement",
+    key: "nav.abonnement",
+    href: localizedPath("/abonnement/", lang),
+    icon: "M12 3v18M7 7h7a3 3 0 0 1 0 6H7m0 0h8a3 3 0 0 1 0 6H7",
+  },
+  {
+    id: "contact",
+    key: "nav.contact",
+    href: localizedPath("/contact/", lang),
+    icon: "M4 4h16v16H4zM4 7l8 6 8-6",
+  },
 ];
 ---
+
 <!doctype html>
 <html lang={lang}>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0D0C09" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="FormationVVS" />
-  <title>{title} — FormationVVS</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0c171b" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
-  <link rel="manifest" href={`${BASE_URL}/manifest.webmanifest`} />
-  <link rel="apple-touch-icon" href={`${BASE_URL}/icon-192.png`} />
-  <link rel="icon" type="image/svg+xml" href={`${BASE_URL}/favicon.svg`} />
-  <script is:inline>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {});
-    }
-    if ('caches' in window) {
-      caches.keys().then((keys) => keys.forEach((k) => caches.delete(k))).catch(() => {});
-    }
-  </script>
-  <script>
-    import '../scripts/motion.js';
-    import '../scripts/gsap-motion.js';
-  </script>
-</head>
-<body>
-  <!-- Marqueur d'origine supprimé : les schémas déclarent leur propre <defs><marker>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title + " — FormationVVS"} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      property="og:image"
+      content={new URL(BASE_URL + "/social-card.png", Astro.site)}
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="FormationVVS — observer, comprendre, calculer"
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: title,
+        description,
+        url: canonical.href,
+        inLanguage: lang,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "FormationVVS",
+          url: Astro.site?.href + "formation-vvs/",
+        },
+      })}
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="FormationVVS" />
+    <title>{title} — FormationVVS</title>
+
+    <link rel="manifest" href={`${BASE_URL}/manifest.webmanifest`} />
+    <link rel="apple-touch-icon" href={`${BASE_URL}/icon-192.png`} />
+    <link rel="icon" type="image/svg+xml" href={`${BASE_URL}/favicon.svg`} />
+
+    <script>
+      import "../scripts/motion.js";
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content"
+      >{lang === "es" ? "Ir al contenido" : "Aller au contenu"}</a
+    >
+    <!-- Marqueur d'origine supprimé : les schémas déclarent leur propre <defs><marker>
        à l'intérieur de chaque <svg> (Safari peint mal les markers référencés depuis
        un SVG caché séparé — cf skill mobile-safari-web §15). -->
-  <header class="app-header">
-    <div class="app-header__inner">
-      <a href={localizedPath('/', lang)} class="brand">
-        <span class="brand__mark">FV</span>
-        <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
-      </a>
-      <div class="app-header__right">
-        <LangSwitcher />
-        <a href={localizedPath('/abonnement/', lang)} class="app-header__cta">{t(lang, 'nav.rejoindre')}</a>
+    <header class="app-header">
+      <div class="app-header__inner">
+        <a href={localizedPath("/", lang)} class="brand">
+          <span class="brand__mark">FV</span>
+          <span class="brand__name"
+            >FORMATION<span class="brand__vvs">VVS</span></span
+          >
+        </a>
+        <nav
+          class="desktop-nav"
+          aria-label={lang === "es"
+            ? "Navegación principal"
+            : "Navigation principale"}
+        >
+          {
+            tabs.slice(0, 3).map((tab) => (
+              <a
+                href={tab.href}
+                aria-current={active === tab.id ? "page" : undefined}
+              >
+                {t(lang, tab.key)}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="app-header__right">
+          <a href={localizedPath("/modules/", lang)} class="app-header__cta"
+            >{lang === "es" ? "Empezar" : "Commencer"}</a
+          >
+        </div>
       </div>
+    </header>
+
+    <div id="scroll-root">
+      <main class="app-main" id="main-content" tabindex="-1">
+        <slot />
+      </main>
+
+      <footer class="app-footer">
+        <div class="app-footer__inner">
+          <div class="app-footer__col">
+            <a href={localizedPath("/", lang)} class="brand brand--footer">
+              <span class="brand__mark">FV</span>
+              <span class="brand__name"
+                >FORMATION<span class="brand__vvs">VVS</span></span
+              >
+            </a>
+            <p class="app-footer__tag">
+              {
+                lang === "es"
+                  ? "Observar, comprender, calcular. Un taller para aprender a leer los mercados."
+                  : "Observer, comprendre, calculer. Un atelier pour apprendre à lire les marchés."
+              }
+            </p>
+          </div>
+          <div class="app-footer__col">
+            <h4>{t(lang, "footer.nav")}</h4>
+            <a href={localizedPath("/marche/", lang)}>{t(lang, "nav.marche")}</a
+            >
+            <a href={localizedPath("/modules/", lang)}
+              >{t(lang, "nav.modules")}</a
+            >
+            <a href={localizedPath("/abonnement/", lang)}
+              >{t(lang, "nav.abonnement")}</a
+            >
+          </div>
+          <div class="app-footer__col app-footer__contact">
+            <h4>{t(lang, "footer.contact")}</h4>
+            <a href={localizedPath("/ressources/", lang)}
+              >{lang === "es" ? "Glosario y fuentes" : "Lexique et sources"}</a
+            >
+            <a href="mailto:neovvs75@gmail.com">neovvs75@gmail.com</a>
+          </div>
+        </div>
+        <div class="app-footer__base">
+          <span>© {new Date().getFullYear()} FormationVVS</span>
+          <span>{t(lang, "footer.rights")}</span>
+        </div>
+      </footer>
     </div>
-  </header>
 
-  <div id="scroll-root">
-    <main class="app-main">
-      <slot />
-    </main>
-
-    <footer class="app-footer">
-      <div class="app-footer__inner">
-        <div class="app-footer__col">
-          <a href={localizedPath('/', lang)} class="brand brand--footer">
-            <span class="brand__mark">FV</span>
-            <span class="brand__name">FORMATION<span class="brand__vvs">VVS</span></span>
+    <nav
+      class="tabbar"
+      aria-label={lang === "es" ? "Navegación móvil" : "Navigation mobile"}
+    >
+      {
+        tabs.map((t2) => (
+          <a
+            href={t2.href}
+            class={`tabbar__item ${active === t2.id ? "is-active" : ""}`}
+            aria-current={active === t2.id ? "page" : undefined}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d={t2.icon} />
+            </svg>
+            <span>{t(lang, t2.key)}</span>
           </a>
-          <p class="app-footer__tag">{t(lang, 'footer.tag')}</p>
-        </div>
-        <div class="app-footer__col">
-          <h4>{t(lang, 'footer.nav')}</h4>
-          <a href={localizedPath('/marche/', lang)}>{t(lang, 'nav.marche')}</a>
-          <a href={localizedPath('/modules/', lang)}>{t(lang, 'nav.modules')}</a>
-          <a href={localizedPath('/abonnement/', lang)}>{t(lang, 'nav.abonnement')}</a>
-        </div>
-        <div class="app-footer__col app-footer__contact">
-          <h4>{t(lang, 'footer.contact')}</h4>
-          <a href="mailto:contact@formationvvs.fr">contact@formationvvs.fr</a>
-          <a href="https://discord.gg/formationvvs">Discord</a>
-          <a href="https://t.me/formationvvs">Telegram</a>
-        </div>
-      </div>
-      <div class="app-footer__base">
-        <span>© {new Date().getFullYear()} FormationVVS</span>
-        <span>{t(lang, 'footer.rights')}</span>
-      </div>
-    </footer>
-  </div>
+        ))
+      }
+    </nav>
 
-  <nav class="tabbar" aria-label="Navigation principale">
-    {tabs.map((t2) => (
-      <a
-        href={t2.href}
-        class={`tabbar__item ${active === t2.id ? 'is-active' : ''}`}
-        aria-current={active === t2.id ? 'page' : undefined}
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d={t2.icon} />
-        </svg>
-        <span>{t(lang, t2.key)}</span>
-      </a>
-    ))}
-  </nav>
+    <style>
+      .skip-link {
+        position: fixed;
+        left: 12px;
+        top: -100px;
+        z-index: 100;
+        background: var(--lime);
+        color: var(--lime-ink);
+        padding: 12px 18px;
+        border-radius: 6px;
+      }
+      .skip-link:focus {
+        top: 10px;
+      }
+      .desktop-nav {
+        display: none;
+        gap: 24px;
+        font-size: 0.8rem;
+        margin-left: auto;
+      }
+      .desktop-nav a[aria-current="page"] {
+        color: var(--lime);
+      }
 
-  <style>
-    .app-header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-      background: var(--canvas);
-      border-bottom: 1.5px solid var(--ligne);
-      padding-top: var(--safe-t);
-    }
-    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .app-header { background: rgba(var(--canvas-rgb), 0.88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
-    }
-    .app-header__inner {
-      display: flex; align-items: center; justify-content: space-between;
-      max-width: 1080px; margin: 0 auto; padding: 12px 16px;
-    }
-    .app-header__right { display: flex; align-items: center; gap: 12px; }
-    .brand { display: flex; align-items: center; gap: 10px; color: var(--encre); }
-    .brand__mark {
-      font-family: var(--font-display); font-weight: 700;
-      background: var(--lime); color: var(--lime-ink);
-      width: 36px; height: 36px; display: grid; place-items: center;
-      border-radius: 7px; font-size: 0.95rem; letter-spacing: -0.05em;
-    }
-    .brand__name { font-family: var(--font-display); font-weight: 700; font-size: 0.92rem; letter-spacing: -0.02em; text-transform: uppercase; color: var(--encre); }
-    .brand__vvs { color: var(--encre); }
-    .app-header__cta {
-      font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
-      font-size: 0.8rem; padding: 8px 14px; border: 1.5px solid var(--lime-press);
-      border-radius: 7px; color: var(--lime-ink); background: var(--lime); transition: all .14s ease;
-    }
-    .app-header__cta:hover { background: var(--lime-press); transform: translateY(-1px); }
-    /* Cible tactile Apple HIG ≥ 44px (iPhone) */
-    .app-header__cta { min-height: 44px; display: inline-flex; align-items: center; }
+      .app-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: var(--canvas);
+        border-bottom: 1.5px solid var(--ligne);
+        padding-top: var(--safe-t);
+      }
+      @supports (
+        (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+      ) {
+        .app-header {
+          background: rgba(var(--canvas-rgb), 0.88);
+          -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+        }
+      }
+      .app-header__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 12px 16px;
+      }
+      .app-header__right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--encre);
+      }
+      .brand__mark {
+        font-family: var(--font-display);
+        font-weight: 700;
+        background: var(--lime);
+        color: var(--lime-ink);
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border-radius: 7px;
+        font-size: 0.95rem;
+        letter-spacing: -0.05em;
+      }
+      .brand__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 0.92rem;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: var(--encre);
+      }
+      .brand__vvs {
+        color: var(--encre);
+      }
+      .app-header__cta {
+        font-family: var(--font-display);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        padding: 8px 14px;
+        border: 1.5px solid var(--lime-press);
+        border-radius: 7px;
+        color: var(--lime-ink);
+        background: var(--lime);
+        transition: all 0.14s ease;
+      }
+      .app-header__cta:hover {
+        background: var(--lime-press);
+        transform: translateY(-1px);
+      }
+      /* Cible tactile Apple HIG ≥ 44px (iPhone) */
+      .app-header__cta {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
 
-    .app-main {
-      min-height: 70vh;
-      /* Compense le header fixed (hors flux) : le contenu commence sous lui.
+      .app-main {
+        min-height: 70vh;
+        /* Compense le header fixed (hors flux) : le contenu commence sous lui.
          Hauteur mesurée = lang min-height 44px HIG + paddings 24px + border 1.5 = 69px */
-      padding-top: calc(69px + var(--safe-t));
-    }
+        padding-top: calc(69px + var(--safe-t));
+      }
 
-    .tabbar {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-      display: flex; justify-content: space-around; align-items: stretch;
-      background: var(--carte);
-      border-top: 1.5px solid var(--ligne);
-      padding-bottom: var(--safe-b);
-    }
-    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .tabbar { background: rgba(var(--carte-rgb), 0.95); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
-    }
-    .tabbar__item {
-      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-      padding: 9px 0 7px; color: var(--encre);
-      font-family: var(--font-body); font-weight: 700; font-size: 0.62rem;
-      text-transform: uppercase; letter-spacing: 0.04em;
-      transition: color .12s ease, transform .12s ease;
-      position: relative;
-    }
-    .tabbar__item svg { width: 23px; height: 23px; }
-    .tabbar__item.is-active { color: var(--lime-text); }
-    .tabbar__item.is-active::before {
-      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 26px; height: 3px; background: var(--lime); border-radius: 0 0 3px 3px;
-    }
-    .tabbar__item:active { transform: scale(0.94); }
+      .tabbar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 60;
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+        background: var(--carte);
+        border-top: 1.5px solid var(--ligne);
+        padding-bottom: var(--safe-b);
+      }
+      @supports (
+        (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+      ) {
+        .tabbar {
+          background: rgba(var(--carte-rgb), 0.95);
+          -webkit-backdrop-filter: blur(14px);
+          backdrop-filter: blur(14px);
+        }
+      }
+      .tabbar__item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 9px 0 7px;
+        color: var(--encre);
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        transition:
+          color 0.12s ease,
+          transform 0.12s ease;
+        position: relative;
+      }
+      .tabbar__item svg {
+        width: 23px;
+        height: 23px;
+      }
+      .tabbar__item.is-active {
+        color: var(--lime-text);
+      }
+      .tabbar__item.is-active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 26px;
+        height: 3px;
+        background: var(--lime);
+        border-radius: 0 0 3px 3px;
+      }
+      .tabbar__item:active {
+        transform: scale(0.94);
+      }
 
-    .app-footer {
-      border-top: 1.5px solid var(--ligne);
-      background: var(--canvas-2);
-      padding: 40px 20px calc(76px + var(--safe-b));
-      margin-top: 40px;
-    }
-    .app-footer__inner {
-      max-width: 1080px; margin: 0 auto;
-      display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 28px;
-    }
-    .brand--footer { margin-bottom: 14px; }
-    .app-footer__tag { color: var(--encre-2); font-size: 0.9rem; max-width: 34ch; line-height: 1.5; }
-    .app-footer__col h4 {
-      font-family: var(--font-body); font-weight: 700; font-size: 0.7rem;
-      text-transform: uppercase; letter-spacing: 0.08em; color: var(--encre-2);
-      margin: 0 0 12px;
-    }
-    .app-footer__col a {
-      display: block; color: var(--encre); font-size: 0.9rem; font-weight: 500;
-      min-height: 44px; display: flex; align-items: center;
-      transition: color .12s ease;
-    }
-    .app-footer__col a:hover { color: var(--lime-text); }
-    .app-footer__base {
-      max-width: 1080px; margin: 32px auto 0; padding-top: 20px;
-      border-top: 1px solid var(--ligne);
-      display: flex; justify-content: space-between; gap: 12px;
-      font-size: 0.78rem; color: var(--encre-2);
-    }
-    @media (max-width: 760px) {
-      .app-footer__inner { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
-      .app-footer__col:first-child { grid-column: 1 / -1; }
-      .app-footer__base { flex-direction: column; gap: 4px; text-align: left; }
-    }
-    /* ⚠️ APRÈS toutes les règles de base du header (sinon l'ordre source les écrase — piège mobile-safari-web §14) */
-    @media (max-width: 480px) {
-      /* Header compact sur petit iPhone (375px) : on compacte la LARGEUR (padding/gap/font),
+      .app-footer {
+        border-top: 1.5px solid var(--ligne);
+        background: var(--canvas-2);
+        padding: 40px 20px calc(76px + var(--safe-b));
+        margin-top: 40px;
+      }
+      .app-footer__inner {
+        max-width: 1080px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.6fr 1fr 1fr;
+        gap: 28px;
+      }
+      .brand--footer {
+        margin-bottom: 14px;
+      }
+      .app-footer__tag {
+        color: var(--encre-2);
+        font-size: 0.9rem;
+        max-width: 34ch;
+        line-height: 1.5;
+      }
+      .app-footer__col h4 {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--encre-2);
+        margin: 0 0 12px;
+      }
+      .app-footer__col a {
+        display: block;
+        color: var(--encre);
+        font-size: 0.9rem;
+        font-weight: 500;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        transition: color 0.12s ease;
+      }
+      .app-footer__col a:hover {
+        color: var(--lime-text);
+      }
+      .app-footer__base {
+        max-width: 1080px;
+        margin: 32px auto 0;
+        padding-top: 20px;
+        border-top: 1px solid var(--ligne);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.78rem;
+        color: var(--encre-2);
+      }
+      @media (max-width: 760px) {
+        .app-footer__inner {
+          grid-template-columns: 1fr 1fr;
+          gap: 24px 16px;
+        }
+        .app-footer__col:first-child {
+          grid-column: 1 / -1;
+        }
+        .app-footer__base {
+          flex-direction: column;
+          gap: 4px;
+          text-align: left;
+        }
+      }
+      /* ⚠️ APRÈS toutes les règles de base du header (sinon l'ordre source les écrase — piège mobile-safari-web §14) */
+      @media (max-width: 480px) {
+        /* Header compact sur petit iPhone (375px) : on compacte la LARGEUR (padding/gap/font),
          jamais la hauteur tactile (reste 44px HIG). */
-      .app-header__inner { gap: 6px; padding: 8px 10px; }
-      .app-main { padding-top: calc(61px + var(--safe-t)); } /* header compact réel = lang 44 + paddings 16 + border = 61px */
-      .brand { gap: 6px; }
-      .brand__mark { width: 30px; height: 30px; font-size: 0.8rem; border-radius: 6px; flex: 0 0 auto; }
-      .brand__name { font-size: 0.62rem; letter-spacing: -0.03em; }
-      .app-header__right { gap: 5px; }
-      .app-header__cta { padding: 0 9px; font-size: 0.65rem; white-space: nowrap; }
-    }
-  </style>
-</body>
+        .app-header__inner {
+          gap: 6px;
+          padding: 8px 10px;
+        }
+        .app-main {
+          padding-top: calc(61px + var(--safe-t));
+        } /* header compact réel = lang 44 + paddings 16 + border = 61px */
+        .brand {
+          gap: 6px;
+        }
+        .brand__mark {
+          width: 30px;
+          height: 30px;
+          font-size: 0.8rem;
+          border-radius: 6px;
+          flex: 0 0 auto;
+        }
+        .brand__name {
+          font-size: 0.72rem;
+          letter-spacing: -0.03em;
+        }
+        .app-header__right {
+          gap: 5px;
+        }
+        .app-header__cta {
+          padding: 0 9px;
+          font-size: 0.65rem;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </body>
 </html>

@@ -4,6 +4,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "check": "astro check",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "verify": "node scripts/verify-build.mjs",
+    "illustration": "node scripts/build-instrument.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -12,11 +16,12 @@
   "dependencies": {
     "@fontsource/newsreader": "^5.3.0",
     "@fontsource/space-grotesk": "^5.3.0",
-    "astro": "^7.2.0",
-    "gsap": "^3.15.0"
+    "astro": "^7.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.7.0"
   }
 }

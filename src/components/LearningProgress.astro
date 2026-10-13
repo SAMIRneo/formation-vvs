@@ -1,0 +1,68 @@
+---
+import { localizedPath } from "../i18n/ui";
+const { lang } = Astro.props;
+const es = lang === "es";
+---
+
+<aside
+  class="learning-progress"
+  data-progress
+  data-lang={lang}
+  data-prefix={localizedPath("/modules/", lang)}
+>
+  <span class="eyebrow">{es ? "TU RECORRIDO" : "TON PARCOURS"}</span><strong
+    data-count>0 / 16</strong
+  ><span>{es ? "conceptos comprobados" : "notions vérifiées"}</span><progress
+    max="16"
+    value="0"
+    aria-label={es ? "Conceptos comprobados" : "Notions vérifiées"}
+  ></progress><small
+    >{
+      es
+        ? "Guardado en este navegador · sin cuenta"
+        : "Sauvegardé dans ce navigateur · sans compte"
+    }</small
+  ><a data-resume hidden href={localizedPath("/modules/", lang)}
+    >{es ? "Continuar" : "Reprendre"} →</a>
+</aside>
+<script>
+  import { readProgress } from "../lib/progress";
+  const update = () =>
+    document
+      .querySelectorAll<HTMLElement>("[data-progress]")
+      .forEach((root) => {
+        const completed = readProgress(),
+          n = completed.length;
+        root.querySelector("[data-count]")!.textContent = n + " / 16";
+        root.querySelector("progress")!.value = n;
+        const resume = root.querySelector<HTMLAnchorElement>("[data-resume]")!;
+        resume.hidden = n === 0;
+        const slugs = [
+          "lire-le-prix",
+          "analyse-technique",
+          "gestion-du-risque",
+          "setups-en-live",
+        ];
+        const ids = slugs.flatMap((_, m) =>
+          [0, 1, 2, 3].map((c) => `0${m + 1}-${c}`),
+        );
+        const next = ids.find((id) => !completed.includes(id));
+        resume.href = next
+          ? root.dataset.prefix +
+            slugs[Number(next.slice(0, 2)) - 1] +
+            "/#chap-" +
+            (Number(next.slice(-1)) + 1)
+          : root.dataset.prefix!;
+        resume.textContent =
+          (next
+            ? root.dataset.lang === "es"
+              ? "Continuar"
+              : "Reprendre"
+            : root.dataset.lang === "es"
+              ? "Revisar el recorrido"
+              : "Revoir le parcours") + " →";
+      });
+  update();
+  window.addEventListener("vvs-progress", update);
+  window.addEventListener("storage", update);
+</script>
