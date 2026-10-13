@@ -1,0 +1,145 @@
+---
+const { lang } = Astro.props;
+const es = lang === "es";
+const uid = Math.random().toString(36).slice(2, 8);
+---
+
+<section class="candle-lab lab-panel" data-candle-lab data-lang={lang}>
+  <div class="lab-heading">
+    <span class="eyebrow">LAB / 01 · OHLC</span><h2>
+      {es ? "Una vela. Cuatro precios." : "Une bougie. Quatre prix."}
+    </h2><p>
+      {
+        es
+          ? "Mueve el cierre. Observa lo que cambia."
+          : "Déplace la clôture. Observe ce qui change."
+      }
+    </p>
+  </div>
+  <div class="candle-stage">
+    <svg
+      viewBox="0 0 560 280"
+      role="img"
+      aria-label={es
+        ? "Vela ilustrativa: apertura 100, mínimo 90, máximo 110; cierre ajustable"
+        : "Bougie illustrative : ouverture 100, minimum 90, maximum 110 ; clôture ajustable"}
+    >
+      <defs
+        ><pattern
+          id={`candle-grid-${uid}`}
+          width="35"
+          height="25"
+          patternUnits="userSpaceOnUse"
+          ><path
+            d="M35 0H0V25"
+            fill="none"
+            stroke="currentColor"
+            stroke-opacity=".1"></path></pattern
+        ></defs
+      >
+      <rect
+        x="20"
+        y="20"
+        width="520"
+        height="240"
+        fill={`url(#candle-grid-${uid})`}></rect>
+      <g fill="currentColor" font-size="12"
+        ><text x="26" y="40">110</text><text x="26" y="145">100</text><text
+          x="26"
+          y="253">90</text
+        ><text x="332" y="38">H / 110</text><text x="332" y="250">L / 90</text
+        ><text x="332" y="141">O / 100</text></g
+      >
+      <path d="M270 35V245" stroke="var(--bleu)" stroke-width="3"></path><path
+        d="M286 35H322M286 245H322M286 140H322"
+        stroke="currentColor"
+        stroke-opacity=".5"></path>
+      <rect
+        data-candle-body
+        x="245"
+        y="98"
+        width="50"
+        height="42"
+        fill="var(--emeraude)"
+        rx="2"></rect>
+      <path
+        data-close-line
+        d="M300 98H425"
+        stroke="var(--lime)"
+        stroke-dasharray="4 4"></path><text
+        data-close-label
+        x="435"
+        y="102"
+        fill="var(--lime)"
+        font-size="13">C / 104</text
+      >
+    </svg>
+  </div>
+  <div class="candle-controls">
+    <label
+      >{es ? "Cierre" : "Clôture"}<input
+        type="range"
+        min="90"
+        max="110"
+        value="104"
+        step="1"
+        aria-label={es ? "Precio de cierre" : "Prix de clôture"}
+      /></label
+    ><output aria-live="polite">104</output>
+  </div>
+  <p data-candle-description>
+    {
+      es
+        ? "Cuerpo alcista: cierre superior a apertura."
+        : "Corps haussier : clôture supérieure à l’ouverture."
+    }
+  </p>
+  <p class="lab-note">
+    {
+      es
+        ? "Ejemplo ficticio. La vela describe el periodo; no predice el siguiente."
+        : "Exemple fictif. La bougie décrit la période ; elle ne prédit pas la suivante."
+    }
+  </p>
+</section>
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-candle-lab]")
+    .forEach((root) => {
+      const input = root.querySelector("input")!;
+      const es = root.dataset.lang === "es";
+      input.addEventListener("input", () => {
+        const close = Number(input.value),
+          y = 245 - (close - 90) * 10.5;
+        const body = root.querySelector("[data-candle-body]")!;
+        body.setAttribute("y", String(Math.min(140, y)));
+        body.setAttribute("height", String(Math.max(2, Math.abs(140 - y))));
+        body.setAttribute(
+          "fill",
+          close > 100
+            ? "var(--emeraude)"
+            : close < 100
+              ? "var(--rouge)"
+              : "var(--bleu)",
+        );
+        root
+          .querySelector("[data-close-line]")!
+          .setAttribute("d", `M300 ${y}H425`);
+        const label = root.querySelector("[data-close-label]")!;
+        label.setAttribute("y", String(y + 4));
+        label.textContent = "C / " + close;
+        root.querySelector("output")!.textContent = String(close);
+        root.querySelector("[data-candle-description]")!.textContent = es
+          ? close > 100
+            ? "Cuerpo alcista: cierre superior a apertura."
+            : close < 100
+              ? "Cuerpo bajista: cierre inferior a apertura."
+              : "Apertura y cierre iguales: cuerpo casi nulo."
+          : close > 100
+            ? "Corps haussier : clôture supérieure à l’ouverture."
+            : close < 100
+              ? "Corps baissier : clôture inférieure à l’ouverture."
+              : "Ouverture et clôture égales : corps presque nul.";
+      });
+    });
+</script>

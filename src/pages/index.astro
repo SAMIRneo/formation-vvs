@@ -1,183 +1,275 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import MarketBoard from '../components/MarketBoard.astro';
-import ChapterDiagram from '../components/ChapterDiagram.astro';
-import { getContent } from '../data/content';
-import { getLang, t, localizedPath } from '../i18n/ui';
-const lang = getLang(Astro.url);
-const { modules } = getContent(lang);
-// miniature de schéma par module (variant ChapterDiagram)
-const diagramVariant = ['candles', 'trend', 'positionsize', 'annotated'];
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ChapterDiagram from "../components/ChapterDiagram.astro";
+import CandleLab from "../components/CandleLab.astro";
+import RiskInstrument from "../components/RiskInstrument.astro";
+import LearningProgress from "../components/LearningProgress.astro";
+import { getContent } from "../data/content";
+import { getLang, localizedPath } from "../i18n/ui";
+const lang = getLang(Astro.url),
+  es = lang === "es";
+const { modules, tools } = getContent(lang);
+const steps = es
+  ? [
+      ["01", "Observar", "Describe los hechos antes de buscar una señal."],
+      ["02", "Comprender", "Relaciona estructura, horizonte y contexto."],
+      ["03", "Manipular", "Cambia los valores. Comprueba sus consecuencias."],
+      ["04", "Verificar", "Responde, corrige y guarda lo aprendido."],
+    ]
+  : [
+      ["01", "Observer", "Décris les faits avant de chercher un signal."],
+      ["02", "Comprendre", "Relie structure, horizon et contexte."],
+      ["03", "Manipuler", "Change les valeurs. Vérifie leurs conséquences."],
+      ["04", "Vérifier", "Réponds, corrige et garde une trace de tes acquis."],
+    ];
 ---
-<BaseLayout title={t(lang, 'home.heroTitle').split('\n')[0]} active="accueil">
-  <!-- HERO ÉDITORIAL -->
-  <section class="hero wrap">
-    <div class="hero__main" data-reveal>
-      <span class="eyebrow">{t(lang, 'home.eyebrow')}</span>
-      <h1 class="hero__title anim-hero" set:html={t(lang, 'home.heroTitle').replace(/\n/g, '<br/>')} />
-      <span class="hero__rule anim-cta" aria-hidden="true" />
-      <p class="hero__lead">{t(lang, 'home.heroLead')}</p>
-      <div class="hero__cta">
-        <a href={localizedPath('/modules/', lang)} class="btn anim-cta">{t(lang, 'home.ctaModules')}</a>
-        <a href={localizedPath('/abonnement/', lang)} class="btn btn--ghost anim-cta">{t(lang, 'home.ctaAbo')}</a>
+
+<BaseLayout
+  title={es
+    ? "Entender el trading y calcular el riesgo"
+    : "Comprendre le trading et calculer le risque"}
+  active="accueil"
+>
+  <section class="lab-hero wrap">
+    <div>
+      <span class="eyebrow"
+        >{es ? "EL TALLER DE LOS MERCADOS" : "L’ATELIER DES MARCHÉS"} / VVS</span
+      ><h1>
+        {
+          es ? (
+            <>
+              El mercado
+              <br />
+              se lee.
+              <>
+                <br />
+                <em>
+                  El riesgo
+                  <br />
+                  se calcula.
+                </em>
+              </>
+            </>
+          ) : (
+            <>
+              Le marché
+              <br />
+              se lit.
+              <>
+                <br />
+                <em>
+                  Le risque
+                  <br />
+                  se calcule.
+                </em>
+              </>
+            </>
+          )
+        }
+      </h1><p class="lab-hero__lead">
+        {
+          es
+            ? "Menos intuiciones vagas. Más observación, hipótesis y números. Un recorrido práctico para entender el trading antes de exponerse."
+            : "Moins d’intuitions floues. Plus d’observations, d’hypothèses et de chiffres. Un parcours concret pour comprendre le trading avant de s’exposer."
+        }
+      </p><div class="lab-actions">
+        <a class="btn" href={localizedPath("/modules/lire-le-prix/", lang)}
+          >{es ? "Empezar el recorrido" : "Commencer le parcours"} ↗</a
+        ><a class="btn btn--ghost" href="#laboratoire"
+          >{es ? "Probar el laboratorio" : "Tester le laboratoire"}</a>
+      </div><div class="lab-hero__index">
+        <span><strong>04</strong>{es ? "módulos" : "modules"}</span><span
+          ><strong>16</strong>{
+            es ? "conceptos + ejercicios" : "notions + exercices"
+          }</span
+        ><span
+          ><strong>FR</strong>{es ? "a tu ritmo" : "à ton rythme"}</span>
       </div>
-      <div class="hero__stats">
-        <div><span class="num">4</span><span class="lab">modules</span></div>
-        <div><span class="num">FR / ES</span><span class="lab">langues</span></div>
-        <div><span class="num">100%</span><span class="lab">sur iPhone</span></div>
-      </div>
+    </div>
+    <div class="lab-hero__art"><RiskInstrument lang={lang} /></div>
+  </section>
+  <section class="section wrap" id="parcours">
+    <LearningProgress lang={lang} /><div class="curriculum-heading">
+      <div>
+        <span class="eyebrow"
+          >{es ? "UN ORDEN PARA AVANZAR" : "UN ORDRE POUR AVANCER"}</span
+        ><h2>
+          {es ? "Del gráfico al escenario." : "Du graphique au scénario."}
+        </h2>
+      </div><p>
+        {
+          es
+            ? "Cuatro etapas. Ejemplos claros. Un ejercicio para cada concepto."
+            : "Quatre étapes. Des exemples clairs. Un exercice pour chaque notion."
+        }
+      </p>
+    </div><div class="curriculum-grid">
+      {
+        modules.map((m, i) => (
+          <a
+            class="curriculum-card"
+            href={localizedPath(`/modules/${m.slug}/`, lang)}
+          >
+            <>
+              <div class="curriculum-card__top">
+                <>
+                  <strong>{m.n}</strong>
+                  <span>{m.tag.toUpperCase()}</span>
+                </>
+              </div>
+              <h3>{m.title}</h3>
+              <p>{m.desc}</p>
+              <ChapterDiagram
+                variant={["candles", "trend", "positionsize", "plan"][i]}
+                lang={lang}
+                decorative
+              />
+              <span class="curriculum-card__go">
+                {es ? "4 conceptos · 4 preguntas" : "4 notions · 4 questions"}{" "}
+                <span aria-hidden="true">↗</span>
+              </span>
+            </>
+          </a>
+        ))
+      }
     </div>
   </section>
-
-  <!-- MANIFESTE -->
-  <section class="section section--alt manifesto">
-    <div class="wrap">
-      <span class="eyebrow" data-reveal>{t(lang, 'home.manifesteEyebrow')}</span>
-      <p class="manifesto__text" data-reveal data-reveal-delay="60" set:html={t(lang, 'home.manifeste').replace(/\n/g, '<br/>')} />
-    </div>
-  </section>
-
-  <!-- MODULES (bento éditorial) -->
-  <section class="section wrap">
-    <div class="sec-head" data-reveal>
-      <h2 class="anim-title">{t(lang, 'home.cursusTitle')}</h2>
-      <p class="muted">{t(lang, 'home.cursusLead')}</p>
-    </div>
-    <div class="modbento">
-      {modules.map((m, i) => (
-        <a href={localizedPath(`/modules/${m.slug}/`, lang)} class="modbento__card" data-reveal data-reveal-delay={(i % 2) * 80} data-parallax={i % 2 ? "0.09" : "-0.09"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-text:${['var(--lime-text)','var(--bleu-text)','var(--jaune-text)','var(--emeraude-text)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
-          <div class="modbento__top">
-            <span class="modbento__n">{m.n}</span>
-            <span class="badge">{m.tag}</span>
-          </div>
-          <h3 class="modbento__t">{m.title}</h3>
-          <p class="modbento__d">{m.desc}</p>
-          <div class="modbento__diagram">
-            <ChapterDiagram variant={diagramVariant[i]} lang={lang} />
-          </div>
-          <span class="modbento__go">{t(lang, 'home.ctaModules')} <span class="modbento__arrow">→</span></span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <!-- MARCHÉ (section dédiée) -->
   <section class="section section--alt">
     <div class="wrap">
-      <div class="sec-head" data-reveal>
-        <h2 class="anim-title">{t(lang, 'home.marcheTitle')}</h2>
-        <p class="muted">{t(lang, 'home.marcheLead')}</p>
+      <div class="method-strip">
+        {
+          steps.map((s) => (
+            <div>
+              <>
+                <span>{s[0]} /</span>
+                <h3>{s[1]}</h3>
+                <p>{s[2]}</p>
+              </>
+            </div>
+          ))
+        }
       </div>
-      <div class="marche-grid" data-reveal>
-        <MarketBoard />
-      </div>
-      <a href={localizedPath('/marche/', lang)} class="board-card__link marche-link">{t(lang, 'home.marcheLink')} →</a>
     </div>
   </section>
-
-  <!-- CTA FINAL -->
-  <section class="section">
-    <div class="wrap cta-final" data-reveal>
-      <h2 class="cta-final__title anim-title">{t(lang, 'home.ctaPanelTitle')}</h2>
-      <p class="cta-final__lead muted">{t(lang, 'home.ctaPanelLead')}</p>
-      <a href={localizedPath('/abonnement/', lang)} class="btn anim-cta">{t(lang, 'home.ctaPanelBtn')}</a>
+  <section class="section wrap" id="laboratoire">
+    <div class="curriculum-heading">
+      <div>
+        <span class="eyebrow"
+          >{es ? "APRENDER HACIENDO" : "APPRENDRE EN FAISANT"}</span
+        ><h2>
+          {es ? "Toca. Observa. Comprende." : "Touche. Observe. Comprends."}
+        </h2>
+      </div><p>
+        {
+          es
+            ? "Ejemplos ficticios. Valores que puedes cambiar. Ninguna orden enviada."
+            : "Des exemples fictifs. Des valeurs à faire varier. Aucun ordre envoyé."
+        }
+      </p>
+    </div><div class="lab-duo">
+      <CandleLab lang={lang} /><div class="lab-panel">
+        <span class="eyebrow">LAB / 02 · POSITION</span><h2
+          style="margin:14px 0 22px"
+        >
+          {es ? "¿Cuántas unidades?" : "Combien d’unités ?"}
+        </h2><ChapterDiagram variant="positionsize" lang={lang} /><p
+          style="margin:24px 0;color:var(--encre-2)"
+        >
+          {
+            es
+              ? "Un presupuesto de 50 € y una distancia entrada-stop de 5 € dan 10 unidades, antes de costes. El capital disponible también limita la posición."
+              : "Un budget de 50 € et une distance entrée-stop de 5 € donnent 10 unités, avant frais. Le capital disponible limite aussi la position."
+          }
+        </p><a class="btn" href={localizedPath("/outils/calculateur/", lang)}
+          >{es ? "Abrir el calculador" : "Ouvrir le calculateur"} ↗</a>
+      </div>
+    </div>
+  </section>
+  <section class="lab-editorial">
+    <div class="wrap">
+      <span class="eyebrow"
+        >{es ? "PRIMERO, ENTENDER" : "D’ABORD, COMPRENDRE"}</span
+      ><h2>
+        {
+          es
+            ? "Una buena pregunta vale más que una falsa certeza."
+            : "Une bonne question vaut mieux qu’une fausse certitude."
+        }
+      </h2><p>
+        {
+          es
+            ? "Una figura no promete una ganancia. Un stop no garantiza su precio. Un ratio atractivo no demuestra una ventaja. Aquí aprendemos a describir las condiciones, calcular la exposición y reconocer los límites de un modelo."
+            : "Une figure ne promet pas un gain. Un stop ne garantit pas son prix. Un ratio séduisant ne prouve pas un avantage. Ici, on apprend à décrire des conditions, calculer une exposition et reconnaître les limites d’un modèle."
+        }
+      </p><div class="resource-links">
+        <a
+          href="https://www.amf-france.org/fr/espace-epargnants/comprendre-les-produits-financiers/produits-complexes/cfd"
+          target="_blank"
+          rel="noopener"
+          >AMF · {es ? "Riesgos de los CFD" : "Risques des CFD"} ↗</a
+        ><a
+          href="https://www.investor.gov/introduction-investing/investing-basics/how-stock-markets-work/types-orders"
+          target="_blank"
+          rel="noopener"
+          >Investor.gov · {es ? "Tipos de órdenes" : "Types d’ordres"} ↗</a>
+      </div>
+    </div>
+  </section>
+  <section class="section wrap">
+    <div class="curriculum-heading">
+      <div>
+        <span class="eyebrow">{es ? "TU BANCO DE TRABAJO" : "TON ÉTABLI"}</span
+        ><h2>
+          {es ? "Prepara. Documenta. Revisa." : "Prépare. Documente. Revois."}
+        </h2>
+      </div><a class="btn btn--ghost" href={localizedPath("/marche/", lang)}
+        >{es ? "Explorar las herramientas" : "Explorer les outils"} ↗</a>
+    </div><div class="tool-list">
+      {
+        tools.map((tool) => (
+          <a href={localizedPath(`/outils/${tool.slug}/`, lang)}>
+            <>
+              <h3>{tool.t} ↗</h3>
+              <p>{tool.d}</p>
+            </>
+          </a>
+        ))
+      }
+    </div><div class="faq">
+      <details>
+        <summary
+          >{es ? "¿Necesito una cuenta?" : "Faut-il créer un compte ?"}</summary
+        ><p>
+          {
+            es
+              ? "No. Los cursos y herramientas publicados se pueden consultar libremente. El progreso y las notas se guardan en este navegador y no se sincronizan."
+              : "Non. Les cours et outils publiés sont librement consultables. La progression et les notes restent dans ce navigateur et ne sont pas synchronisées."
+          }
+        </p>
+      </details><details>
+        <summary
+          >{
+            es
+              ? "¿Son señales de trading?"
+              : "Est-ce un service de signaux de trading ?"
+          }</summary
+        ><p>
+          {
+            es
+              ? "No. Los esquemas y ejercicios son ilustrativos. Los precios provienen de proveedores externos y pueden estar retrasados o no disponibles. Ninguna herramienta ejecuta operaciones."
+              : "Non. Les schémas et exercices sont illustratifs. Les prix proviennent de fournisseurs externes et peuvent être retardés ou indisponibles. Aucun outil n’exécute d’opération."
+          }
+        </p>
+      </details><details>
+        <summary>{es ? "¿Por dónde empezar?" : "Par où commencer ?"}</summary><p
+        >
+          {
+            es
+              ? "Empieza por Leer el precio, responde a las cuatro preguntas y continúa con estructura y riesgo. Puedes regresar a cualquier concepto."
+              : "Commence par Lire le prix, réponds aux quatre questions puis poursuis avec la structure et le risque. Tu peux revenir sur chaque notion à tout moment."
+          }
+        </p>
+      </details>
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .hero {
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-    padding: 96px 22px 72px; min-height: 62vh; justify-content: center;
-  }
-  /* Trait accent sous le H1 — renforce la hiérarchie visuelle (Safari-safe : visible par défaut) */
-  .hero__rule { display: block; width: 64px; height: 4px; border-radius: 999px;
-    background: var(--lime); margin: 4px auto 0; box-shadow: 0 0 18px rgba(var(--lime-rgb), 0.55);
-    transform: scaleX(1); transform-origin: center; }
-  @media (prefers-reduced-motion: no-preference) {
-    .gsap-ready .hero__rule { transform: scaleX(0); transition: transform .7s cubic-bezier(.2,.8,.2,1) .35s; }
-    .gsap-ready .hero.in .hero__rule { transform: scaleX(1); }
-  }
-  .hero__main { display: flex; flex-direction: column; align-items: center; gap: 22px; max-width: 880px; }
-  .hero__title {
-    font-family: var(--font-display); font-weight: 500; line-height: 1.02; letter-spacing: -0.025em;
-    font-size: clamp(2.9rem, 10vw, 6.4rem);
-    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
-  }
-  .hero__lead { color: var(--encre); font-size: 1.18rem; max-width: 52ch; line-height: 1.6; margin-top: 4px; }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-  .hero__stats { display: flex; gap: 40px; margin-top: 16px; padding-top: 24px; border-top: 1px solid var(--ligne); }
-  .hero__stats > div { display: flex; flex-direction: column; }
-  .hero__stats .num { font-family: var(--font-display); font-weight: 600; font-size: 1.8rem; line-height: 1; }
-  .hero__stats .lab { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--encre-2); margin-top: 6px; }
-
-  /* manifeste */
-  .manifesto .eyebrow { margin-bottom: 22px; }
-  .manifesto__text {
-    font-family: var(--font-display); font-weight: 400;
-    font-size: clamp(1.5rem, 3.6vw, 2.5rem); line-height: 1.25; letter-spacing: -0.01em;
-    max-width: 22ch;
-  }
-  .manifesto__text :global(br) { margin-bottom: 0.2em; }
-
-  /* sec-head */
-  .sec-head { margin-bottom: 30px; }
-  .sec-head h2 { position: relative; padding-top: 18px; }
-  .sec-head h2::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 48px; height: 4px;
-    border-radius: 999px; background: var(--lime); box-shadow: 0 0 16px rgba(var(--lime-rgb), 0.5);
-  }
-  .sec-head .muted { margin-top: 8px; max-width: 60ch; }
-
-  /* bento modules */
-  .modbento {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-    overflow: visible; padding: 28px 0;
-  }
-  .modbento__card {
-    position: relative; overflow: hidden; display: flex; flex-direction: column;
-    background: var(--carte); border: 1.5px solid var(--ligne); border-radius: var(--radius);
-    padding: 24px; box-shadow: 0 14px 30px -16px rgba(20,19,15,0.25);
-    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-    will-change: transform;
-  }
-  .modbento__card::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(120% 80% at 100% 0%, rgba(var(--accent-rgb), 0.12), transparent 60%);
-    opacity: 0; transition: opacity .25s ease;
-  }
-  .modbento__card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 30px 56px -22px color-mix(in srgb, var(--accent) 42%, rgba(20,19,15,0.3)); }
-  .modbento__card:hover::before { opacity: 1; }
-  .modbento__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-  .modbento__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; color: var(--accent-text); letter-spacing: -0.04em; line-height: 1; }
-  .modbento__t { font-size: clamp(1.4rem, 4vw, 1.9rem); margin-bottom: 8px; letter-spacing: -0.01em; }
-  .modbento__d { color: var(--encre-2); font-size: 0.92rem; line-height: 1.5; max-width: 40ch; margin-bottom: 18px; }
-  .modbento__diagram {
-    margin-top: auto; border: 1.5px solid var(--ligne); border-radius: var(--radius-sm);
-    background: var(--canvas); padding: 12px; overflow: hidden;
-  }
-  .modbento__go {
-    margin-top: 16px; font-family: var(--font-mono); font-weight: 700; font-size: 0.78rem;
-    text-transform: uppercase; letter-spacing: 0.02em; color: var(--encre); display: inline-flex; align-items: center; gap: 8px;
-  }
-  .modbento__card:hover .modbento__go { color: var(--accent-text); }
-  .modbento__arrow { transition: transform .2s ease; }
-  .modbento__card:hover .modbento__arrow { transform: translateX(5px); }
-
-  /* marché section */
-  .marche-grid { max-width: 760px; }
-  .marche-link { display: inline-block; margin-top: 18px; }
-
-  /* cta final */
-  .cta-final { text-align: center; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-  .cta-final__lead { max-width: 48ch; }
-  .cta-final .btn { margin-top: 8px; }
-
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 56px; }
-    .modbento { grid-template-columns: 1fr; gap: 34px; padding: 24px 0; }
-  }
-  @media (max-width: 640px) {
-    .hero__stats { gap: 22px; }
-  }
-</style>

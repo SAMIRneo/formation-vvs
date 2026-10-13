@@ -1,0 +1,190 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLang, localizedPath } from "../i18n/ui";
+const lang = getLang(Astro.url),
+  es = lang === "es";
+const terms = es
+  ? [
+      ["OHLC", "Apertura, máximo, mínimo y cierre de un periodo."],
+      [
+        "Volatilidad",
+        "Amplitud y variabilidad de los movimientos; no indica su dirección.",
+      ],
+      [
+        "Liquidez",
+        "Posibilidad de negociar una cantidad sin mover demasiado el precio. Depende del mercado y del momento.",
+      ],
+      [
+        "Spread",
+        "Diferencia entre el mejor precio comprador y vendedor. Es parte del coste de negociar.",
+      ],
+      [
+        "Deslizamiento",
+        "Diferencia entre el precio esperado y el precio de ejecución.",
+      ],
+      [
+        "R",
+        "Unidad de riesgo definida al preparar un escenario. No es una promesa de pérdida máxima.",
+      ],
+      [
+        "Drawdown",
+        "Caída desde un máximo de capital hasta un mínimo posterior.",
+      ],
+      [
+        "Esperanza",
+        "Resultado medio teórico, basado en frecuencias y ganancias o pérdidas medias. La muestra y los costes importan.",
+      ],
+      [
+        "Diversificación",
+        "Distribuir la exposición entre inversiones. Puede reducir concentración, pero no elimina todas las pérdidas.",
+      ],
+    ]
+  : [
+      ["OHLC", "Ouverture, plus haut, plus bas et clôture d’une période."],
+      [
+        "Volatilité",
+        "Amplitude et variabilité des mouvements ; elle n’indique pas leur direction.",
+      ],
+      [
+        "Liquidité",
+        "Possibilité d’échanger une quantité sans trop déplacer le prix. Elle dépend du marché et du moment.",
+      ],
+      [
+        "Spread",
+        "Écart entre le meilleur prix acheteur et vendeur. Il fait partie du coût d’une transaction.",
+      ],
+      [
+        "Glissement",
+        "Différence entre le prix attendu et le prix d’exécution.",
+      ],
+      [
+        "R",
+        "Unité de risque définie lors de la préparation d’un scénario. Ce n’est pas une promesse de perte maximale.",
+      ],
+      [
+        "Drawdown",
+        "Recul depuis un sommet de capital jusqu’à un creux ultérieur.",
+      ],
+      [
+        "Espérance",
+        "Résultat moyen théorique fondé sur les fréquences et les gains ou pertes moyens. L’échantillon et les frais comptent.",
+      ],
+      [
+        "Diversification",
+        "Répartir l’exposition entre des investissements. Elle peut réduire la concentration, sans supprimer toutes les pertes.",
+      ],
+    ];
+const sources = [
+  [
+    "AMF",
+    "CFD",
+    "https://www.amf-france.org/fr/espace-epargnants/comprendre-les-produits-financiers/produits-complexes/cfd",
+    es
+      ? "Riesgos y funcionamiento de un producto apalancado."
+      : "Risques et fonctionnement d’un produit à effet de levier.",
+  ],
+  [
+    "Investor.gov",
+    "Types of Orders",
+    "https://www.investor.gov/introduction-investing/investing-basics/how-stock-markets-work/types-orders",
+    es
+      ? "Órdenes a mercado, limitadas y stop."
+      : "Ordres au marché, à cours limité et stops.",
+  ],
+  [
+    "Investor.gov",
+    "Asset Allocation",
+    "https://www.investor.gov/introduction-investing/getting-started/asset-allocation",
+    es
+      ? "Horizonte, tolerancia al riesgo y diversificación."
+      : "Horizon, tolérance au risque et diversification.",
+  ],
+  [
+    "CME Group",
+    "Technical Analysis",
+    "https://www.cmegroup.com/education/courses/trading-and-analysis/technical-analysis",
+    es
+      ? "Recursos educativos para describir gráficos."
+      : "Ressources pédagogiques pour décrire les graphiques.",
+  ],
+];
+---
+
+<BaseLayout
+  title={es
+    ? "Glosario y fuentes educativas"
+    : "Lexique et sources pédagogiques"}
+  active="modules"
+  ><section class="section wrap">
+    <span class="eyebrow"
+      >{es ? "LAS PALABRAS Y SUS LÍMITES" : "LES MOTS ET LEURS LIMITES"}</span
+    ><h1 style="margin:22px 0">
+      {es ? "Entender lo que se dice." : "Comprendre ce qu’on dit."}
+    </h1><p class="muted">
+      {
+        es
+          ? "Un glosario para seguir el recorrido y fuentes primarias para profundizar. Las fuentes no patrocinan ni acreditan FormationVVS."
+          : "Un lexique pour suivre le parcours et des sources primaires pour approfondir. Ces sources ne sponsorisent ni n’accréditent FormationVVS."
+      }
+    </p><dl class="glossary">
+      {
+        terms.map(([term, definition]) => (
+          <div>
+            <>
+              <dt>{term}</dt>
+              <dd>{definition}</dd>
+            </>
+          </div>
+        ))
+      }
+    </dl><h2>{es ? "Volver a la fuente." : "Revenir à la source."}</h2><div
+      class="tool-list"
+      style="margin:25px 0"
+    >
+      {
+        sources.map(([publisher, title, url, description]) => (
+          <a href={url} target="_blank" rel="noopener">
+            <>
+              <span class="eyebrow">{publisher}</span>
+              <h3>{title} ↗</h3>
+              <p>{description}</p>
+            </>
+          </a>
+        ))
+      }
+    </div><p class="info-note">
+      {
+        es
+          ? "Los ejemplos de los cursos son ficticios. Los resultados de un gráfico elegido después del movimiento no validan una estrategia. Ningún contenido sustituye una evaluación de tu situación personal."
+          : "Les exemples des cours sont fictifs. Le résultat d’un graphique choisi après le mouvement ne valide pas une stratégie. Aucun contenu ne remplace une évaluation de ta situation personnelle."
+      }
+    </p><a class="btn" href={localizedPath("/modules/", lang)}
+      >{es ? "Volver al recorrido" : "Retrouver le parcours"} →</a>
+  </section></BaseLayout
+>
+<style>
+  .glossary {
+    margin: 45px 0 65px;
+  }
+  .glossary > div {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 25px;
+    padding: 22px 0;
+    border-top: 1px solid var(--ligne);
+  }
+  dt {
+    font-size: 1.2rem;
+    color: var(--lime);
+  }
+  dd {
+    color: var(--encre-2);
+    max-width: 65ch;
+  }
+  @media (max-width: 600px) {
+    .glossary > div {
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+  }
+</style>

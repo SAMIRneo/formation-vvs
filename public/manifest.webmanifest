@@ -1,13 +1,13 @@
 {
   "name": "FormationVVS — Formation Trading",
   "short_name": "FormationVVS",
-  "description": "Formation trading brute et structurée. Méthode, risque, setups en live.",
+  "description": "Observer, comprendre, calculer. Cours et exercices interactifs pour lire les marchés.",
   "start_url": "/formation-vvs/",
   "scope": "/formation-vvs/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0C0B09",
-  "theme_color": "#0C0B09",
+  "background_color": "#0c171b",
+  "theme_color": "#0c171b",
   "categories": ["education", "finance"],
   "icons": [
     { "src": "/formation-vvs/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },

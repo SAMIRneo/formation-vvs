@@ -1,67 +1,172 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import MarketBoard from '../components/MarketBoard.astro';
-import { getContent } from '../data/content';
-import { getLang, t, localizedPath } from '../i18n/ui';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MarketBoard from "../components/MarketBoard.astro";
+import { getContent } from "../data/content";
+import { getLang, t, localizedPath } from "../i18n/ui";
 const lang = getLang(Astro.url);
 const { tools } = getContent(lang);
 ---
-<BaseLayout title={t(lang, 'marche.title')} active="marche">
+
+<BaseLayout title={t(lang, "marche.title")} active="marche">
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">{t(lang, 'home.marcheEyebrow')}</span>
-      <h2>{t(lang, 'home.marcheTitle')}</h2>
-      <p>{t(lang, 'marche.lead')}</p>
+      <span class="eyebrow">{t(lang, "home.marcheEyebrow")}</span>
+      <h1>{lang === "es" ? "Observar el mercado." : "Observer le marché."}</h1>
+      <p>
+        {
+          lang === "es"
+            ? "Precios de referencia de proveedores externos. Comprueba la fecha; si la fuente falla, ninguna cifra se inventa."
+            : "Des prix de référence fournis par des sources externes. Vérifie leur date ; si la source échoue, aucun chiffre n’est inventé."
+        }
+      </p>
     </div>
-    <MarketBoard />
+    <MarketBoard lang={lang} />
   </section>
 
   <section class="section wrap">
     <div class="sec-head" data-reveal>
-      <span class="eyebrow">{t(lang, 'marche.toolsTitle')}</span>
-      <h2>{t(lang, 'marche.toolsSub')}</h2>
-      <p>{t(lang, 'marche.toolsLead')}</p>
+      <span class="eyebrow">{t(lang, "marche.toolsTitle")}</span>
+      <h2>{t(lang, "marche.toolsSub")}</h2>
+      <p>{t(lang, "marche.toolsLead")}</p>
     </div>
     <div class="tools">
-      {tools.map((tool, i) => (
-        <a class="tool" href={localizedPath(`/outils/${tool.slug}/`, lang)} data-reveal data-parallax={i % 2 ? "0.04" : "-0.04"} style={`--accent:${['var(--lime)','var(--bleu)','var(--jaune)','var(--emeraude)'][i]}; --accent-text:${['var(--lime-text)','var(--bleu-text)','var(--jaune-text)','var(--emeraude-text)'][i]}; --accent-rgb:${['31,214,166','47,111,224','201,154,18','16,158,106'][i]}`}>
-          <span class="tool__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={tool.icon} /></svg>
-          </span>
-          <h3 class="tool__t">{t(lang, `marche.${tool.slug}Name`)}</h3>
-          <p class="tool__d">{t(lang, `marche.${tool.slug}Desc`)}</p>
-          <span class="tool__go">Ouvrir →</span>
-        </a>
-      ))}
+      {
+        tools.map((tool, i) => (
+          <a
+            class="tool"
+            href={localizedPath(`/outils/${tool.slug}/`, lang)}
+            data-reveal
+            data-parallax={i % 2 ? "0.04" : "-0.04"}
+            style={`--accent:${["var(--lime)", "var(--bleu)", "var(--jaune)", "var(--emeraude)"][i]}; --accent-text:${["var(--lime-text)", "var(--bleu-text)", "var(--jaune-text)", "var(--emeraude-text)"][i]}; --accent-rgb:${["31,214,166", "47,111,224", "201,154,18", "16,158,106"][i]}`}
+          >
+            <span class="tool__ic" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d={tool.icon} />
+              </svg>
+            </span>
+            <h3 class="tool__t">{tool.t}</h3>
+            <p class="tool__d">{tool.d}</p>
+            <span class="tool__go">{lang === "es" ? "Abrir" : "Ouvrir"} →</span>
+          </a>
+        ))
+      }
     </div>
     <div class="cta-panel" data-reveal>
-      <h2>{t(lang, 'marche.ctaTitle')}</h2>
-      <p>{t(lang, 'marche.ctaLead')}</p>
-      <a href={localizedPath('/modules/', lang)} class="btn anim-cta">{t(lang, 'marche.ctaBtn')}</a>
+      <h2>{t(lang, "marche.ctaTitle")}</h2>
+      <p>{t(lang, "marche.ctaLead")}</p>
+      <a href={localizedPath("/modules/", lang)} class="btn anim-cta"
+        >{t(lang, "marche.ctaBtn")}</a
+      >
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .sec-head { margin-bottom: 32px; }
-  .sec-head p { color: var(--encre-2); margin-top: 10px; max-width: 52ch; }
-  .tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; overflow: visible; }
-  .tool {
-    position: relative; overflow: hidden;
-    background: var(--carte); border: 1.5px solid var(--ligne);
-    border-radius: var(--radius); padding: 22px; transition: border-color .14s ease, transform .14s ease, box-shadow .14s ease;
-    box-shadow: 0 12px 28px -18px rgba(20,19,15,0.22); will-change: transform;
+  .sec-head {
+    margin-bottom: 32px;
   }
-  .tool::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); opacity: .85; }
-  .tool:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 26px 50px -24px rgba(var(--accent-rgb), 0.40); }
-  .tool__ic { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 10px;
-    background: rgba(var(--accent-rgb), 0.14); color: var(--encre); margin-bottom: 14px; }
-  .tool__ic svg { width: 22px; height: 22px; }
-  .tool__t { font-size: 1.2rem; margin-bottom: 8px; }
-  .tool__d { color: var(--encre-2); font-size: 0.9rem; }
-  .tool__go { margin-top: 12px; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; color: var(--encre); display: inline-flex; align-items: center; gap: 6px; transition: gap .18s ease, color .18s ease; }
-  .tool:hover .tool__go { gap: 11px; color: var(--accent-text); }
-  .cta-panel { margin-top: 36px; padding: 40px; text-align: center; }
-  .cta-panel p { max-width: 44ch; margin: 14px auto 26px;  font-weight: 500; }
-  @media (max-width: 760px) { .tools { grid-template-columns: 1fr; } .cta-panel { padding: 30px 22px; } }
+  .sec-head p {
+    color: var(--encre-2);
+    margin-top: 10px;
+    max-width: 52ch;
+  }
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    overflow: visible;
+  }
+  .tool {
+    position: relative;
+    overflow: hidden;
+    background: var(--carte);
+    border: 1.5px solid var(--ligne);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition:
+      border-color 0.14s ease,
+      transform 0.14s ease,
+      box-shadow 0.14s ease;
+    box-shadow: 0 12px 28px -18px rgba(20, 19, 15, 0.22);
+    will-change: transform;
+  }
+  .tool::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+  .tool:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 26px 50px -24px rgba(var(--accent-rgb), 0.4);
+  }
+  .tool__ic {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(var(--accent-rgb), 0.14);
+    color: var(--encre);
+    margin-bottom: 14px;
+  }
+  .tool__ic svg {
+    width: 22px;
+    height: 22px;
+  }
+  .tool__t {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .tool__d {
+    color: var(--encre-2);
+    font-size: 0.9rem;
+  }
+  .tool__go {
+    margin-top: 12px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--encre);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition:
+      gap 0.18s ease,
+      color 0.18s ease;
+  }
+  .tool:hover .tool__go {
+    gap: 11px;
+    color: var(--accent-text);
+  }
+  .cta-panel {
+    margin-top: 36px;
+    padding: 40px;
+    text-align: center;
+  }
+  .cta-panel p {
+    max-width: 44ch;
+    margin: 14px auto 26px;
+    font-weight: 500;
+  }
+  @media (max-width: 760px) {
+    .tools {
+      grid-template-columns: 1fr;
+    }
+    .cta-panel {
+      padding: 30px 22px;
+    }
+  }
 </style>

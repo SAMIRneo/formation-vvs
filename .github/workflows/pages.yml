@@ -23,12 +23,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - name: Install
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Validate source and financial model
+        run: |
+          npm run check
+          npm test
+          npm run verify
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
